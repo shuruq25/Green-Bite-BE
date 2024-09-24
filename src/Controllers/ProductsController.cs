@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Entity;
 using Microsoft.AspNetCore.Mvc;
+using src.Entity;
 
-namespace Controllers
+namespace src.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -13,9 +9,20 @@ namespace Controllers
     {
         public List<Product> products = new List<Product>
 {
-    new Product { Id = 1, Name = "Vitamin D supplement",Price= 15.99m, Description= "Supports Healthy Bones and Teeth "},
-    new Product { Id = 2, Name = "Healing Lotion" ,Price=30.70m, Description= "Delivers Long-Lasting Hydration"},
-    new Product { Id = 3, Name = " Hair Growth Supplement",Price=7.45m, Description= "Advanced Hair Health"},
+    new Product { Id = 1
+    , Name = "Vitamin D supplement"
+    ,Price= 15.99m
+    , Description= "Supports Healthy Bones and Teeth "},
+
+    new Product { Id = 2
+    , Name = "Healing Lotion"
+    ,Price=30.70m
+    , Description= "Delivers Long-Lasting Hydration"},
+
+    new Product { Id = 3
+    , Name = " Hair Growth Supplement"
+    ,Price=7.45m
+    , Description= "Advanced Hair Health"},
 
 };
 
@@ -24,7 +31,6 @@ namespace Controllers
         {
             return Ok(products);
         }
-
 
 
         [HttpGet("{id}")]
@@ -90,8 +96,6 @@ namespace Controllers
             products.Remove(foundProduct);
             return NoContent();
         }
-
-
 
 
     }
