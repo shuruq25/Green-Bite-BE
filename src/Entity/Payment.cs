@@ -13,6 +13,7 @@ namespace Entity
         public PaymentMethod? Method { get; set; }
         public DateTime PaymentDate { get; set; }
         public PaymentStatus Status { get; set; }
+        public int CouponId{ get; set; }
 
     }
     public enum PaymentMethod

@@ -19,7 +19,7 @@ namespace Controllers
     };
 
     [HttpGet]
-    public ActionResult<IEnumerable<Payment>> GetPayments()
+    public ActionResult <Payment> GetPayments()
     {
         return Ok(payments);
     }
