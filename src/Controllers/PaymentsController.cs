@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entity;
+using src.Entity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Controllers
+namespace src.Controllers
 {
 
     [ApiController]
@@ -14,18 +14,27 @@ namespace Controllers
     {
         public  List<Payment> payments = new List<Payment>
     {
-        new Payment { Id = 1, FinalPrice = 100.00m, Method = PaymentMethod.CreditCard, PaymentDate = DateTime.Now, Status = PaymentStatus.Completed },
-        new Payment { Id = 2, FinalPrice = 50.00m, Method = PaymentMethod.PayPal, PaymentDate = DateTime.Now, Status = PaymentStatus.Pending },
+        new Payment { Id = 1
+        , FinalPrice = 100.00m
+        , Method = PaymentMethod.CreditCard
+        , PaymentDate = DateTime.Now
+        , Status = PaymentStatus.Completed },
+
+        new Payment { Id = 2
+        , FinalPrice = 50.00m
+        , Method = PaymentMethod.PayPal
+        , PaymentDate = DateTime.Now
+        , Status = PaymentStatus.Pending },
     };
 
     [HttpGet]
-    public ActionResult <Payment> GetPayments()
+    public ActionResult  GetPayments()
     {
         return Ok(payments);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Payment> GetPaymentById(int id)
+    public ActionResult GetPaymentById(int id)
     {
         var foundPayment = payments.FirstOrDefault(p => p.Id == id);
         if (foundPayment == null)
@@ -36,7 +45,7 @@ namespace Controllers
     }
 
     [HttpPost]
-    public ActionResult<Payment> CreatePayment(Payment newPayment)
+    public ActionResult CreatePayment(Payment newPayment)
     {
         if (newPayment == null || newPayment.FinalPrice <= 0)
         {
@@ -48,7 +57,7 @@ namespace Controllers
     }
 
     [HttpPut("{id}")]
-    public ActionResult<Payment> UpdatePayment(int id, Payment updatedPayment)
+    public ActionResult UpdatePayment(int id, Payment updatedPayment)
     {
         var foundPayment = payments.FirstOrDefault(p => p.Id == id);
         if (foundPayment == null)
