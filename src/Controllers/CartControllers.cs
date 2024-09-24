@@ -10,8 +10,8 @@ namespace src.Controllers
     {
         private static List<Cart> carts = new List<Cart>
         {
-            new Cart { CartId = 1, Quantity = 2 },
-            new Cart { CartId = 2, Quantity = 5 }
+            new Cart { Id = 1, Quantity = 2 },
+            new Cart { Id = 2, Quantity = 5 }
         };
 
         [HttpGet]
@@ -20,10 +20,10 @@ namespace src.Controllers
             return Ok(carts);
         }
 
-        [HttpGet("{cartId}")]
-        public ActionResult GetCartById(int cartId)
+        [HttpGet("{id}")]
+        public ActionResult GetCartById(int id)
         {
-            var foundCart = carts.FirstOrDefault(c => c.CartId == cartId);
+            var foundCart = carts.FirstOrDefault(c => c.Id == id);
             if (foundCart == null)
             {
                 return NotFound();
@@ -38,16 +38,14 @@ namespace src.Controllers
             {
                 return BadRequest();
             }
-
-            newCart.CartId = carts.Max(c => c.CartId) + 1; // Generate new ID
             carts.Add(newCart);
-            return CreatedAtAction(nameof(GetCartById), new { cartId = newCart.CartId }, newCart);
+            return CreatedAtAction(nameof(GetCartById), new { id = newCart.Id }, newCart);
         }
 
-        [HttpPut("{cartId}")]
-        public ActionResult UpdateCart(int cartId,  Cart updatedCart)
+        [HttpPut("{id}")]
+        public ActionResult UpdateCart(int id,  Cart updatedCart)
         {
-            var foundCart = carts.FirstOrDefault(c => c.CartId == cartId);
+            var foundCart = carts.FirstOrDefault(c => c.Id == id);
             if (foundCart == null)
             {
                 return NotFound();
@@ -61,10 +59,10 @@ namespace src.Controllers
             return Ok(foundCart);
         }
 
-        [HttpDelete("{cartId}")]
-        public ActionResult DeleteCart(int cartId)
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCart(int id)
         {
-            var foundCart = carts.FirstOrDefault(c => c.CartId == cartId);
+            var foundCart = carts.FirstOrDefault(c => c.Id == id);
             if (foundCart == null)
             {
                 return NotFound();
