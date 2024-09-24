@@ -19,6 +19,7 @@ namespace src.Controllers
             {
                 UserID = 1,
                 Name = "Raghad",
+                Password = "ra123",
                 EmailAddress = "raghad@example.com",
                 PaymentID = 5,
                 Phone = "0555764524",
@@ -28,6 +29,7 @@ namespace src.Controllers
             {
                 UserID = 2,
                 Name = "Reema",
+                Password = "97643",
                 EmailAddress = "reema@example.com",
                 PaymentID = 10,
                 Phone = "0534201235",
@@ -37,6 +39,7 @@ namespace src.Controllers
             {
                 UserID = 3,
                 Name = "Ali",
+                Password = "746953",
                 EmailAddress = "ali@example.com",
                 PaymentID = 7,
                 Phone = "0557398543",
