@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Entity;
+using src.Entity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CareQuest.Controllers
+namespace src.Controllers
 {
 
     [ApiController]
