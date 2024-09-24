@@ -7,7 +7,7 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class ProductsController : ControllerBase
     {
-        public List<Product> products = new List<Product>
+        public static List<Product> products = new List<Product>
 {
     new Product { Id = 1
     , Name = "Vitamin D supplement"

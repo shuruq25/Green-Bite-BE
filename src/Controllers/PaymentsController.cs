@@ -12,7 +12,7 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class PaymentsController : ControllerBase
     {
-        public  List<Payment> payments = new List<Payment>
+        public static List<Payment> payments = new List<Payment>
     {
         new Payment { Id = 1
         , FinalPrice = 100.00m

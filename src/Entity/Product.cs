@@ -7,8 +7,8 @@ namespace src.Entity
         public string? Name { get; set; }
         public decimal? Price { get; set; }
         public string? Description { get; set; }
-        public int cartId { get; set; }
-        public int categroyId{ get; set; }
+        public int CartId { get; set; }
+        public int CategroyId{ get; set; }
 
     }
 }
