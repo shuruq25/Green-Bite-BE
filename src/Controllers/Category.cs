@@ -38,8 +38,7 @@ namespace src.Controllers
         [HttpPost]
         public ActionResult GetCatogry(Category newCategory)
         {
-            //categories.Add(newCategory);
-            //return Ok(newCategory);
+            categories.Add(newCategory);
             return CreatedAtAction(nameof(GetCategory), new { id = newCategory.Id }, newCategory);
         }
 
