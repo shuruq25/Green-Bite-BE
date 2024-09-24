@@ -11,7 +11,7 @@ namespace src.Controllers
 {
 
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
         private static List<Category> categories = new List<Category>();

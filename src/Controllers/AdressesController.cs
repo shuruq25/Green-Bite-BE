@@ -6,7 +6,7 @@ using src.Entity;
 namespace src.Controllers{
 
 [ApiController]
-[Route("/api/v1/[controller]")]
+[Route("[controller]")]
     public class AdressesController : ControllerBase {
         
         //*************************Create the List field of address class**************************
