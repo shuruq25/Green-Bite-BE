@@ -1,4 +1,4 @@
-namespace Entity
+namespace src.Entity
 {
     public class Order
     {

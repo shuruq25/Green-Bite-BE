@@ -16,4 +16,5 @@ namespace src.Entity
         public int categroyId{ get; set; }
 
     }
+}
 
