@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Entity
 {
-    public class Adress
+    public class Address
     {
         public int? AddressId { get; set; }
         public string? Country { get; set; }
