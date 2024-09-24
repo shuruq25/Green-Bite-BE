@@ -13,6 +13,7 @@ namespace src.Entity
         public decimal? Price { get; set; }
         public string? Description { get; set; }
         public int cartId { get; set; }
+        public int categroyId{ get; set; }
 
     }
     }
