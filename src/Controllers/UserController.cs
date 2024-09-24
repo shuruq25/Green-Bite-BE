@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace User
+namespace src.Controllers
 {
     [Route("[controller]")]
     public class UserController : Controller

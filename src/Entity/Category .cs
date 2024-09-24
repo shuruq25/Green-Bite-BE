@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace src.Entity
 {
-    public class User
+    public class Category
     {
-
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

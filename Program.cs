@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Entity;
+using src.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
