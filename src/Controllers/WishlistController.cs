@@ -17,24 +17,24 @@ namespace src.Controllers
         {
             new Wishlist
             {
-                Wishlist_ID = 1,
-                Product_ID = 2,
-                Date_Added = DateTime.Now,
-                User_ID = 1,
+                WishlistID = 1,
+                ProductID = 2,
+                DateAdded = DateTime.Now,
+                UserID = 1,
             },
             new Wishlist
             {
-                Wishlist_ID = 2,
-                Product_ID = 2,
-                Date_Added = DateTime.Now,
-                User_ID = 2,
+                WishlistID = 2,
+                ProductID = 2,
+                DateAdded = DateTime.Now,
+                UserID = 2,
             },
             new Wishlist
             {
-                Wishlist_ID = 3,
-                Product_ID = 2,
-                Date_Added = DateTime.Now,
-                User_ID = 3,
+                WishlistID = 3,
+                ProductID = 2,
+                DateAdded = DateTime.Now,
+                UserID = 3,
             },
         };
 
@@ -47,7 +47,7 @@ namespace src.Controllers
         [HttpGet("{id}")]
         public ActionResult GetWishlisttById(int id)
         {
-            Wishlist? foundList = wishList.FirstOrDefault(l => l.Wishlist_ID == id);
+            Wishlist? foundList = wishList.FirstOrDefault(l => l.WishlistID == id);
             if (foundList == null)
             {
                 return NotFound();
@@ -61,7 +61,7 @@ namespace src.Controllers
             wishList.Add(newList);
             return CreatedAtAction(
                 nameof(GetWishlisttById),
-                new { id = newList.Wishlist_ID },
+                new { id = newList.WishlistID },
                 newList
             );
         }
@@ -69,7 +69,7 @@ namespace src.Controllers
         [HttpDelete("{id}")]
         public ActionResult Deletec(int id)
         {
-            Wishlist? foundList = wishList.FirstOrDefault(l => l.Wishlist_ID == id);
+            Wishlist? foundList = wishList.FirstOrDefault(l => l.WishlistID == id);
             if (foundList == null)
             {
                 return NotFound();
@@ -81,12 +81,12 @@ namespace src.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateWishlist(int id, Wishlist updatedList)
         {
-            Wishlist? foundList = wishList.FirstOrDefault(l => l.Wishlist_ID == id);
+            Wishlist? foundList = wishList.FirstOrDefault(l => l.WishlistID == id);
             if (foundList == null)
             {
                 return NotFound();
             }
-            foundList.Product_ID = updatedList.Product_ID;
+            foundList.ProductID = updatedList.ProductID;
             return Ok(foundList);
         }
     }

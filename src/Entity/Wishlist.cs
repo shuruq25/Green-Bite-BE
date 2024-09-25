@@ -7,9 +7,9 @@ namespace src.Entity
 {
     public class Wishlist
     {
-        public int Wishlist_ID { get; set; }
-        public int Product_ID { get; set; }
-        public DateTime Date_Added { get; set; }
-        public int User_ID { get; set; }
+        public int WishlistID { get; set; }
+        public int ProductID { get; set; }
+        public DateTime DateAdded { get; set; }
+        public int UserID { get; set; }
     }
 }
