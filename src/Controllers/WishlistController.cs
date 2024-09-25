@@ -20,18 +20,21 @@ namespace src.Controllers
                 Wishlist_ID = 1,
                 Product_ID = 2,
                 Date_Added = DateTime.Now,
+                User_ID = 1,
             },
             new Wishlist
             {
                 Wishlist_ID = 2,
                 Product_ID = 2,
                 Date_Added = DateTime.Now,
+                User_ID = 2,
             },
             new Wishlist
             {
                 Wishlist_ID = 3,
                 Product_ID = 2,
                 Date_Added = DateTime.Now,
+                User_ID = 3,
             },
         };
 
