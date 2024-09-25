@@ -34,7 +34,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetCatogry(Category newCategory)
+        public ActionResult AddCatogry(Category newCategory)
         {
             categories.Add(newCategory);
             return CreatedAtAction(nameof(GetCategory), new { id = newCategory.Id }, newCategory);
