@@ -13,9 +13,9 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class UserController : ControllerBase
     {
-        public static List<Users> users = new List<Users>
+        public static List<User> users = new List<User>
         {
-            new Users
+            new User
             {
                 UserID = 1,
                 Name = "Raghad",
@@ -23,9 +23,9 @@ namespace src.Controllers
                 EmailAddress = "raghad@example.com",
                 PaymentID = 5,
                 Phone = "0555764524",
-                UserRole = Users.Role.Admin,
+                UserRole = Entity.User.Role.Admin,
             },
-            new Users
+            new User
             {
                 UserID = 2,
                 Name = "Reema",
@@ -33,9 +33,9 @@ namespace src.Controllers
                 EmailAddress = "reema@example.com",
                 PaymentID = 10,
                 Phone = "0534201235",
-                UserRole = Users.Role.Guest,
+                UserRole = Entity.User.Role.Guest,
             },
-            new Users
+            new User
             {
                 UserID = 3,
                 Name = "Ali",
@@ -43,7 +43,7 @@ namespace src.Controllers
                 EmailAddress = "ali@example.com",
                 PaymentID = 7,
                 Phone = "0557398543",
-                UserRole = Users.Role.User,
+                UserRole = Entity.User.Role.User,
             },
         };
 
@@ -56,7 +56,7 @@ namespace src.Controllers
         [HttpGet("{id}")]
         public ActionResult GetUserById(int id)
         {
-            Users? foundUser = users.FirstOrDefault(u => u.UserID == id);
+            User? foundUser = users.FirstOrDefault(u => u.UserID == id);
             if (foundUser == null)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUser(Users newUser)
+        public ActionResult AddUser(User newUser)
         {
             users.Add(newUser);
             return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserID }, newUser);
@@ -74,7 +74,7 @@ namespace src.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteUser(int id)
         {
-            Users? foundUser = users.FirstOrDefault(u => u.UserID == id);
+            User? foundUser = users.FirstOrDefault(u => u.UserID == id);
             if (foundUser == null)
             {
                 return NotFound();
@@ -84,9 +84,9 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateUser(int id, Users updatedUser)
+        public ActionResult UpdateUser(int id, User updatedUser)
         {
-            Users? foundUser = users.FirstOrDefault(u => u.UserID == id);
+            User? foundUser = users.FirstOrDefault(u => u.UserID == id);
             if (foundUser == null)
             {
                 return NotFound();
@@ -96,7 +96,7 @@ namespace src.Controllers
         }
 
         [HttpPost("signup")]
-        public ActionResult SignUpUser([FromBody] Users user)
+        public ActionResult SignUpUser([FromBody] User user)
         {
             PasswordUtils.HashPassword(user.Password, out string hashedPass, out byte[] salt);
             user.Password = hashedPass;
@@ -104,22 +104,26 @@ namespace src.Controllers
             users.Add(user);
             return Created($"/api/v1/user/{user.UserID}", user);
         }
+
         [HttpPost("login")]
-        public ActionResult LogIn(Users user)
+        public ActionResult LogIn(User user)
         {
-            Users? foundUser = users.FirstOrDefault(p => p.EmailAddress == user.EmailAddress);
+            User? foundUser = users.FirstOrDefault(p => p.EmailAddress == user.EmailAddress);
             if (foundUser == null)
             {
                 return NotFound();
             }
 
-            bool isMatched = PasswordUtils.VerifyPassword(user.Password, foundUser.Password, foundUser.Salt);
+            bool isMatched = PasswordUtils.VerifyPassword(
+                user.Password,
+                foundUser.Password,
+                foundUser.Salt
+            );
             if (!isMatched)
             {
                 return Unauthorized();
             }
             return Ok(foundUser);
         }
-
     }
 }
