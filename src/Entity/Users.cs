@@ -14,7 +14,7 @@ namespace src.Entity
         public int PaymentID { get; set; }
         public string? Phone { get; set; }
         public Role UserRole { get; set; }
-
+        public byte[]? Salt { get; set; }
         public enum Role
         {
             Admin,
