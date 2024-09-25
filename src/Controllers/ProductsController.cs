@@ -8,30 +8,35 @@ namespace src.Controllers
     public class ProductsController : ControllerBase
     {
         public List<Product> products = new List<Product>
-{
-    new Product { Id = 1
-    , Name = "Vitamin D supplement"
-    ,Price= 15.99m
-    , Description= "Supports Healthy Bones and Teeth "},
-
-    new Product { Id = 2
-    , Name = "Healing Lotion"
-    ,Price=30.70m
-    , Description= "Delivers Long-Lasting Hydration"},
-
-    new Product { Id = 3
-    , Name = " Hair Growth Supplement"
-    ,Price=7.45m
-    , Description= "Advanced Hair Health"},
-
-};
+        {
+            new Product
+            {
+                Id = 1,
+                Name = "Vitamin D supplement",
+                Price = 15.99m,
+                Description = "Supports Healthy Bones and Teeth ",
+            },
+            new Product
+            {
+                Id = 2,
+                Name = "Healing Lotion",
+                Price = 30.70m,
+                Description = "Delivers Long-Lasting Hydration",
+            },
+            new Product
+            {
+                Id = 3,
+                Name = " Hair Growth Supplement",
+                Price = 7.45m,
+                Description = "Advanced Hair Health",
+            },
+        };
 
         [HttpGet]
         public ActionResult GetProduct()
         {
             return Ok(products);
         }
-
 
         [HttpGet("{id}")]
         public ActionResult GetProductById(int id)
@@ -42,9 +47,8 @@ namespace src.Controllers
                 return NotFound("Product not found.");
             }
             return Ok(foundProduct);
-
-
         }
+
         [HttpPost]
         public ActionResult CreateProduct(Product newProduct)
         {
@@ -54,7 +58,6 @@ namespace src.Controllers
             }
             products.Add(newProduct);
             return CreatedAtAction(nameof(GetProductById), new { id = newProduct.Id }, newProduct);
-
         }
 
         [HttpPut("{id}")]
@@ -80,9 +83,7 @@ namespace src.Controllers
                 foundProduct.Description = updatedProduct.Description;
             }
             return Ok(foundProduct);
-
         }
-
 
         [HttpDelete("{id}")]
         public ActionResult DeleteProduct(int id)
@@ -96,7 +97,5 @@ namespace src.Controllers
             products.Remove(foundProduct);
             return NoContent();
         }
-
-
     }
 }

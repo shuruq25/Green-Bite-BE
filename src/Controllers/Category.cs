@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using src.Entity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using src.Entity;
 
 namespace src.Controllers
 {
-
     [ApiController]
-    [Route("[controller]")]
+    [Route("/api/v1/[controller]")]
     public class CategoryController : ControllerBase
     {
         private static List<Category> categories = new List<Category>();
@@ -23,7 +22,6 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
-
         public ActionResult GetCategory(int id)
         {
             var category = categories.FirstOrDefault(c => c.Id == id);
@@ -43,7 +41,6 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
-
         public ActionResult DeleteCategory(int id)
         {
             var category = categories.FirstOrDefault(c => c.Id == id);
@@ -53,9 +50,7 @@ namespace src.Controllers
             }
             categories.Remove(category);
             return NoContent();
-
         }
-
 
         [HttpPut("{id}")]
         public ActionResult UpdateCategory(int id, Category updatedCategory)
@@ -68,9 +63,6 @@ namespace src.Controllers
 
             category.Name = updatedCategory.Name;
             return Ok(category);
-
         }
     }
 }
-
-

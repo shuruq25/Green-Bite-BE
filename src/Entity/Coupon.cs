@@ -7,9 +7,9 @@ namespace src.Entity
 {
     public class Coupon
     {
-        public int CouponId { get; set;}
-        public string? Code { get; set;}
-        public float?  Discount_Percentage { get; set;}
-        public DateTime Expire { get; set;}
+        public int CouponId { get; set; }
+        public string? Code { get; set; }
+        public decimal? Discount_Percentage { get; set; }
+        public DateTime Expire { get; set; }
     }
 }
