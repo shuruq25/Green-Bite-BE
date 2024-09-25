@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-public class PasswordUtil
+public class PasswordUtils
 {
 
     public static string HashPassword(string originaPassword, out string HashedPassword, out byte[] salt)
