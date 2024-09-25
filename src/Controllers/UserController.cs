@@ -94,5 +94,32 @@ namespace src.Controllers
             foundUser.Name = updatedUser.Name;
             return Ok(foundUser);
         }
+
+        [HttpPost("signup")]
+        public ActionResult SignUpUser([FromBody] Users user)
+        {
+            PasswordUtils.HashPassword(user.Password, out string hashedPass, out byte[] salt);
+            user.Password = hashedPass;
+            user.Salt = salt;
+            users.Add(user);
+            return Created($"/api/v1/user/{user.UserID}", user);
+        }
+        [HttpPost("login")]
+        public ActionResult LogIn(Users user)
+        {
+            Users? foundUser = users.FirstOrDefault(p => p.EmailAddress == user.EmailAddress);
+            if (foundUser == null)
+            {
+                return NotFound();
+            }
+
+            bool isMatched = PasswordUtils.VerifyPassword(user.Password, foundUser.Password, foundUser.Salt);
+            if (!isMatched)
+            {
+                return Unauthorized();
+            }
+            return Ok(foundUser);
+        }
+
     }
 }
