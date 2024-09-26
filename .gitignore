@@ -2,5 +2,5 @@
 .DS_Store
 bin
 obj
-*.http
 appsettings.json
+*.http

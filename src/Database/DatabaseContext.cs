@@ -21,10 +21,11 @@ namespace src.Database
         public DbSet<Payment> Payment { get; set; }
 
         // public DbSet<Review> Review { get; set; }
+        // public DbSet<Cart> Cart { get; set; }
 
+        public DatabaseContext(DbContextOptions options) : base(options)
+        {
 
-
-        public DatabaseContext(DbContextOptions options)
-            : base(options) { }
+        }
     }
 }
