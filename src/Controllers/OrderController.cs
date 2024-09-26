@@ -1,41 +1,41 @@
-using src.Entity;
 using Microsoft.AspNetCore.Mvc;
+using src.Entity;
 
 namespace src.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/api/v1/[controller]")]
     public class OrderController : ControllerBase
     {
         private static List<Order> _orders = new List<Order>
         {
             new Order
             {
-                ID =1,
+                ID = 1,
                 Status = Order.OrderStatus.Pending,
                 UserID = 1,
                 CreatedAt = DateTime.Now,
-                PaymentID= 1,
+                PaymentID = 1,
                 OriginalPrice = 10,
                 EstimatedArrival = DateTime.Now.AddDays(1),
             },
             new Order
             {
-                ID =2,
+                ID = 2,
                 Status = Order.OrderStatus.Shipped,
                 UserID = 2,
                 CreatedAt = DateTime.Now,
-                PaymentID= 2,
+                PaymentID = 2,
                 OriginalPrice = 100,
                 EstimatedArrival = DateTime.Now.AddDays(1),
             },
             new Order
             {
-                ID =3,
+                ID = 3,
                 Status = Order.OrderStatus.Delivered,
                 UserID = 3,
                 CreatedAt = DateTime.Now,
-                PaymentID= 3,
+                PaymentID = 3,
                 OriginalPrice = 1000,
                 EstimatedArrival = DateTime.Now.AddDays(1),
             },
@@ -77,6 +77,5 @@ namespace src.Controllers
             }
             return NoContent();
         }
-
     }
 }

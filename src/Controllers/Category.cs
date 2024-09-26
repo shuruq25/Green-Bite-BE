@@ -10,7 +10,7 @@ using src.Entity;
 namespace src.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("/api/v1/[controller]")]
     public class CategoryController : ControllerBase
     {
         private static List<Category> categories = new List<Category>();

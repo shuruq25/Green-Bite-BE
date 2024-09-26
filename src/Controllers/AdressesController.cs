@@ -1,14 +1,12 @@
-
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
 
-
-namespace src.Controllers{
-
-[ApiController]
-[Route("/api/v1/[controller]")]
-    public class AdressesController : ControllerBase {
-        
+namespace src.Controllers
+{
+    [ApiController]
+    [Route("/api/v1/[controller]")]
+    public class AdressesController : ControllerBase
+    {
         //*************************Create the List field of address class**************************
         public static List<Address> addresses = new List<Address>
         {
@@ -89,8 +87,5 @@ namespace src.Controllers{
             foundAddress.Street = updatedAddress.Street;
             return Ok(foundAddress);
         }
-
-
-
-     }
+    }
 }
