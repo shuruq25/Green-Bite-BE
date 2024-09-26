@@ -17,21 +17,21 @@ namespace src.Controllers
             {
                 CouponId = 1,
                 Code = "DISCOUNT50",
-                Discount_Percentage = 50,
+                DiscountPercentage = 50,
                 Expire = new DateTime(2024, 12, 31),
             },
             new Coupon
             {
                 CouponId = 2,
                 Code = "WELCOME10",
-                Discount_Percentage = 10,
+                DiscountPercentage = 10,
                 Expire = new DateTime(2024, 10, 15),
             },
             new Coupon
             {
                 CouponId = 3,
                 Code = "SUMMER20",
-                Discount_Percentage = 20,
+                DiscountPercentage = 20,
                 Expire = new DateTime(2024, 6, 30),
             },
         };
