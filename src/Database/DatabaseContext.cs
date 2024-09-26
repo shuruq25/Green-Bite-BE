@@ -10,6 +10,8 @@ namespace src.Database
     public class DatabaseContext : DbContext
     {
         public DbSet<Category> Category { get; set; }
+        
+
 
         public DatabaseContext(DbContextOptions options): base(options) {
             

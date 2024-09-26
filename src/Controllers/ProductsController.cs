@@ -9,18 +9,15 @@ namespace src.Controllers
     {
         public List<Product> products = new List<Product>
 {
-    new Product { Id = 1
-    , Name = "Vitamin D supplement"
+    new Product {  Name = "Vitamin D supplement"
     ,Price= 15.99m
     , Description= "Supports Healthy Bones and Teeth "},
 
-    new Product { Id = 2
-    , Name = "Healing Lotion"
+    new Product {  Name = "Healing Lotion"
     ,Price=30.70m
     , Description= "Delivers Long-Lasting Hydration"},
 
-    new Product { Id = 3
-    , Name = " Hair Growth Supplement"
+    new Product {  Name = " Hair Growth Supplement"
     ,Price=7.45m
     , Description= "Advanced Hair Health"},
 
@@ -34,7 +31,7 @@ namespace src.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult GetProductById(int id)
+        public ActionResult GetProductById(Guid id)
         {
             Product? foundProduct = products.FirstOrDefault(p => p.Id == id);
             if (foundProduct == null)
@@ -58,7 +55,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateProduct(int id, Product updatedProduct)
+        public ActionResult UpdateProduct(Guid id, Product updatedProduct)
         {
             Product? foundProduct = products.FirstOrDefault(p => p.Id == id);
             if (foundProduct == null)
@@ -85,7 +82,7 @@ namespace src.Controllers
 
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteProduct(int id)
+        public ActionResult DeleteProduct(Guid id)
         {
             Product? foundProduct = products.FirstOrDefault(p => p.Id == id);
             if (foundProduct == null)
