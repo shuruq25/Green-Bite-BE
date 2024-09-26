@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using src.Entity;
 using Microsoft.AspNetCore.Mvc;
+using src.Entity;
 
 namespace src.Controllers
 {
-
     [ApiController]
     [Route("api/v1/[controller]")]
     public class PaymentsController : ControllerBase
@@ -27,79 +26,78 @@ namespace src.Controllers
         , Status = PaymentStatus.Pending },
     };
 
-    [HttpGet]
-    public ActionResult  GetPayments()
-    {
-        return Ok(payments);
-    }
-
-    [HttpGet("{id}")]
-    public ActionResult GetPaymentById(int id)
-    {
-        var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-        if (foundPayment == null)
+        [HttpGet]
+        public ActionResult GetPayments()
         {
-            return NotFound("Payment not found.");
-        }
-        return Ok(foundPayment);
-    }
-
-    [HttpPost]
-    public ActionResult CreatePayment(Payment newPayment)
-    {
-        if (newPayment == null || newPayment.FinalPrice <= 0)
-        {
-            return BadRequest("Invalid payment data.");
-        }
-        
-        payments.Add(newPayment);
-        return CreatedAtAction(nameof(GetPaymentById), new { id = newPayment.Id }, newPayment);
-    }
-
-    [HttpPut("{id}")]
-    public ActionResult UpdatePayment(int id, Payment updatedPayment)
-    {
-        var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-        if (foundPayment == null)
-        {
-            return NotFound("Payment not found.");
+            return Ok(payments);
         }
 
-        if (updatedPayment.FinalPrice > 0)
+        [HttpGet("{id}")]
+        public ActionResult GetPaymentById(int id)
         {
-            foundPayment.FinalPrice = updatedPayment.FinalPrice;
+            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
+            if (foundPayment == null)
+            {
+                return NotFound("Payment not found.");
+            }
+            return Ok(foundPayment);
         }
 
-        if (updatedPayment.Method != null) 
+        [HttpPost]
+        public ActionResult CreatePayment(Payment newPayment)
         {
-            foundPayment.Method = updatedPayment.Method;
+            if (newPayment == null || newPayment.FinalPrice <= 0)
+            {
+                return BadRequest("Invalid payment data.");
+            }
+
+            payments.Add(newPayment);
+            return CreatedAtAction(nameof(GetPaymentById), new { id = newPayment.Id }, newPayment);
         }
 
-        if (updatedPayment.PaymentDate != default)
+        [HttpPut("{id}")]
+        public ActionResult UpdatePayment(int id, Payment updatedPayment)
         {
-            foundPayment.PaymentDate = updatedPayment.PaymentDate;
+            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
+            if (foundPayment == null)
+            {
+                return NotFound("Payment not found.");
+            }
+
+            if (updatedPayment.FinalPrice > 0)
+            {
+                foundPayment.FinalPrice = updatedPayment.FinalPrice;
+            }
+
+            if (updatedPayment.Method != null)
+            {
+                foundPayment.Method = updatedPayment.Method;
+            }
+
+            if (updatedPayment.PaymentDate != default)
+            {
+                foundPayment.PaymentDate = updatedPayment.PaymentDate;
+            }
+
+            if (updatedPayment.Status != default)
+            {
+                foundPayment.Status = updatedPayment.Status;
+            }
+
+            return Ok(foundPayment);
         }
 
-        if (updatedPayment.Status != default)
+        [HttpDelete("{id}")]
+        public ActionResult DeletePayment(int id)
         {
-            foundPayment.Status = updatedPayment.Status;
+            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
+            if (foundPayment == null)
+            {
+                return NotFound("Payment not found.");
+            }
+
+            payments.Remove(foundPayment);
+            return NoContent();
         }
-
-        return Ok(foundPayment);
-    }
-
-    [HttpDelete("{id}")]
-    public ActionResult DeletePayment(int id)
-    {
-        var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-        if (foundPayment == null)
-        {
-            return NotFound("Payment not found.");
-        }
-
-        payments.Remove(foundPayment);
-        return NoContent();
-    } 
-        
     }
 }

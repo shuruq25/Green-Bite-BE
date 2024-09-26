@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace src.Entity
 {
-    public class Users
+    public class User
     {
         public int UserID { get; set; }
         public string? Name { get; set; }
@@ -14,6 +14,7 @@ namespace src.Entity
         public int PaymentID { get; set; }
         public string? Phone { get; set; }
         public Role UserRole { get; set; }
+        public byte[]? Salt { get; set; }
 
         public enum Role
         {
