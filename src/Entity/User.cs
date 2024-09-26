@@ -11,7 +11,7 @@ namespace src.Entity
         public string? Name { get; set; }
         public string? Password { get; set; }
         public string? EmailAddress { get; set; }
-        public int PaymentID { get; set; }
+        public int AddressID { get; set; }
         public string? Phone { get; set; }
         public Role UserRole { get; set; }
         public byte[]? Salt { get; set; }
