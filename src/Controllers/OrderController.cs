@@ -5,7 +5,7 @@ using src.Repository;
 namespace src.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/api/v1/[controller]")]
     public class OrderController : ControllerBase
     {
         protected IOrderRepository _orders;
