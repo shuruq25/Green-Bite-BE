@@ -1,5 +1,3 @@
-
-
 namespace src.Entity
 {
     public class Address
