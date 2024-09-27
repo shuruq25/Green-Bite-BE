@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Entity;
 
@@ -12,7 +8,7 @@ namespace src.Database
         public DbSet<Category> Category { get; set; }
         public DbSet<User> User { get; set; }
 
-        // public DbSet<Order> Order { get; set; }
+        public DbSet<Order> Order { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Address> Address { get; set; }
 
@@ -25,7 +21,6 @@ namespace src.Database
 
         public DatabaseContext(DbContextOptions options) : base(options)
         {
-
         }
     }
 }
