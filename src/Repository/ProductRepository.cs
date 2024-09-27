@@ -19,6 +19,10 @@ namespace src.Repository
             await _databaseContext.SaveChangesAsync();
             return newProduct;
         }
+          public async Task<List<Product>> GetAllAsync()
+        {
+            return await _product.ToListAsync();
+        }
         public async Task<Product?> GetByIdAsync(Guid id)
         {
             return await _product.FindAsync(id);
