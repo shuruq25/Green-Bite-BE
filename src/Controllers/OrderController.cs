@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
+using src.Repository;
 
 namespace src.Controllers
 {
@@ -7,75 +8,46 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class OrderController : ControllerBase
     {
-        private static List<Order> _orders = new List<Order>
+        protected IOrderRepository _orders;
+
+        public OrderController(IOrderRepository orders)
         {
-            new Order
-            {
-                ID = 1,
-                Status = Order.OrderStatus.Pending,
-                UserID = 1,
-                CreatedAt = DateTime.Now,
-                PaymentID = 1,
-                OriginalPrice = 10,
-                EstimatedArrival = DateTime.Now.AddDays(1),
-            },
-            new Order
-            {
-                ID = 2,
-                Status = Order.OrderStatus.Shipped,
-                UserID = 2,
-                CreatedAt = DateTime.Now,
-                PaymentID = 2,
-                OriginalPrice = 100,
-                EstimatedArrival = DateTime.Now.AddDays(1),
-            },
-            new Order
-            {
-                ID = 3,
-                Status = Order.OrderStatus.Delivered,
-                UserID = 3,
-                CreatedAt = DateTime.Now,
-                PaymentID = 3,
-                OriginalPrice = 1000,
-                EstimatedArrival = DateTime.Now.AddDays(1),
-            },
-        };
+            _orders = orders;
+        }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Order>> GetAll()
+        public async Task<ActionResult<IEnumerable<Order>>> GetAll()
         {
-            return Ok(_orders);
+            return Ok(await _orders.GetAllOrdersAsync());
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Order order)
+        public async Task<IActionResult> Create([FromBody] Order order)
         {
-            _orders.Add(order);
+            var newOrder = await _orders.AddOrderAsync(order);
             return CreatedAtAction(nameof(GetAll), new { id = order.ID }, order);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Order order)
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(int id, [FromBody] Order order)
         {
-            var index = _orders.FindIndex(o => o.ID == id);
-            if (index != -1)
+            if (await _orders.UpdateOrderAsync(id, order))
             {
-                _orders[index] = order;
-                return Ok(_orders[index]);
+                return NoContent();
             }
             return NotFound();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var index = _orders.FindIndex(o => o.ID == id);
-            if (index != -1)
+            if (await _orders.DeleteOrderAsync(id))
             {
-                _orders.RemoveAt(index);
-                return Ok();
+                return NoContent();
             }
-            return NoContent();
+            return NotFound();
         }
     }
 }

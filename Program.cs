@@ -1,35 +1,19 @@
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using src.Database;
 using src.Repository;
-using src.Services.product;
-using src.Utils;
-
 
 var builder = WebApplication.CreateBuilder(args);
-
-// connect database
-var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("Local"));
-
-builder.Services.AddDbContext<DatabaseContext>(options =>
-{
-    options.UseNpgsql(dataSourceBuilder.Build());
-
-}
-);
-
-// add auto-mapper
-builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
-
-// add DI services
-builder.Services
-     .AddScoped<IProductService, ProductService>()
-     .AddScoped<ProductRepository, ProductRepository>();
-
-
-// step 1: add controller
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(
+    builder.Configuration.GetConnectionString("Local")
+).Build();
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<DatabaseContext>(Options =>
+{
+    Options.UseNpgsql(dataSourceBuilder);
+});
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
