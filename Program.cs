@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using src.Database;
 using src.Repository;
+using src.Services;
+using src.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
@@ -13,6 +15,9 @@ builder.Services.AddDbContext<DatabaseContext>(Options =>
 {
     Options.UseNpgsql(dataSourceBuilder);
 });
+
+builder.Services.AddAutoMapper(typeof(OrderMapperProfile).Assembly);
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
