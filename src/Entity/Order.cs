@@ -1,5 +1,12 @@
 namespace src.Entity
 {
+
+    public enum OrderStatuses
+    {
+        Pending,
+        Shipped,
+        Delivered
+    }
     public class Order
     {
         public int ID { get; set; }
@@ -7,13 +14,7 @@ namespace src.Entity
         public decimal OriginalPrice { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime EstimatedArrival { get; set; }
-        public OrderStatus Status { get; set; }
-        public enum OrderStatus
-        {
-            Pending,
-            Shipped,
-            Delivered
-        }
+        public OrderStatuses Status { get; set; }
         public int PaymentID { get; set; }
     }
 }

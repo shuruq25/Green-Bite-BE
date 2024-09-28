@@ -1,19 +1,20 @@
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Npgsql;
-using src.Entity;
+using src.Database;
+using src.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("Local")
-);
+).Build();
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DbContext>(Options =>
+
+builder.Services.AddDbContext<DatabaseContext>(Options =>
 {
-    Options.UseNpgsql(dataSourceBuilder.Build());
+    Options.UseNpgsql(dataSourceBuilder);
 });
- 
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -28,7 +29,7 @@ if (app.Environment.IsDevelopment())
 }
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
     try
     {
