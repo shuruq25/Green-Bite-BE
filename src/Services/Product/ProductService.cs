@@ -40,16 +40,18 @@ namespace src.Services.product
             return _mapper.Map<Product, ProductReadDto>(foundProduct);
 
         }
-        public async Task<bool> DeleteOneAsync(Guid id)
+           public async Task<bool> DeleteOneAsync(Guid id)
         {
             var foundProduct = await _productRepository.GetByIdAsync(id);
-             bool isDeleted= await _productRepository.DeleteOneAsync(foundProduct);
-             if (isDeleted){
-                return true;
-             }
-             return false;
-
-
+            if (foundProduct != null)
+            {
+                bool isDeleted = await _productRepository.DeleteOneAsync(foundProduct);
+                if (isDeleted)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
            public async Task<bool> UpdateOneAsync(Guid id, ProductUpdateDto UpdateDto)
             {
