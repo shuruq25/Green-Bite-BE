@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
+using src.Services.product;
+using src.Utils;
+using static src.DTO.ProductDTO;
 
 namespace src.Controllers
 {
@@ -7,90 +10,55 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class ProductsController : ControllerBase
     {
-        public static List<Product> products = new List<Product>
-{
-    new Product {  Name = "Vitamin D supplement"
-    ,Price= 15.99m
-    , Description= "Supports Healthy Bones and Teeth "},
-
-    new Product {  Name = "Healing Lotion"
-    ,Price=30.70m
-    , Description= "Delivers Long-Lasting Hydration"},
-
-    new Product {  Name = " Hair Growth Supplement"
-    ,Price=7.45m
-    , Description= "Advanced Hair Health"},
-
-};
-
-        [HttpGet]
-        public ActionResult GetProduct()
+        protected IProductService _productService;
+        public ProductsController(IProductService service)
         {
-            return Ok(products);
+            _productService = service;
+
         }
 
 
-        [HttpGet("{id}")]
-        public ActionResult GetProductById(Guid id)
-        {
-            Product? foundProduct = products.FirstOrDefault(p => p.Id == id);
-            if (foundProduct == null)
-            {
-                return NotFound("Product not found.");
-            }
-            return Ok(foundProduct);
-
-
-        }
         [HttpPost]
-        public ActionResult CreateProduct(Product newProduct)
+        public async Task<ActionResult<ProductReadDto>> CreateOne([FromBody] ProductCreateDto createDto)
         {
-            if (newProduct == null || string.IsNullOrEmpty(newProduct.Name))
-            {
-                return BadRequest("Invalid product data.");
-            }
-            products.Add(newProduct);
-            return CreatedAtAction(nameof(GetProductById), new { id = newProduct.Id }, newProduct);
+            var productCreated = await _productService.CreateOneAsync(createDto);
+            return Created($"api/v1/products/{productCreated.Id}", productCreated);
 
+        }
+        [HttpGet]
+        public async Task<ActionResult<List<ProductReadDto>>> GetAll([FromQuery] PaginationOptions paginationOptions)
+        {
+            var productList = await _productService.GetAllAsync(paginationOptions);
+            return Ok(productList);
+
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductReadDto>> GetById([FromRoute] Guid id)
+        {
+            var product = await _productService.GetByIdAsync(id);
+            return Ok(product);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateProduct(Guid id, Product updatedProduct)
+        public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] ProductUpdateDto updateDto)
         {
-            Product? foundProduct = products.FirstOrDefault(p => p.Id == id);
-            if (foundProduct == null)
+            var result = await _productService.UpdateOneAsync(id, updateDto);
+            if (!result)
             {
-                return NotFound("Product not found.");
+                return NotFound();
             }
-            if (!string.IsNullOrEmpty(updatedProduct.Name))
-            {
-                foundProduct.Name = updatedProduct.Name;
-            }
-
-            if (updatedProduct.Price >= 0)
-            {
-                foundProduct.Price = updatedProduct.Price;
-            }
-
-            if (!string.IsNullOrEmpty(updatedProduct.Description))
-            {
-                foundProduct.Description = updatedProduct.Description;
-            }
-            return Ok(foundProduct);
-
+            var updatedProduct = await _productService.GetByIdAsync(id);
+            return Ok(updatedProduct);
         }
 
-
         [HttpDelete("{id}")]
-        public ActionResult DeleteProduct(Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            Product? foundProduct = products.FirstOrDefault(p => p.Id == id);
-            if (foundProduct == null)
+            var deleted = await _productService.DeleteOneAsync(id);
+            if (!deleted)
             {
-                return NotFound("Product not found.");
+                return NotFound();
             }
-
-            products.Remove(foundProduct);
             return NoContent();
         }
 

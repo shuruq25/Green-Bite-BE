@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using src.Entity;
+using src.Services.UserService;
+using src.Utils;
+using static src.DTO.UserDTO;
 
 namespace src.Controllers
 {
@@ -13,114 +16,92 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class UserController : ControllerBase
     {
-        public static List<User> users = new List<User>
-        {
-            new User
-            {
-                UserID = 1,
-                Name = "Raghad",
-                Password = "ra123",
-                EmailAddress = "raghad@example.com",
-                Phone = "0555764524",
-                UserRole = Entity.User.Role.Admin,
-            },
-            new User
-            {
-                UserID = 2,
-                Name = "Reema",
-                Password = "97643",
-                EmailAddress = "reema@example.com",
-                Phone = "0534201235",
-                UserRole = Entity.User.Role.Guest,
-            },
-            new User
-            {
-                UserID = 3,
-                Name = "Ali",
-                Password = "746953",
-                EmailAddress = "ali@example.com",
-                Phone = "0557398543",
-                UserRole = Entity.User.Role.User,
-            },
-        };
+        protected readonly IUserService _userService;
 
-        [HttpGet]
-        public ActionResult GetUsers()
+        public UserController(IUserService service)
         {
-            return Ok(users);
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult GetUserById(int id)
-        {
-            User? foundUser = users.FirstOrDefault(u => u.UserID == id);
-            if (foundUser == null)
-            {
-                return NotFound();
-            }
-            return Ok(foundUser);
+            _userService = service;
         }
 
         [HttpPost]
-        public ActionResult AddUser(User newUser)
+        public async Task<ActionResult<UserReadDto>> CreateOne([FromBody] UserCreateDto createDto)
         {
-            users.Add(newUser);
-            return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserID }, newUser);
+            var userCreated = await _userService.CreateOneAsync(createDto);
+            return Created($"api/v1/user/{userCreated.UserID}", userCreated);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult DeleteUser(int id)
+        [HttpGet]
+        public async Task<ActionResult<List<UserReadDto>>> GetAll(
+            PaginationOptions paginationOptions
+        )
         {
-            User? foundUser = users.FirstOrDefault(u => u.UserID == id);
-            if (foundUser == null)
+            var userList = await _userService.GetAllAsync(paginationOptions);
+            return Ok(userList);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserReadDto>> GetById(Guid id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            users.Remove(foundUser);
+            return Ok(user);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteOne(Guid id)
+        {
+            var isDeleted = await _userService.DeleteOneAsync(id);
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateUser(int id, User updatedUser)
+        public async Task<ActionResult<UserReadDto>> UpdateOne(Guid id, UserUpdateDto updateDto)
         {
-            User? foundUser = users.FirstOrDefault(u => u.UserID == id);
-            if (foundUser == null)
+            var isUpdated = await _userService.UpdateOneAsync(id, updateDto);
+            if (!isUpdated)
             {
-                return NotFound();
+                return NotFound(new { Message = "User not found for update" });
             }
-            foundUser.Name = updatedUser.Name;
-            return Ok(foundUser);
+            var updatedUser = await _userService.GetByIdAsync(id);
+            return Ok(updatedUser);
         }
 
-        [HttpPost("signup")]
-        public ActionResult SignUpUser([FromBody] User user)
-        {
-            PasswordUtils.HashPassword(user.Password, out string hashedPass, out byte[] salt);
-            user.Password = hashedPass;
-            user.Salt = salt;
-            users.Add(user);
-            return Created($"/api/v1/user/{user.UserID}", user);
-        }
+        // [HttpPost("signup")]
+        // public ActionResult SignUpUser([FromBody] User user)
+        // {
+        //     PasswordUtils.HashPassword(user.Password, out string hashedPass, out byte[] salt);
+        //     user.Password = hashedPass;
+        //     user.Salt = salt;
+        //     users.Add(user);
+        //     return Created($"/api/v1/user/{user.UserID}", user);
+        // }
 
-        [HttpPost("login")]
-        public ActionResult LogIn(User user)
-        {
-            User? foundUser = users.FirstOrDefault(p => p.EmailAddress == user.EmailAddress);
-            if (foundUser == null)
-            {
-                return NotFound();
-            }
+        // [HttpPost("login")]
+        // public ActionResult LogIn(User user)
+        // {
+        //     User? foundUser = users.FirstOrDefault(p => p.EmailAddress == user.EmailAddress);
+        //     if (foundUser == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            bool isMatched = PasswordUtils.VerifyPassword(
-                user.Password,
-                foundUser.Password,
-                foundUser.Salt
-            );
-            if (!isMatched)
-            {
-                return Unauthorized();
-            }
-            return Ok(foundUser);
-        }
+        //     bool isMatched = PasswordUtils.VerifyPassword(
+        //         user.Password,
+        //         foundUser.Password,
+        //         foundUser.Salt
+        //     );
+        //     if (!isMatched)
+        //     {
+        //         return Unauthorized();
+        //     }
+        //     return Ok(foundUser);
+        // }
     }
 }
