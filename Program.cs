@@ -21,7 +21,9 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services
      .AddScoped<IProductService, ProductService>()
-     .AddScoped<ProductRepository, ProductRepository>();
+     .AddScoped<ProductRepository, ProductRepository>()
+     .AddScoped<IPaymentRepository, PaymentRepository>()
+     .AddScoped<IPaymentService, PaymentService>();
 
 
 builder.Services.AddControllers();

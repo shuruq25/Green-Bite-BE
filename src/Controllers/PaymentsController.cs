@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using src.Entity;
+using src.DTO;
+using src.Services;
 
 namespace src.Controllers
 {
@@ -11,93 +8,62 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class PaymentsController : ControllerBase
     {
-        public static List<Payment> payments = new List<Payment>
-    {
-        new Payment { Id = 1
-        , FinalPrice = 100.00m
-        , Method = PaymentMethod.CreditCard
-        , PaymentDate = DateTime.Now
-        , Status = PaymentStatus.Completed },
+        protected readonly IPaymentService _paymentService;
 
-        new Payment { Id = 2
-        , FinalPrice = 50.00m
-        , Method = PaymentMethod.PayPal
-        , PaymentDate = DateTime.Now
-        , Status = PaymentStatus.Pending },
-    };
+        public PaymentsController(IPaymentService paymentService)
+        {
+            _paymentService = paymentService;
+        }
 
         [HttpGet]
-        public ActionResult GetPayments()
+        public async Task<ActionResult> GetAllPayments()
         {
-            return Ok(payments);
+            return Ok(await _paymentService.GetAllPaymets());
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetPaymentById(int id)
+        public async Task<ActionResult> GetPaymentById(Guid id)
         {
-            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-            if (foundPayment == null)
+            var payment = await _paymentService.GetPaymentById(id);
+            if (payment == null)
             {
-                return NotFound("Payment not found.");
+                return NotFound();
             }
-            return Ok(foundPayment);
+            return Ok(payment);
         }
 
         [HttpPost]
-        public ActionResult CreatePayment(Payment newPayment)
+        public async Task<ActionResult> CreatePayment([FromBody] PaymentDTO.PaymentCreateDto newPayment)
         {
             if (newPayment == null || newPayment.FinalPrice <= 0)
             {
                 return BadRequest("Invalid payment data.");
             }
+            var createdPaymentDto = await _paymentService.CreatePayment(newPayment);
 
-            payments.Add(newPayment);
-            return CreatedAtAction(nameof(GetPaymentById), new { id = newPayment.Id }, newPayment);
+
+            return CreatedAtAction(nameof(GetPaymentById), new { id = createdPaymentDto.Id }, createdPaymentDto);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdatePayment(int id, Payment updatedPayment)
+        public async Task<ActionResult> UpdatePayment(Guid id,[FromBody] PaymentDTO.PaymentUpdateDto updatedPayment)
         {
-            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-            if (foundPayment == null)
+            if (await _paymentService.UpdatePaymentById(id, updatedPayment))
             {
-                return NotFound("Payment not found.");
+                return NoContent();
             }
-
-            if (updatedPayment.FinalPrice > 0)
-            {
-                foundPayment.FinalPrice = updatedPayment.FinalPrice;
-            }
-
-            if (updatedPayment.Method != null)
-            {
-                foundPayment.Method = updatedPayment.Method;
-            }
-
-            if (updatedPayment.PaymentDate != default)
-            {
-                foundPayment.PaymentDate = updatedPayment.PaymentDate;
-            }
-
-            if (updatedPayment.Status != default)
-            {
-                foundPayment.Status = updatedPayment.Status;
-            }
-
-            return Ok(foundPayment);
+            return NotFound();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeletePayment(int id)
+        public async Task<ActionResult> DeletePayment(Guid id)
         {
-            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-            if (foundPayment == null)
+            if (await _paymentService.DeletePaymentById(id))
             {
-                return NotFound("Payment not found.");
+                return NoContent();
             }
 
-            payments.Remove(foundPayment);
-            return NoContent();
+            return NotFound();
         }
     }
 }
