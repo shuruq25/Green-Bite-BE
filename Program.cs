@@ -2,32 +2,45 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using src.Database;
 using src.Repository;
+using src.Services.product;
+using src.Utils;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
-var dataSourceBuilder = new NpgsqlDataSourceBuilder(
-    builder.Configuration.GetConnectionString("Local")
-).Build();
-builder.Services.AddControllers();
 
-builder.Services.AddDbContext<DatabaseContext>(Options =>
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("Local"));
+
+builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    Options.UseNpgsql(dataSourceBuilder);
-});
+    options.UseNpgsql(dataSourceBuilder.Build());
+
+}
+);
+
+builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+builder.Services
+     .AddScoped<IProductService, ProductService>()
+     .AddScoped<ProductRepository, ProductRepository>();
+
+
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// test if database is connected or not
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
     try
     {
-        // Check if the application can connect to the database
         if (dbContext.Database.CanConnect())
         {
             Console.WriteLine("Database is connected");
@@ -44,7 +57,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-// step 2: use 
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
@@ -55,6 +67,5 @@ if (app.Environment.IsDevelopment())
 
 
 app.Run();
-
 
 

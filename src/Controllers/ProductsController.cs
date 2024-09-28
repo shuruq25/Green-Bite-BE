@@ -39,6 +39,7 @@ namespace src.Controllers
             return Ok(product);
         }
 
+        [HttpPut("{id}")]
         public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] ProductUpdateDto updateDto)
         {
             var result = await _productService.UpdateOneAsync(id, updateDto);
