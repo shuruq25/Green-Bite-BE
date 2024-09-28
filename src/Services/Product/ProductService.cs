@@ -2,6 +2,7 @@ using AutoMapper;
 using src.Repository;
 using src.Entity;
 using static src.DTO.ProductDTO;
+using src.Utils;
 
 namespace src.Services.product
 {
@@ -26,9 +27,9 @@ namespace src.Services.product
 
         }
 
-        public async Task<List<ProductReadDto>> GetAllAsync()
+        public async Task<List<ProductReadDto>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            var productList = await _productRepository.GetAllAsync();
+            var productList = await _productRepository.GetAllAsync(paginationOptions);
             return _mapper.Map<List<Product>, List<ProductReadDto>>(productList);
         }
 
