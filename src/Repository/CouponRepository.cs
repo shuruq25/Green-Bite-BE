@@ -10,9 +10,7 @@ namespace src.Repository
 {
     public class CouponRepository
     {
-    
         protected DbSet<Coupon> _coupon;
-
 
         protected DatabaseContext _databaseContext;
 
@@ -25,7 +23,7 @@ namespace src.Repository
 
         // methods
 
-        
+
         // create a new Coupon:
 
         public async Task<Coupon> CreateOneAsync(Coupon newCoupon)
@@ -59,6 +57,13 @@ namespace src.Repository
             _coupon.Update(updatedCoupon);
             await _databaseContext.SaveChangesAsync();
             return true;
+        }
+
+        // get all Coupons:
+
+        public async Task<List<Coupon>> GetAllAsync()
+        {
+            return await _coupon.ToListAsync();
         }
     }
 }

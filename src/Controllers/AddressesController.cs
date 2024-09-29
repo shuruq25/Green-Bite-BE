@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using src.DTO;
 using src.Entity;
+using src.Services;
+using static src.DTO.AddressDTO;
 
 namespace src.Controllers
 {
@@ -7,85 +10,25 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class AdressesController : ControllerBase
     {
-        //*************************Create the List field of address class**************************
-       // public static List<Address> addresses = new List<Address>
-       // {
-        //     new Address
-        //     {
-        //         AddressId = 1,
-        //         Country = "USA",
-        //         Street = "1st Ave",
-        //         UserId = 101,
-        //     },
-        //     new Address
-        //     {
-        //         AddressId = 2,
-        //         Country = "UK",
-        //         Street = "Baker Street",
-        //         UserId = 102,
-        //     },
-        //     new Address
-        //     {
-        //         AddressId = 3,
-        //         Country = "France",
-        //         Street = "Champs-Élysées",
-        //         UserId = 103,
-        //     },
-        // };
+        protected readonly IAddressService _addressService;
 
-        // //*************************The Logic********************************
+        //DI logic of  the Services.Address in AdressesController
+        public AdressesController(IAddressService service)
+        {
+            _addressService = service;
+        }
 
-        // // GET
-        // [HttpGet]
-        // public ActionResult GetAddresses()
-        // {
-        //     return Ok(addresses);
-        // }
+        //create
 
-        // // GET By ID
-        // [HttpGet("{id}")]
-        // public ActionResult GetAddressById(int id)
-        // {
-        //     var foundAddress = addresses.FirstOrDefault(a => a.AddressId == id);
-        //     if (foundAddress == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return Ok(foundAddress);
-        // }
+        [HttpPost]
+        public async Task<ActionResult<AddressReadDto>> CreateOne(AddressCreateDto createDto)
+        {
+            var addressCreated = await _addressService.CreatOneAsync(createDto);
 
-        // // POST
-        // [HttpPost]
-        // public ActionResult PostAddress(Address newAddress)
-        // {
-        //     addresses.Add(newAddress);
-        //     return Created("Created new address successfully", newAddress);
-        // }
+            // return Created(Url ,addressCreated)
+            return Ok(addressCreated);
+        }
 
-        // // DELETE
-        // [HttpDelete("{id}")]
-        // public ActionResult DeleteAddress(int id)
-        // {
-        //     var foundAddress = addresses.FirstOrDefault(a => a.AddressId == id);
-        //     if (foundAddress == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     addresses.Remove(foundAddress);
-        //     return NoContent();
-        // }
 
-        // // Put
-        // [HttpPut("{id}")]
-        // public ActionResult PutAddress(int id, Address updatedAddress)
-        // {
-        //     var foundAddress = addresses.FirstOrDefault(a => a.AddressId == id);
-        //     if (foundAddress == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     foundAddress.Street = updatedAddress.Street;
-        //     return Ok(foundAddress);
-        // }
     }
 }

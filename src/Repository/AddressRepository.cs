@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Database;
+using src.DTO;
 using src.Entity;
 
 namespace src.Repository
@@ -29,7 +30,7 @@ namespace src.Repository
 
         // methods
 
-        
+
         // create a new Address:
 
         public async Task<Address> CreateOneAsync(Address newAddress)
@@ -64,5 +65,14 @@ namespace src.Repository
             await _databaseContext.SaveChangesAsync();
             return true;
         }
+
+        // get all Addresses:
+
+        public async Task<List<Address>> GetAllAsync()
+        {
+            return await _address.ToListAsync();
+        }
+
+     
     }
 }

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace src.Entity
 {
     public class User
     {
-        public int UserID { get; set; }
+        public Guid UserID { get; set; }
         public string? Name { get; set; }
         public string? Password { get; set; }
         public string? EmailAddress { get; set; }
@@ -16,10 +17,11 @@ namespace src.Entity
         public Role UserRole { get; set; }
         public byte[]? Salt { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum Role
         {
             Admin,
-            User,
+            Customer,
             Guest,
         }
     }
