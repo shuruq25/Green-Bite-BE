@@ -6,10 +6,8 @@ namespace src.DTO
         public class Update
         {
             public decimal? OriginalPrice { get; set; }
-            public DateTime CreatedAt { get; set; }
             public DateTime? EstimatedArrival { get; set; }
             public OrderStatuses? Status { get; set; }
-            public int? PaymentID { get; set; }
         }
 
         public class Create
