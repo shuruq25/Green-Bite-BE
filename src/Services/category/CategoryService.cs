@@ -12,9 +12,9 @@ namespace src.Services.category
 {
     public class CategoryService : ICategoryService
     {
-        protected CategoryRepository _categoryRepo;
+        protected ICategoryRepository _categoryRepo;
         protected IMapper _mapper;
-        public CategoryService(CategoryRepository categoryRepo, IMapper mapper)
+        public CategoryService(ICategoryRepository categoryRepo, IMapper mapper)
         {
             _categoryRepo = categoryRepo;
             _mapper = mapper;

@@ -25,6 +25,7 @@ builder.Services
 
 builder.Services
     .AddScoped<ICategoryService, CategoryService>()
+    .AddScoped<ICategoryRepository, CategoryRepository>()
 
     .AddScoped<IOrderRepository, OrderRepository>()
     .AddScoped<IOrderService, OrderService>()
@@ -33,7 +34,7 @@ builder.Services
     .AddScoped<IPaymentService, PaymentService>()
 
     .AddScoped<IProductService, ProductService>()
-    .AddScoped<ProductRepository, ProductRepository>()
+    .AddScoped<IProductRepository, ProductRepository>()
 
     .AddScoped<IUserService, UserService>()
     .AddScoped<UserRepository, UserRepository>();
