@@ -5,7 +5,7 @@ using static src.DTO.AddressDTO;
 
 namespace src.Services
 {
-    public class AddressServices : IAddressService
+    public class AddressService : IAddressService
     {
         // repo : get the data frome database
         protected readonly AddressRepository _addressRepo;
@@ -15,7 +15,7 @@ namespace src.Services
 
         // Constructer
         // DI the repository and mapper
-        public AddressServices(AddressRepository addressRepo, IMapper mapper)
+        public AddressService(AddressRepository addressRepo, IMapper mapper)
         {
             _addressRepo = addressRepo;
             _mapper = mapper;

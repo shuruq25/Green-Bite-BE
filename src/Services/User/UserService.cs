@@ -3,6 +3,7 @@ using src.Entity;
 using src.Repository;
 using src.Utils;
 using static src.DTO.UserDTO;
+using static src.Entity.User;
 
 namespace src.Services.UserService
 {
@@ -10,16 +11,26 @@ namespace src.Services.UserService
     {
         protected readonly UserRepository _userRepo;
         protected readonly IMapper _mapper;
+        protected readonly IConfiguration _configuration;
 
-        public UserService(UserRepository userRepo, IMapper mapper)
+        public UserService(UserRepository userRepo, IMapper mapper,IConfiguration configuration)
         {
             _userRepo = userRepo;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<UserReadDto> CreateOneAsync(UserCreateDto createDto)
         {
+            PasswordUtils.HashPassword(
+                createDto.Password,
+                out string hashedPassword,
+                out byte[] salt
+            );
             var user = _mapper.Map<UserCreateDto, User>(createDto);
+            user.Password = hashedPassword;
+            user.Salt = salt;
+            user.UserRole = Role.Customer;
             var userCreated = await _userRepo.CreateOneAsync(user);
             return _mapper.Map<User, UserReadDto>(userCreated);
         }
@@ -61,6 +72,24 @@ namespace src.Services.UserService
             }
             _mapper.Map(updateDto, foundUser);
             return await _userRepo.UpdateOneAsync(foundUser);
+        }
+
+        public async Task<string> SignInAsync(UserCreateDto createDto)
+        {
+            var foundUser = await _userRepo.FindByEmailAsync(createDto.EmailAddress);
+
+            var isMatched = PasswordUtils.VerifyPassword(
+                createDto.Password,
+                foundUser.Password,
+                foundUser.Salt
+            );
+            if (isMatched)
+            {
+                var tokenUtil = new TokenUtils(_configuration);
+                return tokenUtil.GenerateToken(foundUser);
+            }
+
+            return "Unauthorized";
         }
     }
 }

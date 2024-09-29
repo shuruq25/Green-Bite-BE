@@ -2,6 +2,7 @@ using AutoMapper;
 using src.Entity;
 using static src.DTO.AddressDTO;
 using static src.DTO.CategoryDTO;
+using static src.DTO.CouponDTO;
 using static src.DTO.ProductDTO;
 using static src.DTO.UserDTO;
 
@@ -34,6 +35,13 @@ namespace src.Utils
             CreateMap<CategoryCreateDto, Category>();
             CreateMap<CategoryUpdateDto, Category>().
             ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
+      
+                  CreateMap<Coupon, CouponReadDto>();
+            CreateMap<CouponCreateDto, Coupon>();
+            CreateMap<CouponUpdateDto, Coupon>().
+           ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
+      
+      
         }
 
     }
