@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update;
 using src.Database;
 using src.Entity;
+using src.Utils;
 
 namespace src.Repository
 {
@@ -27,9 +28,13 @@ namespace src.Repository
             return newUser;
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            return await _user.ToListAsync();
+            var result = _user.Where(u => u.Name.ToLower().Contains(paginationOptions.Search));
+            return await result
+                .Skip(paginationOptions.Offset)
+                .Take(paginationOptions.Limit)
+                .ToListAsync();
         }
 
         public async Task<User?> GetByIdAsync(Guid id)
