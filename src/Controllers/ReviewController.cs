@@ -7,7 +7,7 @@ using src.Entity;
 
 namespace src.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ReviewController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{reviewid}")]
-        public ActionResult GetReview(int reviewid)
+        public ActionResult GetReview(Guid reviewid)
         {
             var review = reviews.FirstOrDefault(r => r.ReviewId == reviewid);
             if (review == null)
@@ -38,7 +38,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{reviewid}")]
-        public ActionResult DeleteReview(int reviewid)
+        public ActionResult DeleteReview(Guid reviewid)
         {
             var review = reviews.FirstOrDefault(r => r.ReviewId == reviewid);
             if (review == null)
@@ -50,7 +50,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{reviewid}")]
-        public ActionResult UpdateReview(int reviewid, Review updatedReview)
+        public ActionResult UpdateReview(Guid reviewid, Review updatedReview)
         {
             var review = reviews.FirstOrDefault(r => r.ReviewId == reviewid);
             if (review == null)

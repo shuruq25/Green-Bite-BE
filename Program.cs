@@ -2,36 +2,43 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using src.Database;
 using src.Repository;
+using src.Services.category;
 using src.Services.product;
+using src.Services.UserService;
 using src.Utils;
-
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("Local"));
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(
+    builder.Configuration.GetConnectionString("Local")
+);
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.Build());
-
-}
-);
+});
 
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
+
 builder.Services
      .AddScoped<IProductService, ProductService>()
      .AddScoped<ProductRepository, ProductRepository>();
+
+builder.Services
+ .AddScoped<ICategoryService, CategoryService>();
+builder.Services
+.AddScoped<CategoryRepository, CategoryRepository>();
 
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserService, UserService>().AddScoped<UserRepository, UserRepository>();
 
 var app = builder.Build();
 
@@ -56,7 +63,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
@@ -65,7 +71,4 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.Run();
-
-
