@@ -9,11 +9,11 @@ namespace src.Services.product
     public class ProductService : IProductService
     {
 
-        protected readonly ProductRepository _productRepository;
+        protected readonly IProductRepository _productRepository;
         protected readonly IMapper _mapper;
 
 
-        public ProductService(ProductRepository productRepository, IMapper mapper)
+        public ProductService(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;

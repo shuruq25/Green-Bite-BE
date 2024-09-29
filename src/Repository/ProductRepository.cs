@@ -5,7 +5,16 @@ using src.Utils;
 
 namespace src.Repository
 {
-    public class ProductRepository
+    public interface IProductRepository
+    {
+        Task<Product> CreateOneAsync(Product newProduct);
+        Task<bool> DeleteOneAsync(Product product);
+        Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions);
+        Task<Product?> GetByIdAsync(Guid id);
+        Task<bool> UpdateOneAsync(Product updateProduct);
+    }
+
+    public class ProductRepository : IProductRepository
     {
         protected DbSet<Product> _product;
         protected DatabaseContext _databaseContext;
@@ -21,9 +30,9 @@ namespace src.Repository
             return newProduct;
         }
 
-          public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
+        public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
         {
-           var searchResult= _product.Where(c =>c.Name.ToLower().Contains(paginationOptions.Search));
+            var searchResult = _product.Where(c => c.Name.ToLower().Contains(paginationOptions.Search));
             return await searchResult.Skip(paginationOptions.Offset).Take(paginationOptions.Limit).ToListAsync();
 
         }

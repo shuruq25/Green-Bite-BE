@@ -1,6 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using src.DTO;
 using src.Entity;
-using src.Repository;
+using src.Services;
 
 namespace src.Controllers
 {
@@ -8,31 +10,38 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class OrderController : ControllerBase
     {
-        protected IOrderRepository _orders;
+        protected IMapper _mapper;
+        protected IOrderService _orderService;
 
-        public OrderController(IOrderRepository orders)
+        public OrderController(IMapper mapper, IOrderService orderService)
         {
-            _orders = orders;
+            _mapper = mapper;
+            _orderService = orderService;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrderById(Guid id)
+        {
+            return Ok(await _orderService.GetOrderByIdAsync(id));
+        }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetAll()
         {
-            return Ok(await _orders.GetAllOrdersAsync());
+            return Ok(await _orderService.GetAllOrdersAsync());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Order order)
+        public async Task<IActionResult> Create([FromBody] OrderDTO.Create order)
         {
-            var newOrder = await _orders.AddOrderAsync(order);
-            return CreatedAtAction(nameof(GetAll), new { id = order.ID }, order);
+            var createdOrderDTO = await _orderService.CreateOneOrderAsync(order);
+            return CreatedAtAction(nameof(GetOrderById), new { id = createdOrderDTO.ID }, createdOrderDTO);
         }
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete(int id, [FromBody] Order order)
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateOrder(Guid id, [FromBody] OrderDTO.Update order)
         {
-            if (await _orders.UpdateOrderAsync(id, order))
+            if (await _orderService.UpdateOrderAsync(id, order))
             {
                 return NoContent();
             }
@@ -41,9 +50,9 @@ namespace src.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (await _orders.DeleteOrderAsync(id))
+            if (await _orderService.DeleteByIdAsync(id))
             {
                 return NoContent();
             }

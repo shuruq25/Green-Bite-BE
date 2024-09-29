@@ -1,14 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
 
 namespace src.Repository
 {
-    public class CategoryRepository
+    public interface ICategoryRepository
+    {
+        Task<Category> CreateOneAsync(Category newCategory);
+        Task<bool> DeleteOnAsync(Category category);
+        Task<List<Category>> GetCategoriesAsync();
+        Task<Category?> GetCategoryAsync(Guid id);
+        Task<bool> UpdateOneAsync(Category updatedCategory);
+    }
+
+    public class CategoryRepository : ICategoryRepository
     {
         protected DbSet<Category> _category;
         protected DatabaseContext _databaseContext;
