@@ -20,7 +20,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrderById(int id)
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrderById(Guid id)
         {
             return Ok(await _orderService.GetOrderByIdAsync(id));
         }
@@ -39,7 +39,7 @@ namespace src.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, [FromBody] OrderDTO.Update order)
+        public async Task<IActionResult> UpdateOrder(Guid id, [FromBody] OrderDTO.Update order)
         {
             if (await _orderService.UpdateOrderAsync(id, order))
             {
@@ -50,7 +50,7 @@ namespace src.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (await _orderService.DeleteByIdAsync(id))
             {

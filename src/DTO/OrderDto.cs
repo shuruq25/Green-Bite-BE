@@ -12,23 +12,21 @@ namespace src.DTO
 
         public class Create
         {
-            public int UserID { get; set; }
             public decimal OriginalPrice { get; set; }
             public DateTime CreatedAt { get; set; }
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
-            public int PaymentID { get; set; }
         }
 
        public class Get
         {
-            public int ID { get; set; }
-            public int UserID { get; set; }
+            public Guid ID { get; set; }
+            public Guid UserID { get; set; }
             public decimal OriginalPrice { get; set; }
             public DateTime CreatedAt { get; set; }
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
-            public int PaymentID { get; set; }
+            public Guid PaymentID { get; set; }
         }
     }
 }

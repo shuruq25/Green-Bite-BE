@@ -28,13 +28,13 @@ namespace src.Services
             return _mapper.Map<OrderDTO.Get>(createdOrder);
         }
 
-        public async Task<OrderDTO.Get?> GetOrderByIdAsync(int id)
+        public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)
         {
             var requestedOrder = await _ordersRepo.GetOrderByIdAsync(id);
             return _mapper.Map<OrderDTO.Get>(requestedOrder);
         }
 
-        public async Task<bool> UpdateOrderAsync(int id, OrderDTO.Update orderDTO)
+        public async Task<bool> UpdateOrderAsync(Guid id, OrderDTO.Update orderDTO)
         {
             var foundOrder = await _ordersRepo.GetOrderByIdAsync(id);
             if (foundOrder == null)
@@ -45,7 +45,7 @@ namespace src.Services
             return await _ordersRepo.UpdateOrderAsync(foundOrder);
         }
 
-        public async Task<bool> DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(Guid id)
         {
             return await _ordersRepo.DeleteOrderAsync(id);
         }

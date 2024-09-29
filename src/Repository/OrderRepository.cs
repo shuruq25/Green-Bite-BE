@@ -9,8 +9,8 @@ namespace src.Repository
         Task<List<Order>> GetAllOrdersAsync();
         Task<Order> AddOrderAsync(Order newOrder);
         Task<bool> UpdateOrderAsync(Order order);
-        Task<bool> DeleteOrderAsync(int id);
-        Task<Order?> GetOrderByIdAsync(int id);
+        Task<bool> DeleteOrderAsync(Guid id);
+        Task<Order?> GetOrderByIdAsync(Guid id);
     }
 
     public class OrderRepository : IOrderRepository
@@ -22,7 +22,7 @@ namespace src.Repository
             _db = db;
         }
 
-        public async Task<Order?> GetOrderByIdAsync(int id) => await _orders.FirstOrDefaultAsync(o => o.ID == id);
+        public async Task<Order?> GetOrderByIdAsync(Guid id) => await _orders.FirstOrDefaultAsync(o => o.ID == id);
 
         public async Task<List<Order>> GetAllOrdersAsync() => await _orders.ToListAsync();
 
@@ -42,7 +42,7 @@ namespace src.Repository
 
 
 
-        public async Task<bool> DeleteOrderAsync(int id)
+        public async Task<bool> DeleteOrderAsync(Guid id)
         {
             var existingOrder = await _orders.FirstOrDefaultAsync(o => o.ID == id);
             if (existingOrder == null)
