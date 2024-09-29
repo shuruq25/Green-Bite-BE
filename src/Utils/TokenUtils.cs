@@ -19,7 +19,7 @@ namespace src.Utils
             _configuration = configuration;
         }
 
-        public string GenericToken(User user)
+        public string GenerateToken(User user)
         {
             var claims = new List<Claim>
             {
@@ -28,8 +28,13 @@ namespace src.Utils
                 new Claim(ClaimTypes.Role, user.UserRole.ToString()),
             };
 
-             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value!));
-            var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value!)
+            );
+            var signingCredentials = new SigningCredentials(
+                key,
+                SecurityAlgorithms.HmacSha256Signature
+            );
             var issuer = _configuration.GetSection("Jwt:Issuer").Value;
             var audience = _configuration.GetSection("Jwt:Audience").Value;
             var descriptor = new SecurityTokenDescriptor
@@ -38,9 +43,9 @@ namespace src.Utils
                 Audience = audience,
                 Expires = DateTime.Now.AddMinutes(60),
                 Subject = new ClaimsIdentity(claims),
-                SigningCredentials = signingCredentials
+                SigningCredentials = signingCredentials,
             };
-        
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(descriptor);
             return tokenHandler.WriteToken(token);

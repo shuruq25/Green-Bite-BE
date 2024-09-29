@@ -76,35 +76,12 @@ namespace src.Controllers
             return Ok(updatedUser);
         }
 
-        // [HttpPost("signup")]
-        // public ActionResult SignUpUser([FromBody] User user)
-        // {
-        //     PasswordUtils.HashPassword(user.Password, out string hashedPass, out byte[] salt);
-        //     user.Password = hashedPass;
-        //     user.Salt = salt;
-        //     users.Add(user);
-        //     return Created($"/api/v1/user/{user.UserID}", user);
-        // }
+        [HttpPost("signIn")]
+        public async Task<ActionResult<string>> SignInUser([FromBody] UserCreateDto createDto)
+        {
+            var token = await _userService.SignInAsync(createDto);
 
-        // [HttpPost("login")]
-        // public ActionResult LogIn(User user)
-        // {
-        //     User? foundUser = users.FirstOrDefault(p => p.EmailAddress == user.EmailAddress);
-        //     if (foundUser == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     bool isMatched = PasswordUtils.VerifyPassword(
-        //         user.Password,
-        //         foundUser.Password,
-        //         foundUser.Salt
-        //     );
-        //     if (!isMatched)
-        //     {
-        //         return Unauthorized();
-        //     }
-        //     return Ok(foundUser);
-        // }
+            return Ok(token);
+        }
     }
 }

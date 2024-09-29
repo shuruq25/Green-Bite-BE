@@ -24,6 +24,7 @@ namespace src.Entity
             Admin,
             Customer,
             Guest,
+            
         }
     }
 }

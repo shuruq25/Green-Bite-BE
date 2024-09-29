@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using src.Entity;
+using static src.Entity.Payment;
+using static src.Entity.User;
 
 namespace src.Database
 {
@@ -11,16 +13,25 @@ namespace src.Database
         public DbSet<Order> Order { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Address> Address { get; set; }
-
-        // public DbSet<Coupon> Coupon { get; set; }
+        public DbSet<Coupon> Coupon { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Payment> Payment { get; set; }
 
         // public DbSet<Review> Review { get; set; }
         // public DbSet<Cart> Cart { get; set; }
 
-        public DatabaseContext(DbContextOptions options) : base(options)
+        public DatabaseContext(DbContextOptions options)
+            : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresEnum<OrderStatuses>();
+            modelBuilder.HasPostgresEnum<PaymentMethod>();
+            modelBuilder.HasPostgresEnum<PaymentStatus>();
+            modelBuilder.HasPostgresEnum<Role>();
+
+
+            
         }
     }
 }
