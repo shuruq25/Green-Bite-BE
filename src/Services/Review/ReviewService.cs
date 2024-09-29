@@ -1,9 +1,10 @@
 using AutoMapper;
 using src.Entity;
 using src.Repository;
+using src.Utils;
 using static src.DTO.ReviewDTO;
 
-namespace src.Services.Review
+namespace src.Services.review
 {
     public class ReviewService : IReviewService
     {
@@ -23,9 +24,9 @@ namespace src.Services.Review
             return _mapper.Map<Review, ReviewReadDto>(reviewCreated);
         }
 
-        public async Task<List<ReviewReadDto>> GetAllAsync()
+        public async Task<List<ReviewReadDto>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            var reviewList = await _reviewRepo.GetReviewsAsync();
+            var reviewList = await _reviewRepo.GetReviewsAsync(paginationOptions);
             return _mapper.Map<List<Review>, List<ReviewReadDto>>(reviewList);
         }
 
@@ -49,6 +50,7 @@ namespace src.Services.Review
             }
             return false;
         }
+
         public async Task<bool> UpdateOneAsync(Guid id, ReviewUpdateDto updateDto)
         {
             var foundReview = await _reviewRepo.GetReviewAsync(id);

@@ -6,6 +6,7 @@ using src.Repository;
 using src.Services;
 using src.Services.category;
 using src.Services.product;
+using src.Services.review;
 using src.Services.UserService;
 using src.Utils;
 
@@ -36,8 +37,9 @@ builder
     .AddScoped<IAddressService, AddressService>()
     .AddScoped<AddressRepository, AddressRepository>()
     .AddScoped<IUserService, UserService>()
-    .AddScoped<UserRepository, UserRepository>();
-
+    .AddScoped<UserRepository, UserRepository>()
+    .AddScoped<IReviewService, ReviewService>()
+    .AddScoped<ReviewRepository, ReviewRepository>();
 builder
     .Services.AddScoped<ICouponService, CouponService>()
     .AddScoped<CouponsController, CouponsController>();
