@@ -32,7 +32,7 @@ namespace src.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
-            PaginationOptions paginationOptions
+            [FromQuery] PaginationOptions paginationOptions
         )
         {
             var userList = await _userService.GetAllAsync(paginationOptions);
@@ -62,7 +62,10 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserReadDto>> UpdateOne(Guid id, UserUpdateDto updateDto)
+        public async Task<ActionResult<UserReadDto>> UpdateOne(
+            Guid id,
+            [FromBody] UserUpdateDto updateDto
+        )
         {
             var isUpdated = await _userService.UpdateOneAsync(id, updateDto);
             if (!isUpdated)
