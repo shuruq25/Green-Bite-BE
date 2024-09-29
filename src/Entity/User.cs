@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
 
@@ -17,10 +18,11 @@ namespace src.Entity
         public Role UserRole { get; set; }
         public byte[]? Salt { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum Role
         {
             Admin,
-            User,
+            Customer,
             Guest,
         }
     }
