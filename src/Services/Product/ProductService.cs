@@ -40,7 +40,7 @@ namespace src.Services.product
             return _mapper.Map<Product, ProductReadDto>(foundProduct);
 
         }
-           public async Task<bool> DeleteOneAsync(Guid id)
+        public async Task<bool> DeleteOneAsync(Guid id)
         {
             var foundProduct = await _productRepository.GetByIdAsync(id);
             if (foundProduct != null)
@@ -53,15 +53,16 @@ namespace src.Services.product
             }
             return false;
         }
-           public async Task<bool> UpdateOneAsync(Guid id, ProductUpdateDto UpdateDto)
-            {
+        public async Task<bool> UpdateOneAsync(Guid id, ProductUpdateDto UpdateDto)
+        {
             var foundProduct = await _productRepository.GetByIdAsync(id);
-            if(foundProduct==null){
-               return false; 
+            if (foundProduct == null)
+            {
+                return false;
             }
             _mapper.Map(UpdateDto, foundProduct);
             return await _productRepository.UpdateOneAsync(foundProduct);
 
-            }
+        }
     }
 }

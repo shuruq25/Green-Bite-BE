@@ -4,6 +4,7 @@ using src.Database;
 using src.Repository;
 using src.Services;
 using src.Utils;
+using src.Services.category;
 using src.Services.product;
 using src.Services.UserService;
 
@@ -22,6 +23,8 @@ builder.Services.AddAutoMapper(typeof(OrderMapperProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 builder.Services
+     .AddScoped<IUserService, UserService>()
+     .AddScoped<UserRepository, UserRepository>()
      .AddScoped<IOrderRepository, OrderRepository>()
      .AddScoped<IOrderService, OrderService>()
      .AddScoped<ProductRepository, ProductRepository>()
@@ -29,13 +32,9 @@ builder.Services
      .AddScoped<IPaymentRepository, PaymentRepository>()
      .AddScoped<IPaymentService, PaymentService>();
 
-
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<IUserService, UserService>().AddScoped<UserRepository, UserRepository>();
 
 var app = builder.Build();
 
