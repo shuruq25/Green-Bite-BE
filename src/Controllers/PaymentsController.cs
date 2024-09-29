@@ -5,99 +5,99 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
 
-namespace src.Controllers
-{
-    [ApiController]
-    [Route("api/v1/[controller]")]
-    public class PaymentsController : ControllerBase
-    {
-        public static List<Payment> payments = new List<Payment>
-    {
-        new Payment { Id = 1
-        , FinalPrice = 100.00m
-        , Method = PaymentMethod.CreditCard
-        , PaymentDate = DateTime.Now
-        , Status = PaymentStatus.Completed },
+// namespace src.Controllers
+// {
+//     [ApiController]
+//     [Route("api/v1/[controller]")]
+//     public class PaymentsController : ControllerBase
+//     {
+//         public static List<Payment> payments = new List<Payment>
+//     {
+//         new Payment { Id = 1
+//         , FinalPrice = 100.00m
+//         , Method = PaymentMethod.CreditCard
+//         , PaymentDate = DateTime.Now
+//         , Status = PaymentStatus.Completed },
 
-        new Payment { Id = 2
-        , FinalPrice = 50.00m
-        , Method = PaymentMethod.PayPal
-        , PaymentDate = DateTime.Now
-        , Status = PaymentStatus.Pending },
-    };
+//         new Payment { Id = 2
+//         , FinalPrice = 50.00m
+//         , Method = PaymentMethod.PayPal
+//         , PaymentDate = DateTime.Now
+//         , Status = PaymentStatus.Pending },
+//     };
 
-        [HttpGet]
-        public ActionResult GetPayments()
-        {
-            return Ok(payments);
-        }
+//         [HttpGet]
+//         public ActionResult GetPayments()
+//         {
+//             return Ok(payments);
+//         }
 
-        [HttpGet("{id}")]
-        public ActionResult GetPaymentById(int id)
-        {
-            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-            if (foundPayment == null)
-            {
-                return NotFound("Payment not found.");
-            }
-            return Ok(foundPayment);
-        }
+//         [HttpGet("{id}")]
+//         public ActionResult GetPaymentById(int id)
+//         {
+//             var foundPayment = payments.FirstOrDefault(p => p.Id == id);
+//             if (foundPayment == null)
+//             {
+//                 return NotFound("Payment not found.");
+//             }
+//             return Ok(foundPayment);
+//         }
 
-        [HttpPost]
-        public ActionResult CreatePayment(Payment newPayment)
-        {
-            if (newPayment == null || newPayment.FinalPrice <= 0)
-            {
-                return BadRequest("Invalid payment data.");
-            }
+//         [HttpPost]
+//         public ActionResult CreatePayment(Payment newPayment)
+//         {
+//             if (newPayment == null || newPayment.FinalPrice <= 0)
+//             {
+//                 return BadRequest("Invalid payment data.");
+//             }
 
-            payments.Add(newPayment);
-            return CreatedAtAction(nameof(GetPaymentById), new { id = newPayment.Id }, newPayment);
-        }
+//             payments.Add(newPayment);
+//             return CreatedAtAction(nameof(GetPaymentById), new { id = newPayment.Id }, newPayment);
+//         }
 
-        [HttpPut("{id}")]
-        public ActionResult UpdatePayment(int id, Payment updatedPayment)
-        {
-            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-            if (foundPayment == null)
-            {
-                return NotFound("Payment not found.");
-            }
+//         [HttpPut("{id}")]
+//         public ActionResult UpdatePayment(int id, Payment updatedPayment)
+//         {
+//             var foundPayment = payments.FirstOrDefault(p => p.Id == id);
+//             if (foundPayment == null)
+//             {
+//                 return NotFound("Payment not found.");
+//             }
 
-            if (updatedPayment.FinalPrice > 0)
-            {
-                foundPayment.FinalPrice = updatedPayment.FinalPrice;
-            }
+//             if (updatedPayment.FinalPrice > 0)
+//             {
+//                 foundPayment.FinalPrice = updatedPayment.FinalPrice;
+//             }
 
-            if (updatedPayment.Method != null)
-            {
-                foundPayment.Method = updatedPayment.Method;
-            }
+//             if (updatedPayment.Method != null)
+//             {
+//                 foundPayment.Method = updatedPayment.Method;
+//             }
 
-            if (updatedPayment.PaymentDate != default)
-            {
-                foundPayment.PaymentDate = updatedPayment.PaymentDate;
-            }
+//             if (updatedPayment.PaymentDate != default)
+//             {
+//                 foundPayment.PaymentDate = updatedPayment.PaymentDate;
+//             }
 
-            if (updatedPayment.Status != default)
-            {
-                foundPayment.Status = updatedPayment.Status;
-            }
+//             if (updatedPayment.Status != default)
+//             {
+//                 foundPayment.Status = updatedPayment.Status;
+//             }
 
-            return Ok(foundPayment);
-        }
+//             return Ok(foundPayment);
+//         }
 
-        [HttpDelete("{id}")]
-        public ActionResult DeletePayment(int id)
-        {
-            var foundPayment = payments.FirstOrDefault(p => p.Id == id);
-            if (foundPayment == null)
-            {
-                return NotFound("Payment not found.");
-            }
+//         [HttpDelete("{id}")]
+//         public ActionResult DeletePayment(int id)
+//         {
+//             var foundPayment = payments.FirstOrDefault(p => p.Id == id);
+//             if (foundPayment == null)
+//             {
+//                 return NotFound("Payment not found.");
+//             }
 
-            payments.Remove(foundPayment);
-            return NoContent();
-        }
-    }
-}
+//             payments.Remove(foundPayment);
+//             return NoContent();
+//         }
+//     }
+// }
