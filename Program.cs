@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using src.Database;
 using src.Repository;
+using src.Services.category;
 using src.Services.product;
 using src.Services.UserService;
 using src.Utils;
@@ -21,9 +22,16 @@ builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-builder
-    .Services.AddScoped<IProductService, ProductService>()
-    .AddScoped<ProductRepository, ProductRepository>();
+
+builder.Services
+     .AddScoped<IProductService, ProductService>()
+     .AddScoped<ProductRepository, ProductRepository>();
+
+builder.Services
+ .AddScoped<ICategoryService, CategoryService>();
+builder.Services
+.AddScoped<CategoryRepository, CategoryRepository>();
+
 
 builder.Services.AddControllers();
 
