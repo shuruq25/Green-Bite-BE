@@ -35,13 +35,9 @@ builder.Services
 
      .AddScoped<IProductService, ProductService>()
      .AddScoped<ProductRepository, ProductRepository>()
-  
+
      .AddScoped<IAddressService, AddressServices>()
-     .AddScoped<AddressRepository,AddressRepository>();
-
-
-    .AddScoped<IProductService, ProductService>()
-    .AddScoped<IProductRepository, ProductRepository>()
+     .AddScoped<AddressRepository, AddressRepository>()
 
     .AddScoped<IUserService, UserService>()
     .AddScoped<UserRepository, UserRepository>();
