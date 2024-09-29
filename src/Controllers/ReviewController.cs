@@ -62,10 +62,8 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ReviewReadDto>> UpdateReview(
-            Guid id,
-            [FromBody] ReviewUpdateDto updateDto
-        )
+        public async Task<ActionResult<ReviewReadDto>> UpdateReview(Guid id,
+            [FromBody] ReviewUpdateDto updateDto)
         {
             var isUpdated = await _reviewService.UpdateOneAsync(id, updateDto);
             if (!isUpdated)

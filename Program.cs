@@ -39,10 +39,9 @@ builder
     .AddScoped<IUserService, UserService>()
     .AddScoped<UserRepository, UserRepository>()
     .AddScoped<IReviewService, ReviewService>()
-    .AddScoped<ReviewRepository, ReviewRepository>();
-builder
-    .Services.AddScoped<ICouponService, CouponService>()
-    .AddScoped<CouponsController, CouponsController>();
+    .AddScoped<ReviewRepository, ReviewRepository>()
+    .AddScoped<ICouponService, CouponService>()
+    .AddScoped<CouponRepository, CouponRepository>();
 ;
 
 builder.Services.AddControllers();
