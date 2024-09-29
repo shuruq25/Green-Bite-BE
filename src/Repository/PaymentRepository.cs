@@ -5,7 +5,16 @@ using src.Entity;
 
 namespace src.Repository
 {
-    public class PaymentRepository
+    public interface IPaymentRepository
+    {
+        Task<Payment> CreateOneAsync(Payment newPayment);
+        Task<bool> DeletePaymentAsync(Payment payment);
+        Task<List<Payment>> GetAllAsync();
+        Task<Payment?> GetByIdAsync(Guid id);
+        Task<bool> UpdatePaymentAsync(Payment updatedPayment);
+    }
+
+    public class PaymentRepository : IPaymentRepository
     {
         protected DbSet<Payment> _payment;
         protected DatabaseContext _databaseContext;
@@ -25,8 +34,7 @@ namespace src.Repository
 
         public async Task<List<Payment>> GetAllAsync()
         {
-             return await _payment.ToListAsync();
-
+            return await _payment.ToListAsync();
         }
 
         public async Task<Payment?> GetByIdAsync(Guid id)

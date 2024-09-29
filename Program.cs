@@ -4,6 +4,7 @@ using src.Database;
 using src.Repository;
 using src.Services;
 using src.Utils;
+using src.Services.category;
 using src.Services.product;
 using src.Services.UserService;
 
@@ -18,22 +19,28 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(dataSourceBuilder.Build());
 });
 
-builder.Services.AddAutoMapper(typeof(OrderMapperProfile).Assembly);
-builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+builder.Services
+    .AddAutoMapper(typeof(OrderMapperProfile).Assembly)
+    .AddAutoMapper(typeof(MapperProfile).Assembly);
 
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services
+    .AddScoped<ICategoryService, CategoryService>()
 
-builder
-    .Services.AddScoped<IProductService, ProductService>()
-    .AddScoped<ProductRepository, ProductRepository>();
+    .AddScoped<IOrderRepository, OrderRepository>()
+    .AddScoped<IOrderService, OrderService>()
+
+    .AddScoped<IPaymentRepository, PaymentRepository>()
+    .AddScoped<IPaymentService, PaymentService>()
+
+    .AddScoped<IProductService, ProductService>()
+    .AddScoped<ProductRepository, ProductRepository>()
+
+    .AddScoped<IUserService, UserService>()
+    .AddScoped<UserRepository, UserRepository>();
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<IUserService, UserService>().AddScoped<UserRepository, UserRepository>();
 
 var app = builder.Build();
 

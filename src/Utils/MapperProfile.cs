@@ -1,5 +1,6 @@
 using AutoMapper;
 using src.Entity;
+using static src.DTO.CategoryDTO;
 using static src.DTO.ProductDTO;
 using static src.DTO.UserDTO;
 
@@ -23,6 +24,12 @@ namespace src.Utils
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
+
+            CreateMap<Category, CategoryReadDto>();
+            CreateMap<CategoryCreateDto, Category>();
+            CreateMap<CategoryUpdateDto, Category>().
+            ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
         }
+
     }
 }
