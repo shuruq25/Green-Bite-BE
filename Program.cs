@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using src.Controllers;
 using src.Database;
 using src.Repository;
 using src.Services;
-using src.Utils;
 using src.Services.category;
 using src.Services.product;
 using src.Services.UserService;
+using src.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,28 +20,28 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(dataSourceBuilder.Build());
 });
 
-builder.Services
-    .AddAutoMapper(typeof(OrderMapperProfile).Assembly)
+builder
+    .Services.AddAutoMapper(typeof(OrderMapperProfile).Assembly)
     .AddAutoMapper(typeof(MapperProfile).Assembly);
 
-builder.Services
-    .AddScoped<ICategoryService, CategoryService>()
+builder
+    .Services.AddScoped<ICategoryService, CategoryService>()
     .AddScoped<ICategoryRepository, CategoryRepository>()
-
     .AddScoped<IOrderRepository, OrderRepository>()
     .AddScoped<IOrderService, OrderService>()
-
     .AddScoped<IPaymentRepository, PaymentRepository>()
     .AddScoped<IPaymentService, PaymentService>()
-
-     .AddScoped<IProductService, ProductService>()
-     .AddScoped<IProductRepository, ProductRepository>()
-
-     .AddScoped<IAddressService, AddressServices>()
-     .AddScoped<AddressRepository, AddressRepository>()
-
+    .AddScoped<IProductService, ProductService>()
+    .AddScoped<IProductRepository, ProductRepository>()
+    .AddScoped<IAddressService, AddressService>()
+    .AddScoped<AddressRepository, AddressRepository>()
     .AddScoped<IUserService, UserService>()
     .AddScoped<UserRepository, UserRepository>();
+
+builder
+    .Services.AddScoped<ICouponService, CouponService>()
+    .AddScoped<CouponsController, CouponsController>();
+;
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
