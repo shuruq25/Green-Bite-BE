@@ -28,10 +28,10 @@ builder.Services
      .AddScoped<IProductService, ProductService>()
      .AddScoped<ProductRepository, ProductRepository>();
 
-builder.Services
-     .AddScoped<ICategoryService, CategoryService>();
-builder.Services
-     .AddScoped<CategoryRepository, CategoryRepository>();
+// builder.Services
+// .AddScoped<ICategoryService, CategoryService>();
+// builder.Services
+//.AddScoped<CategoryRepository, CategoryRepository>();
 
 
 builder.Services.AddControllers();

@@ -6,6 +6,7 @@ using AutoMapper;
 using src.Repository;
 using src.Entity;
 using static src.DTO.CategoryDTO;
+using src.Utils;
 
 namespace src.Services.category
 {
@@ -28,7 +29,7 @@ namespace src.Services.category
         }
 
 
-        public async Task<List<CategoryReadDto>> GetCategoriesAsync()
+        public async Task<List<CategoryReadDto>> GetCategoriesAsync(PaginationOptions paginationOptions)
         {
             var allCategory = await _categoryRepo.GetCategoriesAsync();
             return _mapper.Map<List<Category>, List<CategoryReadDto>>(allCategory);
