@@ -34,7 +34,7 @@ builder.Services
     .AddScoped<IPaymentService, PaymentService>()
 
      .AddScoped<IProductService, ProductService>()
-     .AddScoped<ProductRepository, ProductRepository>()
+     .AddScoped<IProductRepository, ProductRepository>()
 
      .AddScoped<IAddressService, AddressServices>()
      .AddScoped<AddressRepository, AddressRepository>()
