@@ -2,6 +2,7 @@ using AutoMapper;
 using src.Entity;
 using static src.DTO.CategoryDTO;
 using static src.DTO.ProductDTO;
+using static src.DTO.ReviewDTO;
 using static src.DTO.UserDTO;
 
 namespace src.Utils
@@ -16,7 +17,6 @@ namespace src.Utils
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
-
             //User
             CreateMap<User, UserReadDto>();
             CreateMap<UserCreateDto, User>();
@@ -24,12 +24,27 @@ namespace src.Utils
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
-
             CreateMap<Category, CategoryReadDto>();
             CreateMap<CategoryCreateDto, Category>();
-            CreateMap<CategoryUpdateDto, Category>().
-            ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
-        }
+            CreateMap<CategoryUpdateDto, Category>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
 
+
+
+
+
+
+
+
+            //Review
+            CreateMap<Review, ReviewReadDto>();
+            CreateMap<ReviewCreateDto, Review>();
+            CreateMap<ReviewUpdateDto, User>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+        }
     }
 }
