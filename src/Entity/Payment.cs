@@ -26,10 +26,5 @@ namespace src.Entity
         public PaymentStatus Status { get; set; }
         public int CouponId { get; set; }
         public int OrderId { get; set; }
-
-
-
     }
-
-
 }
