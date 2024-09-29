@@ -3,7 +3,9 @@ using Npgsql;
 using src.Database;
 using src.Repository;
 using src.Services;
+using src.Services.category;
 using src.Services.product;
+using src.Services.UserService;
 using src.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,17 +23,24 @@ builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-builder.Services.AddScoped<IProductService, ProductService>()
-    .AddScoped<ProductRepository, ProductRepository>();
 
 builder.Services
-.AddScoped<IAddressService, AddressServices>()
-.AddScoped<AddressRepository,AddressRepository>();
+     .AddScoped<IProductService, ProductService>()
+     .AddScoped<ProductRepository, ProductRepository>()
+     .AddScoped<IAddressService, AddressServices>().AddScoped<AddressRepository,AddressRepository>();
+
+builder.Services
+ .AddScoped<ICategoryService, CategoryService>();
+builder.Services
+.AddScoped<CategoryRepository, CategoryRepository>();
+
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserService, UserService>().AddScoped<UserRepository, UserRepository>();
 
 var app = builder.Build();
 
