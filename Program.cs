@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using src.Database;
 using src.Repository;
+using src.Services;
 using src.Services.category;
 using src.Services.product;
 using src.Services.UserService;
@@ -25,7 +26,8 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services
      .AddScoped<IProductService, ProductService>()
-     .AddScoped<ProductRepository, ProductRepository>();
+     .AddScoped<ProductRepository, ProductRepository>()
+     .AddScoped<IAddressService, AddressServices>().AddScoped<AddressRepository,AddressRepository>();
 
 builder.Services
  .AddScoped<ICategoryService, CategoryService>();
