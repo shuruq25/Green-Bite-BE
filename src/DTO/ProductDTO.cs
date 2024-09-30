@@ -16,7 +16,7 @@ namespace src.DTO
             public string Name { get; set; }
             public decimal Price { get; set; }
             public string? Description { get; set; }
-            public int? CategroyId { get; set; }
+            public Guid? CategroyId { get; set; }
         }
 
         public class ProductUpdateDto
@@ -24,7 +24,7 @@ namespace src.DTO
             public string Name { get; set; }
             public decimal Price { get; set; }
             public string? Description { get; set; }
-            public int? CategroyId { get; set; }
+            public Guid? CategroyId { get; set; }
         }
     }
 
