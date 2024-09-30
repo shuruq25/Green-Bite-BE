@@ -77,7 +77,6 @@ namespace src.Services.UserService
         public async Task<string> SignInAsync(UserCreateDto createDto)
         {
             var foundUser = await _userRepo.FindByEmailAsync(createDto.EmailAddress);
-
             var isMatched = PasswordUtils.VerifyPassword(
                 createDto.Password,
                 foundUser.Password,

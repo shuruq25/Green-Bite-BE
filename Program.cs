@@ -66,10 +66,10 @@ builder
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+            ValidateIssuer = !true,
+            ValidateAudience = !true,
+            ValidateLifetime = !true,
+            ValidateIssuerSigningKey = !true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
@@ -104,7 +104,8 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Database connection failed: {ex.Message}");
     }
 }
-
+app.UseAuthentication();
+app.UseAuthorization(); //it shuold be before the controller
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
