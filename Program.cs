@@ -46,7 +46,9 @@ builder
 
 builder
     .Services.AddScoped<ICouponService, CouponService>()
-    .AddScoped<CouponRepository, CouponRepository>();
+    .AddScoped<CouponRepository, CouponRepository>()
+    .AddScoped<IWishlistService, WishlistService>()
+    .AddScoped<IWishlistRepository, WishlistRepository>();
 ;
 
 builder.Services.AddControllers();

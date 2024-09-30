@@ -19,9 +19,9 @@ namespace src.Services.product
             _mapper = mapper;
 
         }
-        public async Task<ProductReadDto> CreateOneAsync(ProductCreateDto CreateDto)
+        public async Task<ProductReadDto> CreateOneAsync(ProductCreateDto createDto)
         {
-            var product = _mapper.Map<ProductCreateDto, Product>(CreateDto);
+            var product = _mapper.Map<ProductCreateDto, Product>(createDto);
             var productCreated = await _productRepository.CreateOneAsync(product);
             return _mapper.Map<Product, ProductReadDto>(productCreated);
 
