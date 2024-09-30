@@ -22,9 +22,11 @@ namespace src.Utils
 
             CreateMap<Address, AddressReadDto>();
             CreateMap<AddressCreateDto, Address>();
-            CreateMap<AddressUpdateDto, Address>().
-           ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
-            // the Condition to make sure all the filde are not empty so it can convert
+            CreateMap<AddressUpdateDto, Address>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
             //User
             CreateMap<User, UserReadDto>();
             CreateMap<UserCreateDto, User>();
@@ -34,15 +36,24 @@ namespace src.Utils
                 );
             CreateMap<Category, CategoryReadDto>();
             CreateMap<CategoryCreateDto, Category>();
-            CreateMap<CategoryUpdateDto, Category>().
-            ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
-      
-                  CreateMap<Coupon, CouponReadDto>();
+            CreateMap<CategoryUpdateDto, Category>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
+            CreateMap<Coupon, CouponReadDto>();
             CreateMap<CouponCreateDto, Coupon>();
-            CreateMap<CouponUpdateDto, Coupon>().
-           ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
-      
-      
+            CreateMap<CouponUpdateDto, Coupon>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
+            CreateMap<Review, ReviewReadDto>();
+            CreateMap<ReviewCreateDto, Review>();
+            CreateMap<ReviewUpdateDto, Review>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
         }
     }
 }
