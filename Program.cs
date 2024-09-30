@@ -21,7 +21,10 @@ var builder = WebApplication.CreateBuilder(args);
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("Local")
 );
-
+dataSourceBuilder.MapEnum<Role>();
+dataSourceBuilder.MapEnum<PaymentStatus>();
+dataSourceBuilder.MapEnum<PaymentMethod>();
+dataSourceBuilder.MapEnum<OrderStatuses>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.Build());
@@ -47,10 +50,10 @@ builder
     .AddScoped<IAddressService, AddressService>()
     .AddScoped<AddressRepository, AddressRepository>()
     .AddScoped<IUserService, UserService>()
-    .AddScoped<UserRepository, UserRepository>()
-    .AddScoped<IReviewService, ReviewService>()
-    .AddScoped<ReviewRepository, ReviewRepository>()
-    .AddScoped<ICouponService, CouponService>()
+    .AddScoped<UserRepository, UserRepository>();
+
+builder
+    .Services.AddScoped<ICouponService, CouponService>()
     .AddScoped<CouponRepository, CouponRepository>();
 
 //auth
