@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using src.Services.category;
 using src.Entity;
+using src.Services.category;
 using src.Utils;
 using static src.DTO.CategoryDTO;
 
@@ -11,13 +12,16 @@ namespace src.Controllers
     public class CategoryController : ControllerBase
     {
         protected readonly ICategoryService _categoryService;
+
         public CategoryController(ICategoryService service)
         {
             _categoryService = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CategoryReadDto>>> GetCategories([FromQuery] PaginationOptions paginationOptions)
+        public async Task<ActionResult<List<CategoryReadDto>>> GetCategories(
+            [FromQuery] PaginationOptions paginationOptions
+        )
         {
             var categories = await _categoryService.GetCategoriesAsync(paginationOptions);
             return Ok(categories);
@@ -31,7 +35,9 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryReadDto>> CreateOne([FromBody] CategoryCreateDto createDto)
+        public async Task<ActionResult<CategoryReadDto>> CreateOne(
+            [FromBody] CategoryCreateDto createDto
+        )
         {
             var createdCategory = await _categoryService.CreateOneAsync(createDto);
             return Created($"/api/v1/Category/{createdCategory.Id}", createdCategory);
@@ -49,7 +55,10 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] CategoryUpdateDto updateDto)
+        public async Task<ActionResult> UpdateCategory(
+            [FromRoute] Guid id,
+            [FromBody] CategoryUpdateDto updateDto
+        )
         {
             var updateCategory = await _categoryService.UpdateOneAsync(id, updateDto);
             if (!updateCategory)

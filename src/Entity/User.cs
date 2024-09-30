@@ -15,7 +15,7 @@ namespace src.Entity
         public string? EmailAddress { get; set; }
         public Guid AddressID { get; set; }
         public string? Phone { get; set; }
-        public Role UserRole { get; set; }
+        public Role UserRole { get; set; } = Role.Customer;
         public byte[]? Salt { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -23,8 +23,6 @@ namespace src.Entity
         {
             Admin,
             Customer,
-            Guest,
-            
         }
     }
 }
