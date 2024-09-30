@@ -21,7 +21,7 @@ namespace src.DTO
             public Guid UserID { get; set; }
             public string? Name { get; set; }
             public string? EmailAddress { get; set; }
-            public int AddressID { get; set; }
+            public Guid AddressID { get; set; }
             public string? Phone { get; set; }
             public Role UserRole { get; set; }
         }
@@ -31,7 +31,7 @@ namespace src.DTO
             public string? Name { get; set; }
             public string? EmailAddress { get; set; }
             public string? Phone { get; set; }
-            public int AddressID { get; set; }
+            public Guid AddressID { get; set; }
         }
     }
 }
