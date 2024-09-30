@@ -53,15 +53,16 @@ builder
     .AddScoped<IReviewService, ReviewService>()
     .AddScoped<ReviewRepository, ReviewRepository>()
     .AddScoped<ICouponService, CouponService>()
-    .AddScoped<CouponRepository, CouponRepository>();
+    .AddScoped<CouponRepository, CouponRepository>()
+    .AddScoped<IWishlistService, WishlistService>()
+    .AddScoped<IWishlistRepository, WishlistRepository>();
 
 //auth
-builder
-    .Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+    builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -112,5 +113,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.Run();
