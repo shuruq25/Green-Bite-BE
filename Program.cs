@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using src.Controllers;
 using src.Database;
@@ -26,6 +29,10 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.Build());
 });
+dataSourceBuilder.MapEnum<Role>();
+dataSourceBuilder.MapEnum<PaymentStatus>();
+dataSourceBuilder.MapEnum<PaymentMethod>();
+dataSourceBuilder.MapEnum<OrderStatuses>();
 
 builder
     .Services.AddAutoMapper(typeof(OrderMapperProfile).Assembly)
@@ -48,7 +55,29 @@ builder
 builder
     .Services.AddScoped<ICouponService, CouponService>()
     .AddScoped<CouponRepository, CouponRepository>();
-;
+
+//auth
+builder
+    .Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+            ),
+        };
+    });
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
