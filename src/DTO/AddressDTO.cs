@@ -13,7 +13,7 @@ namespace src.DTO
         {
             public string? Country { get; set; }
             public string? Street { get; set; }
-            public int? UserId { get; set; }
+            public Guid UserId { get; set; }
         }
 
         // Class to : get/read data
@@ -23,7 +23,7 @@ namespace src.DTO
             public Guid AddressId { get; set; }
             public string? Country { get; set; }
             public string? Street { get; set; }
-            public int? UserId { get; set; }
+            public Guid UserId { get; set; }
         }
 
         // Class to : Update Address

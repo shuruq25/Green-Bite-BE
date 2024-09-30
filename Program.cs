@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using src.Controllers;
 using src.Database;
 using src.Repository;
 using src.Services;
@@ -40,8 +39,7 @@ builder
 
 builder
     .Services.AddScoped<ICouponService, CouponService>()
-    .AddScoped<CouponsController, CouponsController>();
-;
+    .AddScoped<CouponRepository, CouponRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using src.Utils;
 using static src.DTO.AddressDTO;
 
 namespace src.Services
 {
     public interface IAddressService
     {
-         //create
+        //create
         Task<AddressReadDto> CreatOneAsync(AddressCreateDto createDto);
 
         //get all
-        Task<List<AddressReadDto>> GetAllAsync();
+        // add Pagination
+        // Task<List<AddressReadDto>> GetAllAsync(PaginationOptions paginationOptions);
 
         //get by id
         Task<AddressReadDto> GetByIdAsync(Guid id);
@@ -21,6 +23,6 @@ namespace src.Services
         Task<bool> DeleteOneAsync(Guid id);
 
         //update
-        Task<bool> UpdateOneAsync(Guid id , AddressUpdateDto updateDto);
+        Task<bool> UpdateOneAsync(Guid id, AddressUpdateDto updateDto);
     }
 }

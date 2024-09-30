@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using src.Repository;
-using static src.DTO.CouponDTO;
 using src.Entity;
+using src.Repository;
+using src.Utils;
+using static src.DTO.CouponDTO;
 
 namespace src.Services
 {
     public class CouponService : ICouponService
-    {    protected readonly CouponRepository _couponRepo;
+    {
+        protected readonly CouponRepository _couponRepo;
         protected readonly IMapper _mapper;
 
-        public CouponService(CouponRepository couponRepository , IMapper mapper){
+        public CouponService(CouponRepository couponRepository, IMapper mapper)
+        {
             _couponRepo = couponRepository;
             _mapper = mapper;
         }
 
-        
         //create
         public async Task<CouponReadDto> CreatOneAsync(CouponCreateDto createDto)
         {
@@ -28,12 +30,13 @@ namespace src.Services
             return _mapper.Map<Coupon, CouponReadDto>(ddressCreate);
         }
 
-        // //get all
-        public async Task<List<CouponReadDto>> GetAllAsync()
-        {
-            var CouponList = await _couponRepo.GetAllAsync();
-            return _mapper.Map<List<Coupon>, List<CouponReadDto>>(CouponList);
-        }
+        // get all
+        // add Pagination
+        // public async Task<List<CouponReadDto>> GetAllAsync(PaginationOptions paginationOptions)
+        // {
+        //     var CouponList = await _couponRepo.GetAllAsync(paginationOptions);
+        //     return _mapper.Map<List<Coupon>, List<CouponReadDto>>(CouponList);
+        // }
 
         // //get by id
         public async Task<CouponReadDto> GetByIdAsync(Guid id)
@@ -68,6 +71,6 @@ namespace src.Services
 
             _mapper.Map(updateDto, foundCoupon);
             return await _couponRepo.UpdateOneAsync(foundCoupon);
-        
+        }
     }
-}}
+}
