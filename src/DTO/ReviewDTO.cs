@@ -9,7 +9,6 @@ namespace src.DTO
     {
         public class ReviewCreateDto
         {
-            public Guid ReviewId { get; set; }
             public string? Comment { get; set; }
             public int Rating { get; set; }
         }

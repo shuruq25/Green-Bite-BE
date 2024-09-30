@@ -4,6 +4,7 @@ using static src.DTO.AddressDTO;
 using static src.DTO.CategoryDTO;
 using static src.DTO.CouponDTO;
 using static src.DTO.ProductDTO;
+using static src.DTO.ReviewDTO;
 using static src.DTO.UserDTO;
 using static src.DTO.WishlistDTO;
 
@@ -22,8 +23,12 @@ namespace src.Utils
 
             CreateMap<Address, AddressReadDto>();
             CreateMap<AddressCreateDto, Address>();
-            CreateMap<AddressUpdateDto, Address>().
-           ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
+            CreateMap<AddressUpdateDto, Address>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
+            //User
             CreateMap<User, UserReadDto>();
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>()
@@ -32,22 +37,24 @@ namespace src.Utils
                 );
             CreateMap<Category, CategoryReadDto>();
             CreateMap<CategoryCreateDto, Category>();
-            CreateMap<CategoryUpdateDto, Category>().
-            ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
-      
-                  CreateMap<Coupon, CouponReadDto>();
+            CreateMap<CategoryUpdateDto, Category>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
+            CreateMap<Coupon, CouponReadDto>();
             CreateMap<CouponCreateDto, Coupon>();
-            CreateMap<CouponUpdateDto, Coupon>().
-           ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
+            CreateMap<CouponUpdateDto, Coupon>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
 
-
-                  CreateMap<Wishlist, WishlistReadDto>();
-            CreateMap<WishlistCreateDto, Wishlist>();
-            CreateMap<WishlistUpdateDto, Wishlist>().
-           ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
-      
-      
+            CreateMap<Review, ReviewReadDto>();
+            CreateMap<ReviewCreateDto, Review>();
+            CreateMap<ReviewUpdateDto, Review>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
         }
-
     }
 }
