@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using src.Controllers;
 using src.Database;
+using src.Entity;
 using src.Repository;
 using src.Services;
 using src.Services.category;
@@ -9,13 +10,18 @@ using src.Services.product;
 using src.Services.review;
 using src.Services.UserService;
 using src.Utils;
+using static src.Entity.Payment;
+using static src.Entity.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("Local")
 );
-
+dataSourceBuilder.MapEnum<Role>();
+dataSourceBuilder.MapEnum<PaymentStatus>();
+dataSourceBuilder.MapEnum<PaymentMethod>();
+dataSourceBuilder.MapEnum<OrderStatuses>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.Build());
@@ -37,10 +43,10 @@ builder
     .AddScoped<IAddressService, AddressService>()
     .AddScoped<AddressRepository, AddressRepository>()
     .AddScoped<IUserService, UserService>()
-    .AddScoped<UserRepository, UserRepository>()
-    .AddScoped<IReviewService, ReviewService>()
-    .AddScoped<ReviewRepository, ReviewRepository>()
-    .AddScoped<ICouponService, CouponService>()
+    .AddScoped<UserRepository, UserRepository>();
+
+builder
+    .Services.AddScoped<ICouponService, CouponService>()
     .AddScoped<CouponRepository, CouponRepository>();
 ;
 

@@ -1,7 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace src.Entity
 {
     public class Payment
     {
+     [JsonConverter(typeof(JsonStringEnumConverter))]
+
         public enum PaymentMethod
         {
             CreditCard,
@@ -11,7 +15,7 @@ namespace src.Entity
             Other
 
         }
-
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum PaymentStatus
         {
             Pending,
@@ -24,7 +28,7 @@ namespace src.Entity
         public PaymentMethod? Method { get; set; }
         public DateTime PaymentDate { get; set; }
         public PaymentStatus Status { get; set; }
-        public int CouponId { get; set; }
-        public int OrderId { get; set; }
+        public Guid CouponId { get; set; }
+        public Guid OrderId { get; set; }
     }
 }
