@@ -31,7 +31,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReviewReadDto>> GetById(Guid id)
+        public async Task<ActionResult<ReviewReadDto>> GetById([FromRoute] Guid id)
         {
             var review = await _reviewService.GetByIdAsync(id);
             if (review == null)
@@ -62,8 +62,10 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ReviewReadDto>> UpdateReview(Guid id,
-            [FromBody] ReviewUpdateDto updateDto)
+        public async Task<ActionResult<ReviewReadDto>> UpdateReview(
+            Guid id,
+            [FromBody] ReviewUpdateDto updateDto
+        )
         {
             var isUpdated = await _reviewService.UpdateOneAsync(id, updateDto);
             if (!isUpdated)
