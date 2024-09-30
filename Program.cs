@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
-using src.Controllers;
 using src.Database;
 using src.Entity;
 using src.Repository;
@@ -50,10 +49,10 @@ builder
     .AddScoped<IAddressService, AddressService>()
     .AddScoped<AddressRepository, AddressRepository>()
     .AddScoped<IUserService, UserService>()
-    .AddScoped<UserRepository, UserRepository>();
-
-builder
-    .Services.AddScoped<ICouponService, CouponService>()
+    .AddScoped<UserRepository, UserRepository>()
+    .AddScoped<IReviewService, ReviewService>()
+    .AddScoped<ReviewRepository, ReviewRepository>()
+    .AddScoped<ICouponService, CouponService>()
     .AddScoped<CouponRepository, CouponRepository>();
 
 //auth
