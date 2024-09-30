@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using src.Entity;
@@ -31,6 +32,7 @@ namespace src.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
             [FromQuery] PaginationOptions paginationOptions
         )

@@ -9,6 +9,7 @@ using src.Services.product;
 using src.Services.review;
 using src.Services.UserService;
 using src.Utils;
+using static src.Entity.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.Build());
 });
+dataSourceBuilder.MapEnum<Role>();
 
 builder
     .Services.AddAutoMapper(typeof(OrderMapperProfile).Assembly)
