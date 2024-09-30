@@ -1,24 +1,28 @@
+using System.Text.Json.Serialization;
+
 namespace src.Entity
 {
     public class Payment
     {
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum PaymentMethod
         {
             CreditCard,
             PayPal,
             Cash,
             VISA,
-            Other
-
+            Other,
         }
 
-        public enum PaymentStatus
+ [JsonConverter(typeof(JsonStringEnumConverter))]
+         public enum PaymentStatus
         {
             Pending,
             Completed,
             Failed,
-            Refunded
+            Refunded,
         }
+
         public Guid Id { get; set; }
         public decimal FinalPrice { get; set; }
         public PaymentMethod? Method { get; set; }
