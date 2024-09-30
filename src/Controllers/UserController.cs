@@ -83,7 +83,7 @@ namespace src.Controllers
         {
             var token = await _userService.SignInAsync(createDto);
 
-            return Ok(new { token });
+            return Ok(token);
         }
     }
 }
