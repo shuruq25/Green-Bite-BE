@@ -32,6 +32,14 @@ namespace src.Services.UserService
             var userCreated = await _userRepo.CreateOneAsync(user);
             return _mapper.Map<User, UserReadDto>(userCreated);
         }
+
+
+        //get all original method
+        public async Task<List<UserReadDto>> GetAllAsync()
+        {
+            var userList = await _userRepo.GetAllAsync();
+            return _mapper.Map<List<User>, List<UserReadDto>>(userList);
+        }
         public async Task<List<UserReadDto>> GetAllAsync(PaginationOptions paginationOptions)
         {
             var userList = await _userRepo.GetAllAsync(paginationOptions);

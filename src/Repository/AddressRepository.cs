@@ -72,7 +72,7 @@ namespace src.Repository
 
         public async Task<Address?> GetAddressByIdAsync(Guid id)
         {
-            return await _address.FindAsync(id);
+            return await _address.Include(a=>a.User).FirstOrDefaultAsync(a=>a.AddressId == id);
         }
 
         //delete Address:
