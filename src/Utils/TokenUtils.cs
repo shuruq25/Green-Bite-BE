@@ -35,6 +35,7 @@ namespace src.Utils
                 key,
                 SecurityAlgorithms.HmacSha256Signature
             );
+
             var issuer = _configuration.GetSection("Jwt:Issuer").Value;
             var audience = _configuration.GetSection("Jwt:Audience").Value;
             var descriptor = new SecurityTokenDescriptor
