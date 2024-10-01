@@ -21,7 +21,7 @@ namespace src.Services.product
         }
         public async Task<ProductReadDto> CreateOneAsync(ProductCreateDto createDto)
         {
-            var product = _mapper.Map<ProductCreateDto, Product>(createDto);
+            var product = _mapper.Map<ProductCreateDto, Product>(createDto);          
             var productCreated = await _productRepository.CreateOneAsync(product);
             return _mapper.Map<Product, ProductReadDto>(productCreated);
 
@@ -36,6 +36,10 @@ namespace src.Services.product
         public async Task<ProductReadDto> GetByIdAsync(Guid id)
         {
             var foundProduct = await _productRepository.GetByIdAsync(id);
+                  if (foundProduct == null)
+            {
+                throw CustomException.NotFound($"Product with ID '{id}' not found.");
+            }
 
             return _mapper.Map<Product, ProductReadDto>(foundProduct);
 
@@ -58,7 +62,7 @@ namespace src.Services.product
             var foundProduct = await _productRepository.GetByIdAsync(id);
             if (foundProduct == null)
             {
-                return false;
+                throw CustomException.NotFound($"Product with ID '{id}' not found.");
             }
             _mapper.Map(UpdateDto, foundProduct);
             return await _productRepository.UpdateOneAsync(foundProduct);

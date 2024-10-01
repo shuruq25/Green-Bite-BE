@@ -39,6 +39,10 @@ namespace src.Services.category
         public async Task<CategoryReadDto> GetCategoryAsync(Guid id)
         {
             var foundCategory = await _categoryRepo.GetCategoryAsync(id);
+            if(foundCategory == null){
+
+                throw CustomException.NotFound($"Category with {id} cant find");
+            }
             return _mapper.Map<Category, CategoryReadDto>(foundCategory);
         }
 
@@ -48,7 +52,7 @@ namespace src.Services.category
             var foundCategory = await _categoryRepo.GetCategoryAsync(id);
             if (foundCategory == null)
             {
-                return false;
+                throw CustomException.NotFound($"Category with ID '{id}' not found.");
             }
 
             _mapper.Map(updateDto, foundCategory);

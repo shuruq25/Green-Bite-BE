@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using src.Database;
 using src.Entity;
+using src.Middlewares;
 using src.Repository;
 using src.Services;
 using src.Services.category;
@@ -78,6 +79,10 @@ builder
             ),
         };
     });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -105,6 +110,8 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Database connection failed: {ex.Message}");
     }
 }
+app.UseMiddleware<LoggingMiddleware>();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

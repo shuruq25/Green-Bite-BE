@@ -32,7 +32,7 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+       // [Authorize]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
             [FromQuery] PaginationOptions paginationOptions
         )
