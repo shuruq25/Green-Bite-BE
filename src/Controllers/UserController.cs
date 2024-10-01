@@ -32,7 +32,8 @@ namespace src.Controllers
         }
 
         [HttpGet]
-       // [Authorize]
+       // [Authorize ]
+        [Authorize (Roles = "Admin")]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
             [FromQuery] PaginationOptions paginationOptions
         )
