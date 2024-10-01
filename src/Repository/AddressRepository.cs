@@ -42,6 +42,17 @@ namespace src.Repository
             return newAddress;
         }
 
+
+
+  // get all Addresses:
+
+        public async Task<List<Address>> GetAllAsync()
+        {
+            return await _address.ToListAsync();
+        }
+
+
+
         // get all Addresses:
 
         // add the Pagination

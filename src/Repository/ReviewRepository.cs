@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
+using src.Utils;
 
 namespace src.Repository
 {
@@ -31,9 +32,13 @@ namespace src.Repository
             return await _review.FindAsync(id);
         }
 
-        public async Task<List<Review>> GetReviewsAsync()
+        public async Task<List<Review>> GetReviewsAsync(PaginationOptions paginationOptions)
         {
-            return await _review.ToListAsync();
+            var result = _review.Where(r => r.Comment.ToLower().Contains(paginationOptions.Search));
+            return await result
+                .Skip(paginationOptions.Offset)
+                .Take(paginationOptions.Limit)
+                .ToListAsync();
         }
 
         public async Task<bool> DeleteOneAsync(Review review)

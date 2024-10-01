@@ -30,6 +30,13 @@ namespace src.Services
             return _mapper.Map<Coupon, CouponReadDto>(ddressCreate);
         }
 
+        //get all
+        public async Task<List<CouponReadDto>> GetAllAsync()
+        {
+            var CouponList = await _couponRepo.GetAllAsync();
+            return _mapper.Map<List<Coupon>, List<CouponReadDto>>(CouponList);
+        }
+
         // get all
         // add Pagination
         // public async Task<List<CouponReadDto>> GetAllAsync(PaginationOptions paginationOptions)

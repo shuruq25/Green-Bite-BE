@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
+using src.Services.review;
+using src.Utils;
+using static src.DTO.ReviewDTO;
 
 namespace src.Controllers
 {
@@ -11,18 +14,26 @@ namespace src.Controllers
     [ApiController]
     public class ReviewController : ControllerBase
     {
-        private static List<Review> reviews = new List<Review>();
+        protected readonly IReviewService _reviewService;
+
+        public ReviewController(IReviewService reviewService)
+        {
+            _reviewService = reviewService;
+        }
 
         [HttpGet]
-        public ActionResult<Review> GetReviews()
+        public async Task<ActionResult<List<ReviewReadDto>>> GetAll(
+            [FromQuery] PaginationOptions paginationOptions
+        )
         {
+            var reviews = await _reviewService.GetAllAsync(paginationOptions);
             return Ok(reviews);
         }
 
-        [HttpGet("{reviewid}")]
-        public ActionResult GetReview(Guid reviewid)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ReviewReadDto>> GetById([FromRoute] Guid id)
         {
-            var review = reviews.FirstOrDefault(r => r.ReviewId == reviewid);
+            var review = await _reviewService.GetByIdAsync(id);
             if (review == null)
             {
                 return NotFound();
@@ -31,35 +42,38 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddReview(Review newReview)
+        public async Task<ActionResult<ReviewReadDto>> CreateReview(
+            [FromBody] ReviewCreateDto createDto
+        )
         {
-            reviews.Add(newReview);
-            return CreatedAtAction(nameof(GetReview), new { reviewid = newReview.ReviewId }, newReview);
+            var reivewCreated = await _reviewService.CreateOneAsync(createDto);
+            return Created($"api/v1/review/{reivewCreated.ReviewId}", reivewCreated);
         }
 
-        [HttpDelete("{reviewid}")]
-        public ActionResult DeleteReview(Guid reviewid)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteReview(Guid id)
         {
-            var review = reviews.FirstOrDefault(r => r.ReviewId == reviewid);
-            if (review == null)
+            var isDeleted = await _reviewService.DeleteOneAsync(id);
+            if (!isDeleted)
             {
                 return NotFound();
             }
-            reviews.Remove(review);
             return NoContent();
         }
 
-        [HttpPut("{reviewid}")]
-        public ActionResult UpdateReview(Guid reviewid, Review updatedReview)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ReviewReadDto>> UpdateReview(
+            Guid id,
+            [FromBody] ReviewUpdateDto updateDto
+        )
         {
-            var review = reviews.FirstOrDefault(r => r.ReviewId == reviewid);
-            if (review == null)
+            var isUpdated = await _reviewService.UpdateOneAsync(id, updateDto);
+            if (!isUpdated)
             {
                 return NotFound();
             }
-            review.Comment = updatedReview.Comment;
-            review.Rating = updatedReview.Rating;
-            return Ok(review);
+            var updatedreview = await _reviewService.GetByIdAsync(id);
+            return Ok(updatedreview);
         }
     }
 }

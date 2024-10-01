@@ -31,6 +31,13 @@ namespace src.Services
             return _mapper.Map<Address, AddressReadDto>(ddressCreate);
         }
 
+        // //get all
+        public async Task<List<AddressReadDto>> GetAllAsync()
+        {
+            var addressList = await _addressRepo.GetAllAsync();
+            return _mapper.Map<List<Address>, List<AddressReadDto>>(addressList);
+        }
+
         //get all
         // add Pagination
 
@@ -62,7 +69,7 @@ namespace src.Services
             return false;
         }
 
-        // //update
+        //update
         public async Task<bool> UpdateOneAsync(Guid id, AddressUpdateDto updateDto)
         {
             var foundAddress = await _addressRepo.GetAddressByIdAsync(id);

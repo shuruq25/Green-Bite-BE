@@ -12,7 +12,10 @@ namespace src.Services
         //create
         Task<CouponReadDto> CreatOneAsync(CouponCreateDto createDto);
 
-        // //get all
+        //get all
+        Task<List<CouponReadDto>> GetAllAsync();
+
+        //get all
         // add Pagination
         // Task<List<CouponReadDto>> GetAllAsync(PaginationOptions paginationOptions);
 

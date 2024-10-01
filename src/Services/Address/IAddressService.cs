@@ -13,6 +13,9 @@ namespace src.Services
         Task<AddressReadDto> CreatOneAsync(AddressCreateDto createDto);
 
         //get all
+        Task<List<AddressReadDto>> GetAllAsync();
+
+        //get all
         // add Pagination
         // Task<List<AddressReadDto>> GetAllAsync(PaginationOptions paginationOptions);
 

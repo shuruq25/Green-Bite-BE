@@ -1,7 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace src.Entity
 {
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum OrderStatuses
+
     {
         Pending,
         Shipped,

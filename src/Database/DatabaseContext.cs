@@ -16,8 +16,8 @@ namespace src.Database
         public DbSet<Coupon> Coupon { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Payment> Payment { get; set; }
+        public DbSet<Review> Review { get; set; }
 
-        // public DbSet<Review> Review { get; set; }
         // public DbSet<Cart> Cart { get; set; }
 
         public DatabaseContext(DbContextOptions options)

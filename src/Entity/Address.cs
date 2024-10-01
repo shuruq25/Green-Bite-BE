@@ -5,6 +5,6 @@ namespace src.Entity
         public Guid AddressId { get; set; }
         public string? Country { get; set; }
         public string? Street { get; set; }
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }
