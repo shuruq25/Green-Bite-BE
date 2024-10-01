@@ -6,6 +6,7 @@ using static src.DTO.CouponDTO;
 using static src.DTO.ProductDTO;
 using static src.DTO.ReviewDTO;
 using static src.DTO.UserDTO;
+using static src.DTO.WishlistDTO;
 
 namespace src.Utils
 {

@@ -12,7 +12,7 @@ namespace src.Services.UserService
         protected readonly UserRepository _userRepo;
         protected readonly IMapper _mapper;
         protected readonly IConfiguration _configuration;
-        public UserService(UserRepository userRepo, IMapper mapper,IConfiguration configuration)
+        public UserService(UserRepository userRepo, IMapper mapper, IConfiguration configuration)
         {
             _userRepo = userRepo;
             _mapper = mapper;
@@ -20,6 +20,11 @@ namespace src.Services.UserService
         }
         public async Task<UserReadDto> CreateOneAsync(UserCreateDto createDto)
         {
+            var existingUser = await _userRepo.FindByEmailAsync(createDto.EmailAddress);
+            if (existingUser != null)
+            {
+                throw CustomException.BadRequest($"User with email '{createDto.EmailAddress}' already exists.");
+            }
             PasswordUtils.HashPassword(
                 createDto.Password,
                 out string hashedPassword,
@@ -70,7 +75,7 @@ namespace src.Services.UserService
 
             if (foundUser == null)
             {
-                return false;
+                throw CustomException.BadRequest($"User with ID '{id}' not found.");
             }
             _mapper.Map(updateDto, foundUser);
             return await _userRepo.UpdateOneAsync(foundUser);
@@ -78,6 +83,10 @@ namespace src.Services.UserService
         public async Task<string> SignInAsync(UserCreateDto createDto)
         {
             var foundUser = await _userRepo.FindByEmailAsync(createDto.EmailAddress);
+            if (foundUser == null)
+            {
+                throw CustomException.BadRequest($"User with email '{createDto.EmailAddress}' not found.");
+            }
             var isMatched = PasswordUtils.VerifyPassword(
                 createDto.Password,
                 foundUser.Password,
@@ -88,7 +97,7 @@ namespace src.Services.UserService
                 var tokenUtil = new TokenUtils(_configuration);
                 return tokenUtil.GenerateToken(foundUser);
             }
-            return "Unauthorized";
+            throw CustomException.UnAuthorized("Password does not match.");
         }
     }
 }
