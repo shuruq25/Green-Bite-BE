@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
 using src.Utils;
+using static src.DTO.ProductDTO;
 
 namespace src.Repository
 {

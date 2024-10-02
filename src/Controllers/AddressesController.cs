@@ -32,18 +32,42 @@ namespace src.Controllers
             return Created($"/api/v1/Addresses/{addressCreated.AddressId}", addressCreated);
         }
 
-        // get all
-        // add Pagination
-        // The URL will be like : http://localhost:5125/api/v1/Addresses?offset=&limit=&search=
+        // Get all
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> GetAllAddresses()
+        {
+            return Ok(await _addressService.GetAllAsync());
+        }
 
-        // [HttpGet]
-        // public async Task<ActionResult<List<AddressReadDto>>> GetAll(
-        //     [FromQuery] PaginationOptions paginationOptions
-        // )
-        // {
-        //     var AddressList = await _addressService.GetAllAsync(paginationOptions);
-        //     return Ok(AddressList);
-        // }
+        // Update
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<ActionResult> UpdateAddress(
+            Guid id,
+            [FromBody] AddressUpdateDto updatedAddress
+        )
+        {
+            if (await _addressService.UpdateOneAsync(id, updatedAddress))
+            {
+                return NoContent();
+            }
+            return NotFound();
+        }
+
+        // Delete
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteAddress(Guid id)
+        {
+            if (await _addressService.DeleteOneAsync(id))
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
 
         // get by id
         [HttpGet("{id}")]
