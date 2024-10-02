@@ -30,7 +30,6 @@ namespace src.DTO
             public string? Name { get; set; }
             public string? EmailAddress { get; set; }
             public string? Phone { get; set; }
-            public Guid AddressID { get; set; }
         }
     }
 }
