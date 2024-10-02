@@ -25,8 +25,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        //sign up
-        public async Task<ActionResult<UserReadDto>> CreateOne([FromBody] UserCreateDto createDto)
+        public async Task<ActionResult<UserReadDto>> UserSignUp([FromBody] UserCreateDto createDto)
         {
             var userCreated = await _userService.CreateOneAsync(createDto);
             return Created($"api/v1/user/{userCreated.UserID}", userCreated);
@@ -83,11 +82,10 @@ namespace src.Controllers
         }
 
         [HttpPost("signIn")]
-        public async Task<ActionResult<string>> SignInUser([FromBody] UserCreateDto createDto)
+        public async Task<ActionResult<string>> SignInUser([FromBody] UserSignInDto signInDtoDto)
         {
-            var token = await _userService.SignInAsync(createDto);
+            var token = await _userService.SignInAsync(signInDtoDto);
             return Ok(token);
-            //emil,pass
         }
     }
 }
