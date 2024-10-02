@@ -32,5 +32,6 @@ namespace src.Entity
         public PaymentStatus Status { get; set; }
         public Guid CouponId { get; set; }
         public Guid OrderId { get; set; }
+        public Order Order { get; set; }
     }
 }

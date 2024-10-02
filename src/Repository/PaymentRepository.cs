@@ -16,8 +16,8 @@ namespace src.Repository
 
     public class PaymentRepository : IPaymentRepository
     {
-        protected DbSet<Payment> _payment;
-        protected DatabaseContext _databaseContext;
+        protected readonly DbSet<Payment> _payment;
+        protected readonly DatabaseContext _databaseContext;
 
         public PaymentRepository(DatabaseContext databaseContext)
         {
@@ -34,12 +34,12 @@ namespace src.Repository
 
         public async Task<List<Payment>> GetAllAsync()
         {
-            return await _payment.ToListAsync();
+            return await _payment.Include(payment => payment.Order).ToListAsync();
         }
 
         public async Task<Payment?> GetByIdAsync(Guid id)
         {
-            return await _payment.FindAsync(id);
+            return await _payment.Include(payment => payment.Order).FirstOrDefaultAsync(payment => payment.Id == id);
         }
 
         public async Task<bool> UpdatePaymentAsync(Payment updatedPayment)
