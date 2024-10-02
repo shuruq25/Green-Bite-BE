@@ -59,14 +59,14 @@ namespace src.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult> DeleteAddress(Guid id)
+        public async Task<IActionResult> DeleteAddress([FromRoute] Guid id)
         {
-            if (await _addressService.DeleteOneAsync(id))
+            var deleted = await _addressService.DeleteOneAsync(id);
+            if (!deleted)
             {
-                return NoContent();
+                return NotFound();
             }
-
-            return NotFound();
+            return NoContent();
         }
 
         // get by id

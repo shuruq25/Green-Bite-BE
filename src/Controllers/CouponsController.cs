@@ -47,28 +47,30 @@ namespace src.Controllers
         [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> UpdateCoupon(
             Guid id,
-            [FromBody] CouponUpdateDto updatedCoupon
+            [FromBody] CouponUpdateDto updateCoupon
         )
         {
-            if (await _couponService.UpdateOneAsync(id, updatedCoupon))
+            var isUpdated = await _couponService.UpdateOneAsync(id, updateCoupon);
+            if (!isUpdated)
             {
-                return NoContent();
+                return NotFound();
             }
-            return NotFound();
+            var result = await _couponService.GetByIdAsync(id);
+            return Ok(result);
         }
 
         // Delete
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult> DeleteCoupon(Guid id)
+        public async Task<IActionResult> DeleteCoupon([FromRoute] Guid id)
         {
-            if (await _couponService.DeleteOneAsync(id))
+            var deleted = await _couponService.DeleteOneAsync(id);
+            if (!deleted)
             {
-                return NoContent();
+                return NotFound();
             }
-
-            return NotFound();
+            return NoContent();
         }
 
         // get by id
