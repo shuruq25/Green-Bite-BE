@@ -72,6 +72,10 @@ namespace src.Utils
             CreateMap<Cart, CartReadDto>();
             CreateMap<CartDetails, CartDetailsReadDto>();
             CreateMap<Product, ProductReadDto>();
+             CreateMap<CartUpdateDto, Cart>();
+              CreateMap<CartDetailsUpdateDto, CartDetails>();
+
+           
 
         }
     }

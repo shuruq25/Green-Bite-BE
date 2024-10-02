@@ -48,9 +48,14 @@ namespace src.Repository
 
         }
 
+
         public async Task<Wishlist?> GetByIdAsync(Guid id)
         {
-            return await _wishlist.FindAsync(id);
+            try { return await _wishlist.FindAsync(id); }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Unable to find wishlist with id {id}.", ex);
+            }
         }
 
         public async Task<bool> UpdateOneAsync(Wishlist updateWishlist)
