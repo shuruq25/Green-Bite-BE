@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
 using src.Services.product;
@@ -19,6 +20,7 @@ namespace src.Controllers
 
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<ProductReadDto>> CreateOne([FromBody] ProductCreateDto createDto)
         {
             var productCreated = await _productService.CreateOneAsync(createDto);
@@ -40,6 +42,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] ProductUpdateDto updateDto)
         {
             var result = await _productService.UpdateOneAsync(id, updateDto);
@@ -52,6 +55,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var deleted = await _productService.DeleteOneAsync(id);

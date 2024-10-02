@@ -25,6 +25,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
+        //sign up
         public async Task<ActionResult<UserReadDto>> CreateOne([FromBody] UserCreateDto createDto)
         {
             var userCreated = await _userService.CreateOneAsync(createDto);
@@ -32,8 +33,7 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
             [FromQuery] PaginationOptions paginationOptions
         )
@@ -43,6 +43,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<UserReadDto>> GetById(Guid id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -54,6 +55,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteOne(Guid id)
         {
             var isDeleted = await _userService.DeleteOneAsync(id);
@@ -65,6 +67,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<UserReadDto>> UpdateOne(
             Guid id,
             [FromBody] UserUpdateDto updateDto
@@ -83,8 +86,8 @@ namespace src.Controllers
         public async Task<ActionResult<string>> SignInUser([FromBody] UserCreateDto createDto)
         {
             var token = await _userService.SignInAsync(createDto);
-
             return Ok(token);
+            //emil,pass
         }
     }
 }

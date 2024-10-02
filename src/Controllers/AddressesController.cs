@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Entity;
@@ -22,6 +23,7 @@ namespace src.Controllers
         //create
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<AddressReadDto>> CreateOne(
             [FromBody] AddressCreateDto createDto
         )
@@ -45,6 +47,7 @@ namespace src.Controllers
 
         // get by id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<AddressReadDto>> GetById([FromRoute] Guid id)
         {
             var Address = await _addressService.GetByIdAsync(id);
