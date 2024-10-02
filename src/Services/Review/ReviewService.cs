@@ -32,7 +32,7 @@ namespace src.Services.review
                 OrderId = createDto.OrderId,
                 Comment = createDto.Comment,
                 Rating = createDto.Rating,
-                ReviewDate = DateTime.Now,
+                ReviewDate = DateTime.UtcNow,
                 UserID = userId
             };
             var reviewCreated = await _reviewRepo.CreateOneAsync(review);

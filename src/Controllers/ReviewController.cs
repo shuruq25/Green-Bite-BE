@@ -44,7 +44,7 @@ namespace src.Controllers
             return Ok(review);
         }
 
-        [HttpGet("/order{orderid}")]
+        [HttpGet("/order{orderId}")]
         public async Task<ActionResult<List<ReviewReadDto>>> GetReviewsByOrderId([FromRoute] Guid orderId)
         {
             var reviews = await _reviewService.GetReviewsByOrderIdAsync(orderId);

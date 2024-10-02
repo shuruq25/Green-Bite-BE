@@ -18,6 +18,8 @@ namespace src.Database
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Review> Review { get; set; }
 
+
+
         // public DbSet<Cart> Cart { get; set; }
 
         public DatabaseContext(DbContextOptions options)
@@ -29,6 +31,12 @@ namespace src.Database
             modelBuilder.HasPostgresEnum<PaymentMethod>();
             modelBuilder.HasPostgresEnum<PaymentStatus>();
             modelBuilder.HasPostgresEnum<Role>();
+
+            modelBuilder.Entity<Order>()
+            .HasMany(order => order.reviews)
+            .WithOne(review => review.Order)
+            .HasForeignKey(review => review.OrderId)
+            .HasPrincipalKey(order => order.ID);
         }
     }
 }

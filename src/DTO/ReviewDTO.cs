@@ -17,8 +17,7 @@ namespace src.DTO
             public int Rating { get; set; }
 
             public Guid OrderId { get; set; }
-            //???????
-            //public Guid UserID {get; set;}
+
         }
 
         public class ReviewReadDto
