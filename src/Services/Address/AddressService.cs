@@ -1,6 +1,7 @@
 using AutoMapper;
 using src.Entity;
 using src.Repository;
+using src.Utils;
 using static src.DTO.AddressDTO;
 
 namespace src.Services
@@ -37,7 +38,17 @@ namespace src.Services
             return _mapper.Map<List<Address>, List<AddressReadDto>>(addressList);
         }
 
-        // //get by id
+        //get all
+        // add Pagination
+
+
+        // public async Task<List<AddressReadDto>> GetAllAsync(PaginationOptions paginationOptions)
+        // {
+        //     var addressList = await _addressRepo.GetAllAsync(paginationOptions);
+        //     return _mapper.Map<List<Address>, List<AddressReadDto>>(addressList);
+        // }
+
+        //get by id
         public async Task<AddressReadDto> GetByIdAsync(Guid id)
         {
             var foundAddress = await _addressRepo.GetAddressByIdAsync(id);
@@ -58,7 +69,7 @@ namespace src.Services
             return false;
         }
 
-        // //update
+        //update
         public async Task<bool> UpdateOneAsync(Guid id, AddressUpdateDto updateDto)
         {
             var foundAddress = await _addressRepo.GetAddressByIdAsync(id);

@@ -28,6 +28,12 @@ namespace src.Repository
             return newUser;
         }
 
+        // get all original method 
+          public async Task<List<User>> GetAllAsync()
+        {
+            return await _user.ToListAsync();
+        }
+
         public async Task<List<User>> GetAllAsync(PaginationOptions paginationOptions)
         {
             var result = _user.Where(u => u.Name.ToLower().Contains(paginationOptions.Search));
