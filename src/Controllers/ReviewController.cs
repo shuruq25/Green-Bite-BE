@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
 using src.Services.review;
@@ -12,6 +14,7 @@ namespace src.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+
     public class ReviewController : ControllerBase
     {
         protected readonly IReviewService _reviewService;
@@ -41,16 +44,31 @@ namespace src.Controllers
             return Ok(review);
         }
 
+        [HttpGet("/order{orderid}")]
+        public async Task<ActionResult<List<ReviewReadDto>>> GetReviewsByOrderId([FromRoute] Guid orderId)
+        {
+            var reviews = await _reviewService.GetReviewsByOrderIdAsync(orderId);
+            return Ok(reviews);
+        }
+
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ReviewReadDto>> CreateReview(
             [FromBody] ReviewCreateDto createDto
         )
         {
-            var reivewCreated = await _reviewService.CreateOneAsync(createDto);
+            var userIdClaim = HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+            var userGuid = Guid.Parse(userIdClaim.Value);
+            var reivewCreated = await _reviewService.CreateOneAsync(createDto, userGuid);
             return Created($"api/v1/review/{reivewCreated.ReviewId}", reivewCreated);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteReview(Guid id)
         {
             var isDeleted = await _reviewService.DeleteOneAsync(id);
@@ -62,6 +80,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<ReviewReadDto>> UpdateReview(
             Guid id,
             [FromBody] ReviewUpdateDto updateDto
@@ -72,8 +91,8 @@ namespace src.Controllers
             {
                 return NotFound();
             }
-            var updatedreview = await _reviewService.GetByIdAsync(id);
-            return Ok(updatedreview);
+            var updatedReview = await _reviewService.UpdateOneAsync(id, updateDto);
+            return Ok(updatedReview);
         }
     }
 }
