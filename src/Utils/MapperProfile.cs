@@ -69,6 +69,10 @@ namespace src.Utils
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
 
+            CreateMap<Cart, CartReadDto>();
+            CreateMap<CartDetails, CartDetailsReadDto>();
+            CreateMap<Product, ProductReadDto>();
+
         }
     }
 }
