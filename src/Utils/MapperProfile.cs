@@ -1,6 +1,8 @@
 using AutoMapper;
 using src.Entity;
 using static src.DTO.AddressDTO;
+using static src.DTO.CartDetailsDTO;
+using static src.DTO.CartDTO;
 using static src.DTO.CategoryDTO;
 using static src.DTO.CouponDTO;
 using static src.DTO.ProductDTO;
@@ -55,6 +57,19 @@ namespace src.Utils
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
+
+            CreateMap<CartDetails, CartDetailsReadDto>();
+            CreateMap<CartDetailsCreateDto, CartDetails>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+            CreateMap<Cart, CartReadDto>();
+            CreateMap<CartCreateDto, Cart>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
         }
     }
 }
+

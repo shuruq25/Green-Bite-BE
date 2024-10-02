@@ -25,6 +25,7 @@ namespace src.Repository
         }
         public async Task<Product> CreateOneAsync(Product newProduct)
         {
+        
             await _product.AddAsync(newProduct);
             await _databaseContext.SaveChangesAsync();
             return newProduct;
@@ -38,7 +39,7 @@ namespace src.Repository
         }
         public async Task<Product?> GetByIdAsync(Guid id)
         {
-            return await _product.FindAsync(id);
+            return await _product.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
         }
         public async Task<bool> UpdateOneAsync(Product updateProduct)
         {
