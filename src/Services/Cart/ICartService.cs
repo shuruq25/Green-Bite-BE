@@ -9,11 +9,9 @@ namespace src.Services
 {
     public interface ICartService
     {
-        Task<CartReadDto> CreateOneAsync(Guid id , CartCreateDto cartCreate);
-         Task<CartReadDto> GetCartByIdAsync(Guid cartId);
-         Task<CartReadDto> UpdateOneAsync(Guid id, CartUpdateDto UpdateDto);
-
-        
+    Task<CartReadDto> CreateOneAsync(Guid userId, CartCreateDto cartCreate);
+    Task<CartReadDto> GetCartByUserIdAsync(Guid cartId);
+     Task<bool> DeleteCartAsync(Guid id);
         
 
 

@@ -20,7 +20,7 @@ namespace src.DTO
         {
             public Guid Id { get; set; }
             public Guid UserId { get; set; }
-            public List<CartDetails> CartDetails { get; set; } =new List<CartDetails>();
+            public List<CartDetails> CartDetails { get; set; }
             public int CartTotal { get; set; }
             public decimal TotalPrice { get; set; }
 
@@ -30,8 +30,7 @@ namespace src.DTO
         {
 
         public List<CartDetails> CartDetails { get; set; }= new List<CartDetails>();
-         public int CartTotal { get; set; }
-         public decimal TotalPrice { get; set; }
+        
         }
 
 

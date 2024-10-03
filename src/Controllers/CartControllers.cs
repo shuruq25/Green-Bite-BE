@@ -19,7 +19,6 @@ namespace src.Controllers
         {
             _cartService = service;
         }
-
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<CartReadDto>> CreateOneAsync([FromBody] CartCreateDto cartCreate)
@@ -29,49 +28,41 @@ namespace src.Controllers
             var userGuid = new Guid(userId);
             return await _cartService.CreateOneAsync(userGuid, cartCreate);
 
-        }
 
-        [HttpGet("user/{id}")]
+        }
+        // GET: api/cart/user/{userId}
+        [HttpGet("user/{userId}")]
         [Authorize]
-        public async Task<ActionResult<List<CartReadDto>>> GetCartById([FromRoute] Guid id)
-        {
-            var cart = await _cartService.GetCartByIdAsync(id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
-            return Ok(cart);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<CartReadDto>> UpdateCart(Guid id, [FromBody] CartUpdateDto cartUpdateDto)
+        public async Task<IActionResult> GetCartByUserId(Guid userId)
         {
             try
             {
-                var updatedCart = await _cartService.UpdateOneAsync(id, cartUpdateDto);
-                return Ok(updatedCart); // Return the updated cart
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(); // Return Not Found if the cart doesn't exist
+                var cart = await _cartService.GetCartByUserIdAsync(userId);
+
+                if (cart == null)
+                {
+                    return NotFound(new { message = $"Cart for User ID {userId} not found." });
+                }
+
+                return Ok(cart);
             }
             catch (Exception ex)
             {
-                // Optionally log the exception
-                return StatusCode(500, "An error occurred while updating the cart."); // Return internal server error
+                return StatusCode(500, new { message = "An error occurred while retrieving the cart.", error = ex.Message });
             }
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCart([FromRoute] Guid id)
+        {
+            var deleted = await _cartService.DeleteCartAsync(id);
 
+            if (!deleted)
+            {
+                return NotFound(); // Cart not found
+            }
 
-        // // Retrieve the updated cart details
-        // var updatedCart = await _cartService.GetCartByIdAsync(id);
-
-        // // Check if the cart was found
-        // if (updatedCart == null)
-        // {
-        //     return NotFound(); // Return Not Found if the cart doesn't exist
-        // }
-
+            return NoContent(); // Cart deleted successfully
+        }
 
 
 

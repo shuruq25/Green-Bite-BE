@@ -9,13 +9,35 @@ using src.Entity;
 
 namespace src.Repository
 {
+
+
+    // public async Task<Cart> CreateOneAsync(Cart cart)
+    // {
+
+    // var existingCart = await _carts.FirstOrDefaultAsync(c => c.UserId == cart.UserId);
+    // if (existingCart != null)
+    // {
+    //     throw new InvalidOperationException($"User with ID {cart.UserId} already has a cart.");
+    // }
+    // await _carts.AddAsync(cart);
+    // await _databaseContext.SaveChangesAsync();
+    // await _carts.Entry(cart).Collection(o => o.CartDetails).LoadAsync();
+
+    // foreach (var details in cart.CartDetails)
+    // {
+    //     await _databaseContext.Entry(details).Reference(cd => cd.Product).LoadAsync();
+    // }
+    // return cart;
+
     public interface ICartRepository
     {
         Task<Cart> CreateOneAsync(Cart cart);
-        Task<Cart?> GetByIdAsync(Guid id);
-        Task<Cart> UpdateOneAsync(Cart updatedCart);
+        Task<Cart> GetByIdAsync(Guid id);
+        Task RemoveCart(Cart cart);
+
 
     }
+
     public class CartRepository : ICartRepository
     {
         protected readonly DbSet<Cart> _carts;
@@ -25,57 +47,46 @@ namespace src.Repository
             _databaseContext = databaseContext;
             _carts = _databaseContext.Set<Cart>();
         }
+
         public async Task<Cart> CreateOneAsync(Cart cart)
         {
-
-            var existingCart = await _carts.FirstOrDefaultAsync(c => c.UserId == cart.UserId);
-            if (existingCart != null)
+            var userExists = await _databaseContext.User.AnyAsync(u => u.UserID == cart.UserId);
+            if (!userExists)
             {
-                throw new InvalidOperationException($"User with ID {cart.UserId} already has a cart.");
+                throw new Exception("User not found.");
             }
+
             await _carts.AddAsync(cart);
             await _databaseContext.SaveChangesAsync();
-            await _carts.Entry(cart).Collection(o => o.CartDetails).LoadAsync();
 
+            await _carts.Entry(cart).Collection(o => o.CartDetails).LoadAsync();
             foreach (var details in cart.CartDetails)
             {
                 await _databaseContext.Entry(details).Reference(cd => cd.Product).LoadAsync();
             }
+
             return cart;
-
         }
-        public async Task<Cart?> GetByIdAsync(Guid userId)
+
+        public async Task<Cart> GetByIdAsync(Guid id)
         {
-            return await _carts
-                .Include(c => c.CartDetails)
-                .ThenInclude(cd => cd.Product)
-                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            return await _databaseContext.Cart
+                          .Include(c => c.CartDetails)
+                              .ThenInclude(cd => cd.Product)
+                              .FirstOrDefaultAsync(c => c.UserId == id);
         }
 
-        public async Task<Cart> UpdateOneAsync(Cart updatedCart)
-        {
-            
+       public async Task RemoveCart(Cart cart)
+{
+    if (cart != null)
+    {
+        // Remove the cart entity itself
+        _databaseContext.Cart.Remove(cart);
 
-            var existingCart = await _carts.FindAsync(updatedCart.Id);
-            if (existingCart == null)
-            {
-                throw new KeyNotFoundException($"Cart with ID {updatedCart.Id} not found.");
-            }
-
-            _databaseContext.Cart.Update(updatedCart);
-            await _databaseContext.SaveChangesAsync();
-            return updatedCart;
-
-
-        }
-
-
-
-
-
-
-
-
-
+        // Save changes to the database
+        await _databaseContext.SaveChangesAsync();
     }
 }
+
+}}

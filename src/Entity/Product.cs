@@ -9,5 +9,6 @@ namespace src.Entity
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
 
+
     }
 }

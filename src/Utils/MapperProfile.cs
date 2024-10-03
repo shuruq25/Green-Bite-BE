@@ -70,14 +70,16 @@ namespace src.Utils
                 );
 
             CreateMap<Cart, CartReadDto>();
+            CreateMap<CartCreateDto, Cart>()
+                .ForMember(dest => dest.UserId, opt => opt.Ignore());
+            CreateMap<CartUpdateDto, Cart>();
             CreateMap<CartDetails, CartDetailsReadDto>();
-            CreateMap<Product, ProductReadDto>();
-             CreateMap<CartUpdateDto, Cart>();
-              CreateMap<CartDetailsUpdateDto, CartDetails>();
-
-           
-
+            CreateMap<CartDetailsCreateDto, CartDetails>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
         }
+
+
     }
 }
+
 

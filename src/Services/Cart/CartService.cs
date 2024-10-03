@@ -3,40 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.Extensions.Configuration.UserSecrets;
+using src.Database;
 using src.Entity;
 using src.Repository;
 using src.Services;
+using static src.DTO.CartDetailsDTO;
 using static src.DTO.CartDTO;
 
 namespace Services
 {
     public class CartService : ICartService
     {
-        protected readonly ICartRepository _cartRepository;
-        protected readonly IProductRepository _productRepository;
+        private readonly ICartRepository _cartRepository;
+        private readonly IProductRepository _productRepository;
 
-        protected readonly IMapper _mapper;
-        public CartService(ICartRepository cartRepository, IMapper mapper, IProductRepository productRepository)
+        private readonly IMapper _mapper;
+
+
+    public CartService(ICartRepository cartRepository, IMapper mapper, IProductRepository productRepository)
         {
             _cartRepository = cartRepository;
             _mapper = mapper;
             _productRepository = productRepository;
         }
-
-
-        public async Task<CartReadDto> CreateOneAsync(Guid userId, CartCreateDto cartCreate)
+         public async Task<CartReadDto> CreateOneAsync(Guid userId, CartCreateDto cartCreate)
         {
-
-            var existingCart = await _cartRepository.GetByIdAsync(userId);
-            if (existingCart != null)
+            // Validate input
+            if (cartCreate == null)
             {
-                throw new InvalidOperationException($"User with ID {userId} already has a cart.");
+                throw new ArgumentNullException(nameof(cartCreate), "CartCreateDto cannot be null.");
+            }
+
+            if (cartCreate.CartDetails == null || !cartCreate.CartDetails.Any())
+            {
+                throw new ArgumentException("Cart details cannot be empty.", nameof(cartCreate.CartDetails));
             }
 
             var cart = _mapper.Map<CartCreateDto, Cart>(cartCreate);
             cart.UserId = userId;
 
+            // Initialize total price and cart total
             cart.CartTotal = cartCreate.CartDetails.Sum(cd => cd.Quantity);
             cart.TotalPrice = 0;
 
@@ -51,77 +57,44 @@ namespace Services
                 cart.TotalPrice += product.Price * detail.Quantity;
             }
 
-            try
-            {
-                var newCart = await _cartRepository.CreateOneAsync(cart);
-                return _mapper.Map<Cart, CartReadDto>(newCart);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while creating the cart.", ex);
-            }
+            await _cartRepository.CreateOneAsync(cart);
+            return _mapper.Map<Cart, CartReadDto>(cart);
         }
 
-        public async Task<CartReadDto> GetCartByIdAsync(Guid cartId)
-        {
 
-            var cart = await _cartRepository.GetByIdAsync(cartId);
+    
+
+
+
+        public async Task<CartReadDto> GetCartByUserIdAsync(Guid userId)
+        {
+            var cart = await _cartRepository.GetByIdAsync(userId);
             if (cart == null)
             {
-                throw new KeyNotFoundException($"Cart with ID {cartId} not found.");
+                throw new KeyNotFoundException($"Cart for User ID {userId} not found.");
             }
-            var cartList = _mapper.Map<Cart, CartReadDto>(cart);
 
-
-            return cartList;
+            return _mapper.Map<Cart, CartReadDto>(cart);
         }
 
-        public async Task<CartReadDto> UpdateOneAsync(Guid id, CartUpdateDto updateDto)
+
+        public async Task<bool> DeleteCartAsync(Guid userId)
         {
-            var cart = await _cartRepository.GetByIdAsync(id);
-            if (cart == null)
+            // Fetch the cart for the user
+            var existingCart = await _cartRepository.GetByIdAsync(userId);
+
+            // Check if the user has a cart
+            if (existingCart == null)
             {
-                throw new KeyNotFoundException($"Cart with ID {id} not found.");
+                // If no cart is found for the user, return false
+                return false;
             }
 
-            cart.CartDetails.Clear();
+            // Call the repository to remove the cart and its details
+            await _cartRepository.RemoveCart(existingCart);
 
-            decimal totalPrice = 0;
-
-            foreach (var detail in updateDto.CartDetails)
-            {
-                var product = await _productRepository.GetByIdAsync(detail.ProductId);
-                if (product == null)
-                {
-                    throw new Exception($"Product with ID {detail.ProductId} not found.");
-                }
-
-                var cartDetail = new CartDetails
-                {
-                    ProductId = detail.ProductId,
-                    Quantity = detail.Quantity
-                };
-
-                cart.CartDetails.Add(cartDetail);
-                totalPrice += product.Price * detail.Quantity;
-            }
-
-            cart.CartTotal = updateDto.CartDetails.Sum(cd => cd.Quantity);
-            cart.TotalPrice = totalPrice;
-
-            var updatedCart = await _cartRepository.UpdateOneAsync(cart);
-
-            return _mapper.Map<Cart, CartReadDto>(updatedCart);
+            // Return true if the cart was successfully deleted
+            return true;
         }
 
-
-
-
-
-
-
-    }
-
-
-
-}
+    }}
