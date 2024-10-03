@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
+using src.Services;
+using src.Utils;
+using static src.DTO.CouponDTO;
 
 namespace src.Controllers
 {
@@ -11,92 +14,41 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class CouponsController : ControllerBase
     {
-        // public static List<Coupon> Coupons = new List<Coupon>
-        // {
-        //     new Coupon
-        //     {
-        //         CouponId = 1,
-        //         Code = "DISCOUNT50",
-        //         DiscountPercentage = 50,
-        //         Expire = new DateTime(2024, 12, 31),
-        //     },
-        //     new Coupon
-        //     {
-        //         CouponId = 2,
-        //         Code = "WELCOME10",
-        //         DiscountPercentage = 10,
-        //         Expire = new DateTime(2024, 10, 15),
-        //     },
-        //     new Coupon
-        //     {
-        //         CouponId = 3,
-        //         Code = "SUMMER20",
-        //         DiscountPercentage = 20,
-        //         Expire = new DateTime(2024, 6, 30),
-        //     },
-        // };
+        protected readonly ICouponService _couponService;
 
-        // // GET:
+        public CouponsController(ICouponService service)
+        {
+            _couponService = service;
+        }
+
+        //create
+
+        [HttpPost]
+        public async Task<ActionResult<CouponReadDto>> CreateOne(
+            [FromBody] CouponCreateDto createDto
+        )
+        {
+            var CouponCreated = await _couponService.CreatOneAsync(createDto);
+            return Created($"/api/v1/Coupons/{CouponCreated.CouponId}", CouponCreated);
+        }
+
+        // get all
+        // add Pagination
         // [HttpGet]
-        // public ActionResult GetCoupons()
+        // public async Task<ActionResult<List<CouponReadDto>>> GetAll(
+        //     [FromQuery] PaginationOptions paginationOptions
+        // )
         // {
-        //     return Ok(Coupons);
-        // }
+        //     var CouponList = await _couponService.GetAllAsync(paginationOptions);
+        //     return Ok(CouponList);
+        //}
 
-        // // GET:
-        // [HttpGet("{id}")]
-        // public ActionResult GetCouponById(int id)
-        // {
-        //     var foundCoupon = Coupons.FirstOrDefault(c => c.CouponId == id);
-        //     if (foundCoupon == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return Ok(foundCoupon);
-        // }
-
-        // // POST:
-        // [HttpPost]
-        // public ActionResult PostCoupon(Coupon newCoupon)
-        // {
-        //     if (newCoupon == null || string.IsNullOrEmpty(newCoupon.Code))
-        //     {
-        //         return BadRequest("Coupon details are required.");
-        //     }
-
-        //     return Created($"api/v1/coupons/{newCoupon.CouponId}", newCoupon);
-        // }
-
-        // // PUT:
-        // [HttpPut("{id}")]
-        // public ActionResult PutCoupon(int id, Coupon updatedCoupon)
-        // {
-        //     if (updatedCoupon == null || string.IsNullOrEmpty(updatedCoupon.Code))
-        //     {
-        //         return BadRequest("Coupon details are required.");
-        //     }
-        //     var foundCoupon = Coupons.FirstOrDefault(c => c.CouponId == id);
-        //     if (foundCoupon == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     foundCoupon.Code = updatedCoupon.Code;
-
-        //     return NoContent();
-        // }
-
-        // // DELETE:
-        // [HttpDelete("{id}")]
-        // public ActionResult DeleteCoupon(int id)
-        // {
-        //     var foundCoupon = Coupons.FirstOrDefault(c => c.CouponId == id);
-        //     if (foundCoupon == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     Coupons.Remove(foundCoupon);
-        //     return NoContent();
-        // }
+        // get by id
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CouponReadDto>> GetById([FromRoute] Guid id)
+        {
+            var Coupon = await _couponService.GetByIdAsync(id);
+            return Ok(Coupon);
+        }
     }
 }

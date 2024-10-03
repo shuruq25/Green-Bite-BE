@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using src.Utils;
 using static src.DTO.CouponDTO;
 
 namespace src.Services
@@ -14,6 +15,10 @@ namespace src.Services
         //get all
         Task<List<CouponReadDto>> GetAllAsync();
 
+        //get all
+        // add Pagination
+        // Task<List<CouponReadDto>> GetAllAsync(PaginationOptions paginationOptions);
+
         //get by id
         Task<CouponReadDto> GetByIdAsync(Guid id);
 
@@ -21,7 +26,6 @@ namespace src.Services
         Task<bool> DeleteOneAsync(Guid id);
 
         //update
-        Task<bool> UpdateOneAsync(Guid id , CouponUpdateDto updateDto);
-        
+        Task<bool> UpdateOneAsync(Guid id, CouponUpdateDto updateDto);
     }
 }
