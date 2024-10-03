@@ -29,16 +29,21 @@ namespace src.Repository
 
         public async Task<Review?> GetReviewAsync(Guid id)
         {
-            return await _review.FindAsync(id);
+            return await _review.Include(i => i.Order).FirstOrDefaultAsync(i => i.ReviewId == id);
         }
 
         public async Task<List<Review>> GetReviewsAsync(PaginationOptions paginationOptions)
         {
-            var result = _review.Where(r => r.Comment.ToLower().Contains(paginationOptions.Search));
+            var result = _review.Include(r => r.Order).Where(r => r.Comment.ToLower().Contains(paginationOptions.Search));
             return await result
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
                 .ToListAsync();
+        }
+
+        public async Task<List<Review>> GetReviewByOrderIdAsync(Guid orderId)
+        {
+            return await _review.Where(r => r.OrderId == orderId).Include(r => r.Order).ToListAsync();
         }
 
         public async Task<bool> DeleteOneAsync(Review review)

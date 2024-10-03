@@ -12,5 +12,7 @@ namespace src.Entity
         public string? Comment { get; set; }
         public int Rating { get; set; }
         public DateTime ReviewDate { get; set; }
+        public Guid UserID { get; set; }
+        public Order Order { get; set; }
     }
 }
