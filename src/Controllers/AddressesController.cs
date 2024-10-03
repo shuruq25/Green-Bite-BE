@@ -30,25 +30,52 @@ namespace src.Controllers
             return Created($"/api/v1/Addresses/{addressCreated.AddressId}", addressCreated);
         }
 
-        // get all
-        // add Pagination
-        // The URL will be like : http://localhost:5125/api/v1/Addresses?offset=&limit=&search=
-
-        // [HttpGet]
-        // public async Task<ActionResult<List<AddressReadDto>>> GetAll(
-        //     [FromQuery] PaginationOptions paginationOptions
-        // )
-        // {
-        //     var AddressList = await _addressService.GetAllAsync(paginationOptions);
-        //     return Ok(AddressList);
-        // }
+    
 
         // get by id
         [HttpGet("{id}")]
         public async Task<ActionResult<AddressReadDto>> GetById([FromRoute] Guid id)
         {
             var Address = await _addressService.GetByIdAsync(id);
+
             return Ok(Address);
+        }
+
+
+        // Get all 
+        [HttpGet]
+        public async Task<ActionResult> GetAllAddresses()
+        {
+            return Ok(await _addressService.GetAllAsync());
+        }
+
+
+
+// Update 
+           [HttpPut("{id}")]
+        public async Task<ActionResult<AddressReadDto>> UpdateAddress(Guid id,[FromBody] AddressUpdateDto updateAddress)
+        {
+            var isUpdated = await _addressService.UpdateOneAsync(id, updateAddress);
+            if (!isUpdated)
+            {
+                return NotFound();
+            }
+            var result = await _addressService.GetByIdAsync(id);
+            return Ok(result);
+        }
+
+// Delete
+
+      
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAddress([FromRoute] Guid id)
+        {
+            var deleted = await _addressService.DeleteOneAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }
