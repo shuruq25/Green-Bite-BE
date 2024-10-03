@@ -1,4 +1,7 @@
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using src.Entity;
 using src.Repository;
 using src.Utils;
@@ -17,9 +20,21 @@ namespace src.Services.review
             _mapper = mapper;
         }
 
-        public async Task<ReviewReadDto> CreateOneAsync(ReviewCreateDto createDto)
+        public async Task<ReviewReadDto> CreateOneAsync(ReviewCreateDto createDto, Guid userId)
         {
-            var review = _mapper.Map<ReviewCreateDto, Review>(createDto);
+            if (createDto.Rating < 1 || createDto.Rating > 5)
+            {
+                throw new ArgumentOutOfRangeException(nameof(createDto.Rating), "Rating must be between 1 and 5.");
+            }
+
+            var review = new Review
+            {
+                OrderId = createDto.OrderId,
+                Comment = createDto.Comment,
+                Rating = createDto.Rating,
+                ReviewDate = DateTime.UtcNow,
+                UserID = userId
+            };
             var reviewCreated = await _reviewRepo.CreateOneAsync(review);
             return _mapper.Map<Review, ReviewReadDto>(reviewCreated);
         }
@@ -33,7 +48,7 @@ namespace src.Services.review
         public async Task<ReviewReadDto> GetByIdAsync(Guid id)
         {
             var foundReview = await _reviewRepo.GetReviewAsync(id);
-            return _mapper.Map<Review, ReviewReadDto>(foundReview);
+            return _mapper.Map<Review?, ReviewReadDto>(foundReview);
         }
 
         public async Task<bool> DeleteOneAsync(Guid id)
@@ -49,6 +64,12 @@ namespace src.Services.review
                 }
             }
             return false;
+        }
+
+        public async Task<List<ReviewReadDto>> GetReviewsByOrderIdAsync(Guid orderId)
+        {
+            var reviews = await _reviewRepo.GetReviewByOrderIdAsync(orderId);
+            return _mapper.Map<List<Review>, List<ReviewReadDto>>(reviews);
         }
 
         public async Task<bool> UpdateOneAsync(Guid id, ReviewUpdateDto updateDto)

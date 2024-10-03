@@ -16,6 +16,12 @@ namespace src.DTO
             public string? Phone { get; set; }
         }
 
+        public class UserSignInDto
+        {
+            public string EmailAddress { get; set; }
+            public string Password { get; set; }
+        }
+
         public class UserReadDto
         {
             public Guid UserID { get; set; }

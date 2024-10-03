@@ -8,7 +8,6 @@ using src.Entity;
 
 namespace src.Repository
 {
-
     public interface IWishlistRepository
     {
         Task<Wishlist> CreateOneAsync(Wishlist newWishlist);
@@ -17,6 +16,7 @@ namespace src.Repository
         Task<Wishlist?> GetByIdAsync(Guid id);
         Task<bool> UpdateOneAsync(Wishlist updateWishlist);
     }
+
     public class WishlistRepository : IWishlistRepository
     {
         protected DbSet<Wishlist> _wishlist;
@@ -45,12 +45,13 @@ namespace src.Repository
         public async Task<List<Wishlist>> GetAllAsync()
         {
             return await _wishlist.ToListAsync();
-
         }
 
         public async Task<Wishlist?> GetByIdAsync(Guid id)
         {
-            return await _wishlist.FindAsync(id);
+            return await _wishlist
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(p => p.WishlistID == id);
         }
 
         public async Task<bool> UpdateOneAsync(Wishlist updateWishlist)
