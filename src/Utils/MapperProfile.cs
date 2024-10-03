@@ -57,28 +57,13 @@ namespace src.Utils
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
-
-            CreateMap<CartDetails, CartDetailsReadDto>();
-            CreateMap<CartDetailsCreateDto, CartDetails>()
+            CreateMap<Wishlist, WishlistReadDto>();
+            CreateMap<WishlistCreateDto, Wishlist>();
+            CreateMap<WishlistUpdateDto, Wishlist>()
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
-            CreateMap<Cart, CartReadDto>();
-            CreateMap<CartCreateDto, Cart>()
-                .ForAllMembers(opts =>
-                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
-                );
-
-            CreateMap<Cart, CartReadDto>();
-            CreateMap<CartCreateDto, Cart>()
-                .ForMember(dest => dest.UserId, opt => opt.Ignore());
-            CreateMap<CartUpdateDto, Cart>();
-            CreateMap<CartDetails, CartDetailsReadDto>();
-            CreateMap<CartDetailsCreateDto, CartDetails>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
         }
-
-
     }
 }
 

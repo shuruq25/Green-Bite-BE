@@ -32,6 +32,7 @@ namespace src.Database
             modelBuilder.HasPostgresEnum<PaymentMethod>();
             modelBuilder.HasPostgresEnum<PaymentStatus>();
             modelBuilder.HasPostgresEnum<Role>();
+
         }
     }
 }

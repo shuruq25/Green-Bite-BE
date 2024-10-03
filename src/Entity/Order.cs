@@ -1,9 +1,10 @@
 using System.Text.Json.Serialization;
+using src.DTO;
 
 namespace src.Entity
 {
 
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum OrderStatuses
 
     {

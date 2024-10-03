@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Entity;
@@ -20,25 +21,33 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrderById(Guid id)
         {
             return Ok(await _orderService.GetOrderByIdAsync(id));
         }
+
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<IEnumerable<Order>>> GetAll()
         {
             return Ok(await _orderService.GetAllOrdersAsync());
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] OrderDTO.Create order)
         {
             var createdOrderDTO = await _orderService.CreateOneOrderAsync(order);
-            return CreatedAtAction(nameof(GetOrderById), new { id = createdOrderDTO.ID }, createdOrderDTO);
+            return CreatedAtAction(
+                nameof(GetOrderById),
+                new { id = createdOrderDTO.ID },
+                createdOrderDTO
+            );
         }
 
-
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateOrder(Guid id, [FromBody] OrderDTO.Update order)
         {
             if (await _orderService.UpdateOrderAsync(id, order))
@@ -50,6 +59,7 @@ namespace src.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (await _orderService.DeleteByIdAsync(id))
