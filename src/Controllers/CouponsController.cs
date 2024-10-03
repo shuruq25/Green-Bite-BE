@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
 using src.Services;
@@ -24,6 +25,7 @@ namespace src.Controllers
         //create
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<CouponReadDto>> CreateOne(
             [FromBody] CouponCreateDto createDto
         )
@@ -32,19 +34,48 @@ namespace src.Controllers
             return Created($"/api/v1/Coupons/{CouponCreated.CouponId}", CouponCreated);
         }
 
-        // get all
-        // add Pagination
-        // [HttpGet]
-        // public async Task<ActionResult<List<CouponReadDto>>> GetAll(
-        //     [FromQuery] PaginationOptions paginationOptions
-        // )
-        // {
-        //     var CouponList = await _couponService.GetAllAsync(paginationOptions);
-        //     return Ok(CouponList);
-        //}
+        // Get all
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> GetAllCoupons()
+        {
+            return Ok(await _couponService.GetAllAsync());
+        }
+
+        // Update
+        [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult> UpdateCoupon(
+            Guid id,
+            [FromBody] CouponUpdateDto updateCoupon
+        )
+        {
+            var isUpdated = await _couponService.UpdateOneAsync(id, updateCoupon);
+            if (!isUpdated)
+            {
+                return NotFound();
+            }
+            var result = await _couponService.GetByIdAsync(id);
+            return Ok(result);
+        }
+
+        // Delete
+
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> DeleteCoupon([FromRoute] Guid id)
+        {
+            var deleted = await _couponService.DeleteOneAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
 
         // get by id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<CouponReadDto>> GetById([FromRoute] Guid id)
         {
             var Coupon = await _couponService.GetByIdAsync(id);

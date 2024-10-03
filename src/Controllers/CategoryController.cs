@@ -35,6 +35,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<CategoryReadDto>> CreateOne(
             [FromBody] CategoryCreateDto createDto
         )
@@ -44,6 +45,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> DeleteCategory([FromRoute] Guid id)
         {
             var deletedCategory = await _categoryService.DeleteOneAsync(id);
@@ -55,6 +57,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> UpdateCategory(
             [FromRoute] Guid id,
             [FromBody] CategoryUpdateDto updateDto

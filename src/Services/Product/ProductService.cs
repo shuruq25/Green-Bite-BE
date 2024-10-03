@@ -1,30 +1,27 @@
 using AutoMapper;
-using src.Repository;
 using src.Entity;
-using static src.DTO.ProductDTO;
+using src.Repository;
 using src.Utils;
+using static src.DTO.ProductDTO;
 
 namespace src.Services.product
 {
     public class ProductService : IProductService
     {
-
         protected readonly IProductRepository _productRepository;
         protected readonly IMapper _mapper;
-
 
         public ProductService(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;
-
         }
+
         public async Task<ProductReadDto> CreateOneAsync(ProductCreateDto createDto)
         {
-            var product = _mapper.Map<ProductCreateDto, Product>(createDto);          
+            var product = _mapper.Map<ProductCreateDto, Product>(createDto);
             var productCreated = await _productRepository.CreateOneAsync(product);
             return _mapper.Map<Product, ProductReadDto>(productCreated);
-
         }
 
         public async Task<List<ProductReadDto>> GetAllAsync(PaginationOptions paginationOptions)
@@ -36,14 +33,14 @@ namespace src.Services.product
         public async Task<ProductReadDto> GetByIdAsync(Guid id)
         {
             var foundProduct = await _productRepository.GetByIdAsync(id);
-                  if (foundProduct == null)
+            if (foundProduct == null)
             {
                 throw CustomException.NotFound($"Product with ID '{id}' not found.");
             }
 
             return _mapper.Map<Product, ProductReadDto>(foundProduct);
-
         }
+
         public async Task<bool> DeleteOneAsync(Guid id)
         {
             var foundProduct = await _productRepository.GetByIdAsync(id);
@@ -57,6 +54,7 @@ namespace src.Services.product
             }
             return false;
         }
+
         public async Task<bool> UpdateOneAsync(Guid id, ProductUpdateDto UpdateDto)
         {
             var foundProduct = await _productRepository.GetByIdAsync(id);
@@ -66,7 +64,12 @@ namespace src.Services.product
             }
             _mapper.Map(UpdateDto, foundProduct);
             return await _productRepository.UpdateOneAsync(foundProduct);
+        }
 
+        public async Task<List<ProductReadDto>> SearchProductsAsync(PaginationOptions options)
+        {
+            var products = await _productRepository.GetAllAsync(options);
+            return _mapper.Map<List<ProductReadDto>>(products); 
         }
     }
 }

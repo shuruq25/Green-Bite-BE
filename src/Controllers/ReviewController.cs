@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
 using src.Services.review;
@@ -23,8 +24,7 @@ namespace src.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<ReviewReadDto>>> GetAll(
-            [FromQuery] PaginationOptions paginationOptions
-        )
+            [FromQuery] PaginationOptions paginationOptions)
         {
             var reviews = await _reviewService.GetAllAsync(paginationOptions);
             return Ok(reviews);
@@ -42,6 +42,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ReviewReadDto>> CreateReview(
             [FromBody] ReviewCreateDto createDto
         )
@@ -51,6 +52,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteReview(Guid id)
         {
             var isDeleted = await _reviewService.DeleteOneAsync(id);
@@ -62,6 +64,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<ReviewReadDto>> UpdateReview(
             Guid id,
             [FromBody] ReviewUpdateDto updateDto

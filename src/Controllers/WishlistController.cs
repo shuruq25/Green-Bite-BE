@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using src.Services;
 using static src.DTO.WishlistDTO;
@@ -34,10 +35,22 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<WishlistReadDto>> CreateOne([FromBody] WishlistCreateDto createDto)
+        public async Task<ActionResult<WishlistReadDto>> CreateOne(
+            [FromBody] WishlistCreateDto createDto
+        )
         {
+            var authenticateClaims = HttpContext.User;
+            var userId = authenticateClaims
+                .FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!
+                .Value;
+            var userGuid = new Guid(userId);
+            createDto.UserID = userGuid;
             var newWishlistItem = await _wishlistService.CreateOneAsync(createDto);
-            return CreatedAtAction(nameof(GetById), new { id = newWishlistItem.WishlistID }, newWishlistItem);
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = newWishlistItem.WishlistID },
+                newWishlistItem
+            );
         }
 
         [HttpDelete("{id}")]
@@ -52,7 +65,10 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<WishlistReadDto>> UpdateOne(Guid id, [FromBody] WishlistUpdateDto updateDto)
+        public async Task<ActionResult<WishlistReadDto>> UpdateOne(
+            Guid id,
+            [FromBody] WishlistUpdateDto updateDto
+        )
         {
             var isUpdated = await _wishlistService.UpdateOneAsync(id, updateDto);
             if (!isUpdated)
@@ -64,4 +80,3 @@ namespace src.Controllers
         }
     }
 }
-
