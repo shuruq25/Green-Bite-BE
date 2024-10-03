@@ -28,7 +28,7 @@ dataSourceBuilder.MapEnum<PaymentMethod>();
 dataSourceBuilder.MapEnum<OrderStatuses>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseNpgsql(dataSourceBuilder.Build());
+    options.UseNpgsql(dataSourceBuilder.ConnectionString);
 });
 dataSourceBuilder.MapEnum<Role>();
 dataSourceBuilder.MapEnum<PaymentStatus>();
