@@ -32,11 +32,6 @@ namespace src.Database
             modelBuilder.HasPostgresEnum<PaymentStatus>();
             modelBuilder.HasPostgresEnum<Role>();
 
-            modelBuilder.Entity<Order>()
-            .HasMany(order => order.reviews)
-            .WithOne(review => review.Order)
-            .HasForeignKey(review => review.OrderId)
-            .HasPrincipalKey(order => order.ID);
         }
     }
 }

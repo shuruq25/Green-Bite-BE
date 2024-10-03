@@ -42,7 +42,7 @@ namespace src.Utils
             {
                 Issuer = issuer,
                 Audience = audience,
-                Expires = DateTime.Now.AddMinutes(69),
+                Expires = DateTime.Now.AddMinutes(200),
                 Subject = new ClaimsIdentity(claims),
                 SigningCredentials = signingCredentials,
             };

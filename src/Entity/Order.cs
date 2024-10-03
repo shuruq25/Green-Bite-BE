@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using src.DTO;
 
 namespace src.Entity
 {
@@ -20,6 +21,5 @@ namespace src.Entity
         public DateTime EstimatedArrival { get; set; }
         public OrderStatuses Status { get; set; }
         public Guid PaymentID { get; set; }
-        public ICollection<Review> reviews { get; set; }
     }
 }
