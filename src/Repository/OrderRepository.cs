@@ -22,9 +22,15 @@ namespace src.Repository
             _db = db;
         }
 
-        public async Task<Order?> GetOrderByIdAsync(Guid id) => await _orders.FirstOrDefaultAsync(o => o.ID == id);
+        public async Task<Order?> GetOrderByIdAsync(Guid id) => await _orders
+            .Include(order => order.User)
+            .Include(order => order.Payment)
+            .FirstOrDefaultAsync(o => o.ID == id);
 
-        public async Task<List<Order>> GetAllOrdersAsync() => await _orders.ToListAsync();
+        public async Task<List<Order>> GetAllOrdersAsync() => await _orders
+            .Include(order => order.User)
+            .Include(order => order.Payment)
+            .ToListAsync();
 
         public async Task<Order> AddOrderAsync(Order newOrder)
         {

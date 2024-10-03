@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
@@ -11,12 +10,10 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class OrderController : ControllerBase
     {
-        protected IMapper _mapper;
         protected IOrderService _orderService;
 
-        public OrderController(IMapper mapper, IOrderService orderService)
+        public OrderController( IOrderService orderService)
         {
-            _mapper = mapper;
             _orderService = orderService;
         }
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using Services;
 using src.Database;
 using src.Entity;
 using src.Middlewares;
@@ -27,7 +28,7 @@ dataSourceBuilder.MapEnum<PaymentMethod>();
 dataSourceBuilder.MapEnum<OrderStatuses>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseNpgsql(dataSourceBuilder.Build());
+    options.UseNpgsql(dataSourceBuilder.ConnectionString);
 });
 dataSourceBuilder.MapEnum<Role>();
 dataSourceBuilder.MapEnum<PaymentStatus>();
@@ -56,7 +57,9 @@ builder
     .AddScoped<ICouponService, CouponService>()
     .AddScoped<CouponRepository, CouponRepository>()
     .AddScoped<IWishlistService, WishlistService>()
-    .AddScoped<IWishlistRepository, WishlistRepository>();
+    .AddScoped<IWishlistRepository, WishlistRepository>()
+    .AddScoped<ICartService, CartService>()
+    .AddScoped<ICartRepository, CartRepository>();
 
 //auth
 builder.Services.AddAuthentication(options =>
