@@ -10,7 +10,7 @@ namespace src.DTO
     {
         // Class to : create Address
 
-        public class AddressCreateDto()
+        public class AddressCreateDto
         {
             public string? Country { get; set; }
             public string? Street { get; set; }
@@ -19,7 +19,7 @@ namespace src.DTO
 
         // Class to : get/read data
 
-        public class AddressReadDto()
+        public class AddressReadDto
         {
             public Guid AddressId { get; set; }
             public string? Country { get; set; }
@@ -29,7 +29,7 @@ namespace src.DTO
 
         // Class to : Update Address
 
-        public class AddressUpdateDto()
+        public class AddressUpdateDto
         {
             public string? Country { get; set; }
             public string? Street { get; set; }
