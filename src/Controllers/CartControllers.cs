@@ -58,10 +58,10 @@ namespace src.Controllers
 
             if (!deleted)
             {
-                return NotFound(); // Cart not found
+                return NotFound(); 
             }
 
-            return NoContent(); // Cart deleted successfully
+            return NoContent(); 
         }
 
 

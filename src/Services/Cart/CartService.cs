@@ -61,11 +61,6 @@ namespace Services
             return _mapper.Map<Cart, CartReadDto>(cart);
         }
 
-
-    
-
-
-
         public async Task<CartReadDto> GetCartByUserIdAsync(Guid userId)
         {
             var cart = await _cartRepository.GetByIdAsync(userId);
@@ -80,20 +75,15 @@ namespace Services
 
         public async Task<bool> DeleteCartAsync(Guid userId)
         {
-            // Fetch the cart for the user
             var existingCart = await _cartRepository.GetByIdAsync(userId);
 
-            // Check if the user has a cart
             if (existingCart == null)
             {
-                // If no cart is found for the user, return false
                 return false;
             }
 
-            // Call the repository to remove the cart and its details
             await _cartRepository.RemoveCart(existingCart);
 
-            // Return true if the cart was successfully deleted
             return true;
         }
 

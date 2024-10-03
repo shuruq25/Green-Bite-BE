@@ -81,10 +81,8 @@ namespace src.Repository
 {
     if (cart != null)
     {
-        // Remove the cart entity itself
         _databaseContext.Cart.Remove(cart);
 
-        // Save changes to the database
         await _databaseContext.SaveChangesAsync();
     }
 }
