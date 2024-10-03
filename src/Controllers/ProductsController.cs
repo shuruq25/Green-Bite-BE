@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using src.DTO;
 using src.Entity;
 using src.Services.product;
 using src.Utils;
@@ -11,27 +13,31 @@ namespace src.Controllers
     public class ProductsController : ControllerBase
     {
         protected IProductService _productService;
+
         public ProductsController(IProductService service)
         {
             _productService = service;
-
         }
 
-
         [HttpPost]
-        public async Task<ActionResult<ProductReadDto>> CreateOne([FromBody] ProductCreateDto createDto)
+       // [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult<ProductReadDto>> CreateOne(
+            [FromBody] ProductCreateDto createDto
+        )
         {
             var productCreated = await _productService.CreateOneAsync(createDto);
             return Created($"api/v1/products/{productCreated.Id}", productCreated);
-
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<ProductReadDto>>> GetAll([FromQuery] PaginationOptions paginationOptions)
+        public async Task<ActionResult<List<ProductReadDto>>> GetAll(
+            [FromQuery] PaginationOptions paginationOptions
+        )
         {
             var productList = await _productService.GetAllAsync(paginationOptions);
             return Ok(productList);
-
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductReadDto>> GetById([FromRoute] Guid id)
         {
@@ -40,7 +46,11 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] ProductUpdateDto updateDto)
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult> Update(
+            [FromRoute] Guid id,
+            [FromBody] ProductUpdateDto updateDto
+        )
         {
             var result = await _productService.UpdateOneAsync(id, updateDto);
             if (!result)
@@ -52,6 +62,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var deleted = await _productService.DeleteOneAsync(id);
@@ -62,6 +73,17 @@ namespace src.Controllers
             return NoContent();
         }
 
-
+        [HttpGet("search")]
+        public async Task<ActionResult<List<ProductReadDto>>> SearchProducts(
+            [FromBody] PaginationOptions options
+        )
+        {
+            var products = await _productService.SearchProductsAsync(options);
+            if (products == null || products.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(products);
+        }
     }
 }

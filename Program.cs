@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using Services;
 using src.Database;
 using src.Entity;
 using src.Middlewares;
@@ -27,7 +28,7 @@ dataSourceBuilder.MapEnum<PaymentMethod>();
 dataSourceBuilder.MapEnum<OrderStatuses>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseNpgsql(dataSourceBuilder.Build());
+    options.UseNpgsql(dataSourceBuilder.ConnectionString);
 });
 dataSourceBuilder.MapEnum<Role>();
 dataSourceBuilder.MapEnum<PaymentStatus>();
@@ -56,29 +57,31 @@ builder
     .AddScoped<ICouponService, CouponService>()
     .AddScoped<CouponRepository, CouponRepository>()
     .AddScoped<IWishlistService, WishlistService>()
-    .AddScoped<IWishlistRepository, WishlistRepository>();
+    .AddScoped<IWishlistRepository, WishlistRepository>()
+    .AddScoped<ICartService, CartService>()
+    .AddScoped<ICartRepository, CartRepository>();
 
 //auth
-    builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(options =>
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-            ),
-        };
-    });
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+        ),
+    };
+});
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));

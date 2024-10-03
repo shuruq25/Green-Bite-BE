@@ -12,18 +12,22 @@ namespace src.Services.UserService
         protected readonly UserRepository _userRepo;
         protected readonly IMapper _mapper;
         protected readonly IConfiguration _configuration;
+
         public UserService(UserRepository userRepo, IMapper mapper, IConfiguration configuration)
         {
             _userRepo = userRepo;
             _mapper = mapper;
             _configuration = configuration;
         }
+
         public async Task<UserReadDto> CreateOneAsync(UserCreateDto createDto)
         {
             var existingUser = await _userRepo.FindByEmailAsync(createDto.EmailAddress);
             if (existingUser != null)
             {
-                throw CustomException.BadRequest($"User with email '{createDto.EmailAddress}' already exists.");
+                throw CustomException.BadRequest(
+                    $"User with email '{createDto.EmailAddress}' already exists."
+                );
             }
             PasswordUtils.HashPassword(
                 createDto.Password,
@@ -38,23 +42,25 @@ namespace src.Services.UserService
             return _mapper.Map<User, UserReadDto>(userCreated);
         }
 
-
         //get all original method
         public async Task<List<UserReadDto>> GetAllAsync()
         {
             var userList = await _userRepo.GetAllAsync();
             return _mapper.Map<List<User>, List<UserReadDto>>(userList);
         }
+
         public async Task<List<UserReadDto>> GetAllAsync(PaginationOptions paginationOptions)
         {
             var userList = await _userRepo.GetAllAsync(paginationOptions);
             return _mapper.Map<List<User>, List<UserReadDto>>(userList);
         }
+
         public async Task<UserReadDto> GetByIdAsync(Guid id)
         {
             var foundUser = await _userRepo.GetByIdAsync(id);
             return _mapper.Map<User, UserReadDto>(foundUser);
         }
+
         public async Task<bool> DeleteOneAsync(Guid id)
         {
             var foundUser = await _userRepo.GetByIdAsync(id);
@@ -80,15 +86,18 @@ namespace src.Services.UserService
             _mapper.Map(updateDto, foundUser);
             return await _userRepo.UpdateOneAsync(foundUser);
         }
-        public async Task<string> SignInAsync(UserCreateDto createDto)
+
+        public async Task<string> SignInAsync(UserSignInDto signInDto)
         {
-            var foundUser = await _userRepo.FindByEmailAsync(createDto.EmailAddress);
+            var foundUser = await _userRepo.FindByEmailAsync(signInDto.EmailAddress);
             if (foundUser == null)
             {
-                throw CustomException.BadRequest($"User with email '{createDto.EmailAddress}' not found.");
+                throw CustomException.BadRequest(
+                    $"User with email '{signInDto.EmailAddress}' not found."
+                );
             }
             var isMatched = PasswordUtils.VerifyPassword(
-                createDto.Password,
+                signInDto.Password,
                 foundUser.Password,
                 foundUser.Salt
             );

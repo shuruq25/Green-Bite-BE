@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Entity;
@@ -22,6 +23,7 @@ namespace src.Controllers
         //create
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<AddressReadDto>> CreateOne(
             [FromBody] AddressCreateDto createDto
         )
@@ -30,10 +32,46 @@ namespace src.Controllers
             return Created($"/api/v1/Addresses/{addressCreated.AddressId}", addressCreated);
         }
 
-    
+        // Get all
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> GetAllAddresses()
+        {
+            return Ok(await _addressService.GetAllAsync());
+        }
+
+        // Update
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<ActionResult> UpdateAddress(
+            Guid id,
+            [FromBody] AddressUpdateDto updatedAddress
+        )
+        {
+            if (await _addressService.UpdateOneAsync(id, updatedAddress))
+            {
+                return NoContent();
+            }
+            return NotFound();
+        }
+
+        // Delete
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteAddress([FromRoute] Guid id)
+        {
+            var deleted = await _addressService.DeleteOneAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
 
         // get by id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<AddressReadDto>> GetById([FromRoute] Guid id)
         {
             var Address = await _addressService.GetByIdAsync(id);
