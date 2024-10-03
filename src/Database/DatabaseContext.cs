@@ -17,16 +17,17 @@ namespace src.Database
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Review> Review { get; set; }
+        public DbSet<Cart> Cart { get; set; }
+        public DbSet<CartDetails> CartDetails { get; set; }
 
 
-
-        // public DbSet<Cart> Cart { get; set; }
 
         public DatabaseContext(DbContextOptions options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.HasPostgresEnum<OrderStatuses>();
             modelBuilder.HasPostgresEnum<PaymentMethod>();
             modelBuilder.HasPostgresEnum<PaymentStatus>();

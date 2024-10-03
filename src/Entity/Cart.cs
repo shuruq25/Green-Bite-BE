@@ -4,8 +4,12 @@ namespace src.Entity
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public int CartTotal { get; set; }
-        public decimal TotalPrice { get; set; }
+        public User User { get; set; }
+        public List<CartDetails> CartDetails { get; set; }
+        public int CartTotal => CartDetails.Sum(cd => cd.Quantity);
+        public decimal TotalPrice => CartDetails.Sum(cd => cd.Product.Price * cd.Quantity);
+
+
 
     }
 }
