@@ -38,6 +38,28 @@ namespace src.Repository
             var searchResult = _product.Where(c =>
                 c.Name.ToLower().Contains(paginationOptions.Search)
             );
+            if (paginationOptions.Filter.MinPrice.HasValue)
+            {
+                searchResult = searchResult.Where(p =>
+                    p.Price >= paginationOptions.Filter.MinPrice.Value
+                );
+            }
+            if (paginationOptions.Filter.MaxPrice.HasValue)
+            {
+                searchResult = searchResult.Where(p =>
+                    p.Price <= paginationOptions.Filter.MaxPrice.Value
+                );
+            }
+
+            // Apply sorting
+            if (paginationOptions.Sort.SortByPriceAscending)
+            {
+                searchResult = searchResult.OrderBy(p => p.Price);
+            }
+            else
+            {
+                searchResult = searchResult.OrderByDescending(p => p.Price);
+            }
             return await searchResult
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
