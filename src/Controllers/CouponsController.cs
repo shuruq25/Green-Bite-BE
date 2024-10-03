@@ -78,8 +78,13 @@ namespace src.Controllers
         [Authorize]
         public async Task<ActionResult<CouponReadDto>> GetById([FromRoute] Guid id)
         {
-            var Coupon = await _couponService.GetByIdAsync(id);
-            return Ok(Coupon);
+
+            CouponReadDto? coupon = await _couponService.GetByIdAsync(id);
+            if (coupon is null)
+            {
+                return NotFound();
+            }
+            return Ok(coupon);
         }
     }
 }
