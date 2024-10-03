@@ -24,7 +24,7 @@ namespace src.Controllers
             _userService = service;
         }
 
-        [HttpPost]
+        [HttpPost("signUp")]
         public async Task<ActionResult<UserReadDto>> UserSignUp([FromBody] UserCreateDto createDto)
         {
             var userCreated = await _userService.CreateOneAsync(createDto);
