@@ -51,7 +51,7 @@ namespace src.Repository
                 );
             }
 
-            // Apply sorting
+          
             if (paginationOptions.Sort.SortByPriceAscending)
             {
                 searchResult = searchResult.OrderBy(p => p.Price);
