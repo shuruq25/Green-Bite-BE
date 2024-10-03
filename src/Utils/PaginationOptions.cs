@@ -7,8 +7,10 @@ namespace src.Utils
 {
     public class PaginationOptions
     {
-        public int Limit { get; set; } = 2;
+        public int Limit { get; set; } = 10;
         public int Offset { get; set; } = 0;
         public string Search { get; set; } = string.Empty;
+        public SortOptions Sort { get; set; } = new SortOptions();
+        public FilterOptions Filter { get; set; } = new FilterOptions();
     }
 }
