@@ -7,9 +7,10 @@ namespace src.Services.UserService
     {
         Task<UserReadDto> CreateOneAsync(UserCreateDto createDto);
         Task<List<UserReadDto>> GetAllAsync(PaginationOptions paginationOptions);
+         Task<List<UserReadDto>> GetAllAsync();
         Task<UserReadDto> GetByIdAsync(Guid id);
         Task<bool> DeleteOneAsync(Guid id);
         Task<bool> UpdateOneAsync(Guid id, UserUpdateDto updateDto);
-        Task<string> SignInAsync(UserCreateDto createDto);
+        Task<string> SignInAsync(UserSignInDto signInDto);
     }
 }

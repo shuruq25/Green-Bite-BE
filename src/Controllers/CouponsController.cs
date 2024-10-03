@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.Entity;
+using src.Services;
+using src.Utils;
+using static src.DTO.CouponDTO;
 
 namespace src.Controllers
 {
@@ -11,92 +15,71 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class CouponsController : ControllerBase
     {
-        // public static List<Coupon> Coupons = new List<Coupon>
-        // {
-        //     new Coupon
-        //     {
-        //         CouponId = 1,
-        //         Code = "DISCOUNT50",
-        //         DiscountPercentage = 50,
-        //         Expire = new DateTime(2024, 12, 31),
-        //     },
-        //     new Coupon
-        //     {
-        //         CouponId = 2,
-        //         Code = "WELCOME10",
-        //         DiscountPercentage = 10,
-        //         Expire = new DateTime(2024, 10, 15),
-        //     },
-        //     new Coupon
-        //     {
-        //         CouponId = 3,
-        //         Code = "SUMMER20",
-        //         DiscountPercentage = 20,
-        //         Expire = new DateTime(2024, 6, 30),
-        //     },
-        // };
+        protected readonly ICouponService _couponService;
 
-        // // GET:
-        // [HttpGet]
-        // public ActionResult GetCoupons()
-        // {
-        //     return Ok(Coupons);
-        // }
+        public CouponsController(ICouponService service)
+        {
+            _couponService = service;
+        }
 
-        // // GET:
-        // [HttpGet("{id}")]
-        // public ActionResult GetCouponById(int id)
-        // {
-        //     var foundCoupon = Coupons.FirstOrDefault(c => c.CouponId == id);
-        //     if (foundCoupon == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return Ok(foundCoupon);
-        // }
+        //create
 
-        // // POST:
-        // [HttpPost]
-        // public ActionResult PostCoupon(Coupon newCoupon)
-        // {
-        //     if (newCoupon == null || string.IsNullOrEmpty(newCoupon.Code))
-        //     {
-        //         return BadRequest("Coupon details are required.");
-        //     }
+        [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult<CouponReadDto>> CreateOne(
+            [FromBody] CouponCreateDto createDto
+        )
+        {
+            var CouponCreated = await _couponService.CreatOneAsync(createDto);
+            return Created($"/api/v1/Coupons/{CouponCreated.CouponId}", CouponCreated);
+        }
 
-        //     return Created($"api/v1/coupons/{newCoupon.CouponId}", newCoupon);
-        // }
+        // Get all
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> GetAllCoupons()
+        {
+            return Ok(await _couponService.GetAllAsync());
+        }
 
-        // // PUT:
-        // [HttpPut("{id}")]
-        // public ActionResult PutCoupon(int id, Coupon updatedCoupon)
-        // {
-        //     if (updatedCoupon == null || string.IsNullOrEmpty(updatedCoupon.Code))
-        //     {
-        //         return BadRequest("Coupon details are required.");
-        //     }
-        //     var foundCoupon = Coupons.FirstOrDefault(c => c.CouponId == id);
-        //     if (foundCoupon == null)
-        //     {
-        //         return NotFound();
-        //     }
+        // Update
+        [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult> UpdateCoupon(
+            Guid id,
+            [FromBody] CouponUpdateDto updateCoupon
+        )
+        {
+            var isUpdated = await _couponService.UpdateOneAsync(id, updateCoupon);
+            if (!isUpdated)
+            {
+                return NotFound();
+            }
+            var result = await _couponService.GetByIdAsync(id);
+            return Ok(result);
+        }
 
-        //     foundCoupon.Code = updatedCoupon.Code;
+        // Delete
 
-        //     return NoContent();
-        // }
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> DeleteCoupon([FromRoute] Guid id)
+        {
+            var deleted = await _couponService.DeleteOneAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
 
-        // // DELETE:
-        // [HttpDelete("{id}")]
-        // public ActionResult DeleteCoupon(int id)
-        // {
-        //     var foundCoupon = Coupons.FirstOrDefault(c => c.CouponId == id);
-        //     if (foundCoupon == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     Coupons.Remove(foundCoupon);
-        //     return NoContent();
-        // }
+        // get by id
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<ActionResult<CouponReadDto>> GetById([FromRoute] Guid id)
+        {
+            var Coupon = await _couponService.GetByIdAsync(id);
+            return Ok(Coupon);
+        }
     }
 }

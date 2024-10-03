@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
@@ -16,12 +17,15 @@ namespace src.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> GetAllPayments()
         {
             return Ok(await _paymentService.GetAllPaymets());
         }
 
         [HttpGet("{id}")]
+        [Authorize]
+        //filite user in service
         public async Task<ActionResult> GetPaymentById(Guid id)
         {
             var payment = await _paymentService.GetPaymentById(id);
@@ -33,7 +37,10 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreatePayment([FromBody] PaymentDTO.PaymentCreateDto newPayment)
+        [Authorize]
+        public async Task<ActionResult> CreatePayment(
+            [FromBody] PaymentDTO.PaymentCreateDto newPayment
+        )
         {
             if (newPayment == null || newPayment.FinalPrice <= 0)
             {
@@ -41,12 +48,19 @@ namespace src.Controllers
             }
             var createdPaymentDto = await _paymentService.CreatePayment(newPayment);
 
-
-            return CreatedAtAction(nameof(GetPaymentById), new { id = createdPaymentDto.Id }, createdPaymentDto);
+            return CreatedAtAction(
+                nameof(GetPaymentById),
+                new { id = createdPaymentDto.Id },
+                createdPaymentDto
+            );
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePayment(Guid id,[FromBody] PaymentDTO.PaymentUpdateDto updatedPayment)
+        [Authorize]
+        public async Task<ActionResult> UpdatePayment(
+            Guid id,
+            [FromBody] PaymentDTO.PaymentUpdateDto updatedPayment
+        )
         {
             if (await _paymentService.UpdatePaymentById(id, updatedPayment))
             {
@@ -56,6 +70,8 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
+        //in the service check the py statues
         public async Task<ActionResult> DeletePayment(Guid id)
         {
             if (await _paymentService.DeletePaymentById(id))
@@ -67,4 +83,3 @@ namespace src.Controllers
         }
     }
 }
-

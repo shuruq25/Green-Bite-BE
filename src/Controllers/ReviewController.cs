@@ -26,8 +26,7 @@ namespace src.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<ReviewReadDto>>> GetAll(
-            [FromQuery] PaginationOptions paginationOptions
-        )
+            [FromQuery] PaginationOptions paginationOptions)
         {
             var reviews = await _reviewService.GetAllAsync(paginationOptions);
             return Ok(reviews);
@@ -68,7 +67,9 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+
+        [Authorize]
+
         public async Task<ActionResult> DeleteReview(Guid id)
         {
             var isDeleted = await _reviewService.DeleteOneAsync(id);

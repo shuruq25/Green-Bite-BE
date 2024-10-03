@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.DTO;
 using src.Entity;
+using src.Utils;
 
 namespace src.Repository
 {
@@ -41,11 +42,37 @@ namespace src.Repository
             return newAddress;
         }
 
+
+
+  // get all Addresses:
+
+        public async Task<List<Address>> GetAllAsync()
+        {
+            return await _address.ToListAsync();
+        }
+
+
+
+        // get all Addresses:
+
+        // add the Pagination
+
+        // public async Task<List<Address>> GetAllAsync(PaginationOptions paginationOptions)
+        // {
+        //     var result = _address.Where(c =>
+        //         c.Country.ToLower().Contains(paginationOptions.Search)
+        //     );
+        //     return await result
+        //         .Skip(paginationOptions.Offset)
+        //         .Take(paginationOptions.Limit)
+        //         .ToListAsync();
+        // }
+
         // get by Address by ID
 
         public async Task<Address?> GetAddressByIdAsync(Guid id)
         {
-            return await _address.FindAsync(id);
+            return await _address.Include(a=>a.User).FirstOrDefaultAsync(a=>a.AddressId == id);
         }
 
         //delete Address:
@@ -58,21 +85,11 @@ namespace src.Repository
         }
 
         //Update Address:
-
         public async Task<bool> UpdateOneAsync(Address updatedAddress)
         {
             _address.Update(updatedAddress);
             await _databaseContext.SaveChangesAsync();
             return true;
         }
-
-        // get all Addresses:
-
-        public async Task<List<Address>> GetAllAsync()
-        {
-            return await _address.ToListAsync();
-        }
-
-     
     }
 }
