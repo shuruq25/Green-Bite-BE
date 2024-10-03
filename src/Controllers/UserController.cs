@@ -42,7 +42,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<UserReadDto>> GetById(Guid id)
         {
             var user = await _userService.GetByIdAsync(id);

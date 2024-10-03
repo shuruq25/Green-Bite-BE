@@ -12,8 +12,7 @@ namespace src.DTO
         public class CartCreateDto
         {
             public List<CartDetailsCreateDto> CartDetails { get; set; } = new List<CartDetailsCreateDto>();
-            public int CartTotal { get; set; }
-            public decimal TotalPrice { get; set; }
+            
         }
 
         public class CartReadDto
@@ -21,6 +20,8 @@ namespace src.DTO
             public Guid Id { get; set; }
             public Guid UserId { get; set; }
             public List<CartDetails> CartDetails { get; set; }
+
+
             public int CartTotal { get; set; }
             public decimal TotalPrice { get; set; }
 
@@ -29,8 +30,8 @@ namespace src.DTO
         public class CartUpdateDto
         {
 
-        public List<CartDetails> CartDetails { get; set; }= new List<CartDetails>();
-        
+            public List<CartDetailsUpdateDto> CartDetails { get; set; } = new List<CartDetailsUpdateDto>();
+
         }
 
 

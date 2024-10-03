@@ -10,30 +10,12 @@ using src.Entity;
 namespace src.Repository
 {
 
-
-    // public async Task<Cart> CreateOneAsync(Cart cart)
-    // {
-
-    // var existingCart = await _carts.FirstOrDefaultAsync(c => c.UserId == cart.UserId);
-    // if (existingCart != null)
-    // {
-    //     throw new InvalidOperationException($"User with ID {cart.UserId} already has a cart.");
-    // }
-    // await _carts.AddAsync(cart);
-    // await _databaseContext.SaveChangesAsync();
-    // await _carts.Entry(cart).Collection(o => o.CartDetails).LoadAsync();
-
-    // foreach (var details in cart.CartDetails)
-    // {
-    //     await _databaseContext.Entry(details).Reference(cd => cd.Product).LoadAsync();
-    // }
-    // return cart;
-
     public interface ICartRepository
     {
         Task<Cart> CreateOneAsync(Cart cart);
         Task<Cart> GetByIdAsync(Guid id);
         Task RemoveCart(Cart cart);
+        Task<bool> UpdateOneAsync(Cart updateCart);
 
 
     }
@@ -47,7 +29,7 @@ namespace src.Repository
             _databaseContext = databaseContext;
             _carts = _databaseContext.Set<Cart>();
         }
-
+        // Create a new Cart
         public async Task<Cart> CreateOneAsync(Cart cart)
         {
             var userExists = await _databaseContext.User.AnyAsync(u => u.UserID == cart.UserId);
@@ -65,9 +47,9 @@ namespace src.Repository
                 await _databaseContext.Entry(details).Reference(cd => cd.Product).LoadAsync();
             }
 
-            return cart;
+            return cart; 
         }
-
+        // Get Cart by User ID
         public async Task<Cart> GetByIdAsync(Guid id)
         {
 
@@ -76,15 +58,23 @@ namespace src.Repository
                               .ThenInclude(cd => cd.Product)
                               .FirstOrDefaultAsync(c => c.UserId == id);
         }
+        // Remove a Cart
+        public async Task RemoveCart(Cart cart)
+        {
+            if (cart != null)
+            {
+                _databaseContext.Cart.Remove(cart);
 
-       public async Task RemoveCart(Cart cart)
-{
-    if (cart != null)
-    {
-        _databaseContext.Cart.Remove(cart);
+                await _databaseContext.SaveChangesAsync();
+            }
+        }
 
-        await _databaseContext.SaveChangesAsync();
+        // Update an existing Cart
+        public async Task<bool> UpdateOneAsync(Cart updateCart)
+        {
+            _carts.Update(updateCart);
+            await _databaseContext.SaveChangesAsync();
+            return true;
+        }
     }
 }
-
-}}

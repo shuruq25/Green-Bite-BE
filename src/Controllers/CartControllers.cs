@@ -19,8 +19,18 @@ namespace src.Controllers
         {
             _cartService = service;
         }
+
+        // POST: api/cart
+        // This endpoint creates a new cart for a user
+        // Example request body:
+        // {
+        //     "CartDetails": [
+        //         { "ProductId": "", "Quantity": },
+        //         { "ProductId": "", "Quantity":  }
+        //     ]
+        // }
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<CartReadDto>> CreateOneAsync([FromBody] CartCreateDto cartCreate)
         {
             var authenticateClaims = HttpContext.User;
@@ -30,9 +40,14 @@ namespace src.Controllers
 
 
         }
+
         // GET: api/cart/user/{userId}
+        // This endpoint retrieves the cart for a specific user by their UserId
+        // Example:
+        // GET /api/cart/user/{userId}
+
         [HttpGet("user/{userId}")]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> GetCartByUserId(Guid userId)
         {
             try
@@ -51,6 +66,10 @@ namespace src.Controllers
                 return StatusCode(500, new { message = "An error occurred while retrieving the cart.", error = ex.Message });
             }
         }
+        // DELETE: api/cart/{id}
+        // This endpoint deletes a cart based on the provided userId
+        // Example:
+        // DELETE /api/cart/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCart([FromRoute] Guid id)
         {
@@ -58,12 +77,35 @@ namespace src.Controllers
 
             if (!deleted)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
-            return NoContent(); 
+            return NoContent();
         }
 
+        // PUT: api/cart/{id}
+        // This endpoint updates the cart for the specified userId with new details
+        // Example request body:
+        // {
+        //     "CartDetails": [
+        //         { "ProductId": "", "Quantity":  },
+        //         { "ProductId": "", "Quantity": }
+        //     ]
+        // }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(
+                   [FromRoute] Guid id,
+                   [FromBody] CartUpdateDto updateDto
+               )
+        {
+            var result = await _cartService.UpdateOneAsync(id, updateDto);
+            if (!result)
+            {
+                return NotFound();
+            }
+            var updatedProduct = await _cartService.GetCartByUserIdAsync(id);
+            return Ok(updatedProduct);
+        }
 
 
     }
