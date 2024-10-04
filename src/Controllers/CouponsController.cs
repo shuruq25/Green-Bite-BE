@@ -53,7 +53,7 @@ namespace src.Controllers
             var isUpdated = await _couponService.UpdateOneAsync(id, updateCoupon);
             if (!isUpdated)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             var result = await _couponService.GetByIdAsync(id);
             return Ok(result);
@@ -68,7 +68,7 @@ namespace src.Controllers
             var deleted = await _couponService.DeleteOneAsync(id);
             if (!deleted)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }
@@ -81,7 +81,7 @@ namespace src.Controllers
             CouponReadDto? coupon = await _couponService.GetByIdAsync(id);
             if (coupon is null)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return Ok(coupon);
         }

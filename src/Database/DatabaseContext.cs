@@ -20,30 +20,36 @@ namespace src.Database
         public DbSet<Cart> Cart { get; set; }
         public DbSet<CartDetails> CartDetails { get; set; }
 
-
-
         public DatabaseContext(DbContextOptions options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.HasPostgresEnum<OrderStatuses>();
             modelBuilder.HasPostgresEnum<PaymentMethod>();
             modelBuilder.HasPostgresEnum<PaymentStatus>();
             modelBuilder.HasPostgresEnum<Role>();
 
-            modelBuilder.Entity<User>()
+            modelBuilder
+                .Entity<User>()
                 .HasMany(user => user.Orders)
                 .WithOne(order => order.User)
                 .HasForeignKey(order => order.UserID)
                 .HasPrincipalKey(user => user.UserID);
 
-            modelBuilder.Entity<Order>()
+            modelBuilder
+                .Entity<Order>()
                 .HasOne(order => order.Payment)
                 .WithOne(payment => payment.Order)
                 .HasForeignKey<Order>(order => order.PaymentID);
 
+            modelBuilder.Entity<User>().HasIndex(u => u.EmailAddress).IsUnique();
+            modelBuilder.Entity<Cart>().HasIndex(u => u.UserId).IsUnique();
+
+            modelBuilder.Entity<Review>()
+            .HasOne(r => r.Order) // Each Review has one Order
+            .WithMany(o => o.Reviews) // Each Order can have many Reviews
+            .HasForeignKey(r => r.OrderId); // The foreign key in Review is OrderId
         }
     }
 }

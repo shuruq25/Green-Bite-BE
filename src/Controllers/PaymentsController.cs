@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
+using src.Utils;
 
 namespace src.Controllers
 {
@@ -31,7 +32,7 @@ namespace src.Controllers
             var payment = await _paymentService.GetPaymentById(id);
             if (payment == null)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return Ok(payment);
         }
@@ -44,7 +45,7 @@ namespace src.Controllers
         {
             if (newPayment == null || newPayment.FinalPrice <= 0)
             {
-                return BadRequest("Invalid payment data.");
+                throw CustomException.BadRequest("Invalid payment data.");
             }
             var createdPaymentDto = await _paymentService.CreatePayment(newPayment);
 
@@ -66,7 +67,7 @@ namespace src.Controllers
             {
                 return NoContent();
             }
-            return NotFound();
+            throw CustomException.NotFound();
         }
 
         [HttpDelete("{id}")]
@@ -79,7 +80,7 @@ namespace src.Controllers
                 return NoContent();
             }
 
-            return NotFound();
+            throw CustomException.NotFound();
         }
     }
 }
