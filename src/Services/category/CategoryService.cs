@@ -20,55 +20,90 @@ namespace src.Services.category
             _mapper = mapper;
         }
 
-
+        // Create a new category
         public async Task<CategoryReadDto> CreateOneAsync(CategoryCreateDto createDto)
         {
-            var category = _mapper.Map<CategoryCreateDto, Category>(createDto);
-            var createdCategory = await _categoryRepo.CreateOneAsync(category);
-            return _mapper.Map<Category, CategoryReadDto>(createdCategory);
+            try
+            {
+                var category = _mapper.Map<CategoryCreateDto, Category>(createDto);
+                var createdCategory = await _categoryRepo.CreateOneAsync(category);
+                return _mapper.Map<Category, CategoryReadDto>(createdCategory);
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError(ex.Message);
+            }
         }
 
-
+        // Get all categories
         public async Task<List<CategoryReadDto>> GetCategoriesAsync(PaginationOptions paginationOptions)
         {
-            var allCategory = await _categoryRepo.GetCategoriesAsync();
-            return _mapper.Map<List<Category>, List<CategoryReadDto>>(allCategory);
+            try
+            {
+                var allCategory = await _categoryRepo.GetCategoriesAsync();
+                return _mapper.Map<List<Category>, List<CategoryReadDto>>(allCategory);
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError(ex.Message);
+            }
         }
 
-
+        // Get a category by ID
         public async Task<CategoryReadDto> GetCategoryAsync(Guid id)
         {
-            var foundCategory = await _categoryRepo.GetCategoryAsync(id);
-            if(foundCategory == null){
+            try
+            {
+                var foundCategory = await _categoryRepo.GetCategoryAsync(id);
+                if (foundCategory == null)
+                {
 
-                throw CustomException.NotFound($"Category with {id} cant find");
+                    throw CustomException.NotFound($"Category with {id} cant find");
+                }
+                return _mapper.Map<Category, CategoryReadDto>(foundCategory);
             }
-            return _mapper.Map<Category, CategoryReadDto>(foundCategory);
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError(ex.Message);
+            }
         }
 
-
+        // Update a category
         public async Task<bool> UpdateOneAsync(Guid id, CategoryUpdateDto updateDto)
         {
-            var foundCategory = await _categoryRepo.GetCategoryAsync(id);
-            if (foundCategory == null)
+            try
             {
-                throw CustomException.NotFound($"Category with ID '{id}' not found.");
-            }
+                var foundCategory = await _categoryRepo.GetCategoryAsync(id);
+                if (foundCategory == null)
+                {
+                    throw CustomException.NotFound($"Category with ID '{id}' not found.");
+                }
 
-            _mapper.Map(updateDto, foundCategory);
-            return await _categoryRepo.UpdateOneAsync(foundCategory);
+                _mapper.Map(updateDto, foundCategory);
+                return await _categoryRepo.UpdateOneAsync(foundCategory);
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError(ex.Message);
+            }
         }
 
-
+        // Delete a category
         public async Task<bool> DeleteOneAsync(Guid id)
         {
-            var foundCategory = await _categoryRepo.GetCategoryAsync(id);
-            bool deleteCategory = await _categoryRepo.DeleteOnAsync(foundCategory);
-            if (deleteCategory)
+            try
             {
-                return true;
+                var foundCategory = await _categoryRepo.GetCategoryAsync(id);
+                if (foundCategory == null)
+                {
+                    throw CustomException.NotFound($"Category with ID '{id}' not found.");
+                }
+                return await _categoryRepo.DeleteOnAsync(foundCategory);
             }
-            return false;
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError(ex.Message);
+            }
         }
     }
 }

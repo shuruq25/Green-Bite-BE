@@ -48,7 +48,7 @@ namespace src.Controllers
             var user = await _userService.GetByIdAsync(id);
             if (user == null)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return Ok(user);
         }
@@ -60,7 +60,7 @@ namespace src.Controllers
             var isDeleted = await _userService.DeleteOneAsync(id);
             if (!isDeleted)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
+using src.Utils;
 
 namespace src.Repository
 {
@@ -24,35 +25,75 @@ namespace src.Repository
             _category = databaseContext.Set<Category>();
         }
 
+        // Create a new category
         public async Task<Category> CreateOneAsync(Category newCategory)
         {
-            await _category.AddAsync(newCategory);
-            await _databaseContext.SaveChangesAsync();
-            return newCategory;
+            try
+            {
+                await _category.AddAsync(newCategory);
+                await _databaseContext.SaveChangesAsync();
+                return newCategory;
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Failed to create category: " + ex.Message);
+            }
         }
 
+        // Get a category by ID
         public async Task<Category?> GetCategoryAsync(Guid id)
         {
-            return await _category.FindAsync(id);
+            try
+            {
+                return await _category.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error fetching category: " + ex.Message);
+            }
         }
 
+        // Get all categories
         public async Task<List<Category>> GetCategoriesAsync()
         {
-            return await _category.ToListAsync();
+            try
+            {
+                return await _category.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error fetching categories: " + ex.Message);
+            }
         }
 
+        // Update a category
         public async Task<bool> UpdateOneAsync(Category updatedCategory)
         {
-            _category.Update(updatedCategory);
-            await _databaseContext.SaveChangesAsync();
-            return true;
+            try
+            {
+                _category.Update(updatedCategory);
+                await _databaseContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error updating category: " + ex.Message);
+            }
         }
 
+        // Delete a category
         public async Task<bool> DeleteOnAsync(Category category)
         {
-            _category.Remove(category);
-            await _databaseContext.SaveChangesAsync();
-            return true;
+            try
+            {
+                _category.Remove(category);
+                await _databaseContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error deleting category: " + ex.Message);
+            }
         }
     }
 }

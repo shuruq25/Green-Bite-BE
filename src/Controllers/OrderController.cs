@@ -1,8 +1,10 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Entity;
 using src.Services;
+using src.Utils;
 
 namespace src.Controllers
 {
@@ -12,7 +14,7 @@ namespace src.Controllers
     {
         protected IOrderService _orderService;
 
-        public OrderController( IOrderService orderService)
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
         }
@@ -35,6 +37,12 @@ namespace src.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] OrderDTO.Create order)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null || !Guid.TryParse(userId, out Guid parsedUserId))
+            {
+                return BadRequest("Invalid User ID.");
+            }
+            order.UserID = parsedUserId;
             var createdOrderDTO = await _orderService.CreateOneOrderAsync(order);
             return CreatedAtAction(
                 nameof(GetOrderById),
@@ -51,7 +59,7 @@ namespace src.Controllers
             {
                 return NoContent();
             }
-            return NotFound();
+            throw CustomException.NotFound();
         }
 
         [HttpDelete]
@@ -63,7 +71,7 @@ namespace src.Controllers
             {
                 return NoContent();
             }
-            return NotFound();
+            throw CustomException.NotFound();
         }
     }
 }
