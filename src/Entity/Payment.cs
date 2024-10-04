@@ -28,7 +28,7 @@ namespace src.Entity
         public Guid Id { get; set; }
         public decimal FinalPrice { get; set; }
         public PaymentMethod? Method { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public DateTime PaymentDate { get; set; }=DateTime.Now;
         public PaymentStatus Status { get; set; }
         public Guid CouponId { get; set; }
         public Guid OrderId { get; set; }
