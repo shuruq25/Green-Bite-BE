@@ -45,6 +45,11 @@ namespace src.Database
 
             modelBuilder.Entity<User>().HasIndex(u => u.EmailAddress).IsUnique();
             modelBuilder.Entity<Cart>().HasIndex(u => u.UserId).IsUnique();
+
+            modelBuilder.Entity<Review>()
+            .HasOne(r => r.Order) // Each Review has one Order
+            .WithMany(o => o.Reviews) // Each Order can have many Reviews
+            .HasForeignKey(r => r.OrderId); // The foreign key in Review is OrderId
         }
     }
 }

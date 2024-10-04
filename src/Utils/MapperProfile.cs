@@ -1,4 +1,5 @@
 using AutoMapper;
+using src.DTO;
 using src.Entity;
 using static src.DTO.AddressDTO;
 using static src.DTO.CartDetailsDTO;
@@ -53,7 +54,7 @@ namespace src.Utils
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
             // Review Mappings
-            CreateMap<Review, ReviewReadDto>();
+            CreateMap<Review, ReviewDTO.ReviewReadDto>();
             CreateMap<ReviewCreateDto, Review>();
             CreateMap<ReviewUpdateDto, Review>()
                 .ForAllMembers(opts =>
@@ -81,6 +82,15 @@ namespace src.Utils
             CreateMap<CartDetailsCreateDto, CartDetails>();
             CreateMap<CartDetailsUpdateDto, CartDetails>()
         .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
+            // Order Mappings
+            CreateMap<Order, OrderDTO.Get>()
+            .ForMember(dest => dest.reviews, opt => opt.MapFrom(src => src.Reviews));
+            CreateMap<OrderDTO.Create, Order>();
+            CreateMap<OrderDTO, Order>()
+                .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
         }

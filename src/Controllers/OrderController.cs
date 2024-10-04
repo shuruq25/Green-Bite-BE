@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
@@ -36,6 +37,12 @@ namespace src.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] OrderDTO.Create order)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null || !Guid.TryParse(userId, out Guid parsedUserId))
+            {
+                return BadRequest("Invalid User ID.");
+            }
+            order.UserID = parsedUserId;
             var createdOrderDTO = await _orderService.CreateOneOrderAsync(order);
             return CreatedAtAction(
                 nameof(GetOrderById),

@@ -20,44 +20,92 @@ namespace src.Repository
             _review = databaseContext.Set<Review>();
         }
 
+        // Create a new review
         public async Task<Review> CreateOneAsync(Review newReview)
         {
-            await _review.AddAsync(newReview);
-            await _databaseContext.SaveChangesAsync();
-            return newReview;
+            try
+            {
+                await _review.AddAsync(newReview);
+                await _databaseContext.SaveChangesAsync();
+                return newReview;
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Failed to create review: " + ex.Message);
+            }
         }
 
+        // Get a review by ID
         public async Task<Review?> GetReviewAsync(Guid id)
         {
-            return await _review.Include(i => i.Order).FirstOrDefaultAsync(i => i.ReviewId == id);
+            try
+            {
+                return await _review.Include(i => i.Order).FirstOrDefaultAsync(i => i.ReviewId == id);
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error fetching review: " + ex.Message);
+            }
         }
 
+        // Get all reviews with pagination
         public async Task<List<Review>> GetReviewsAsync(PaginationOptions paginationOptions)
         {
-            var result = _review.Include(r => r.Order).Where(r => r.Comment.ToLower().Contains(paginationOptions.Search));
-            return await result
-                .Skip(paginationOptions.Offset)
-                .Take(paginationOptions.Limit)
-                .ToListAsync();
+            try
+            {
+                var result = _review.Include(r => r.Order).Where(r => r.Comment.ToLower().Contains(paginationOptions.Search));
+                return await result
+                    .Skip(paginationOptions.Offset)
+                    .Take(paginationOptions.Limit)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error fetching reviews: " + ex.Message);
+            }
         }
 
+        // Get reviews by order ID
         public async Task<List<Review>> GetReviewByOrderIdAsync(Guid orderId)
         {
-            return await _review.Where(r => r.OrderId == orderId).Include(r => r.Order).ToListAsync();
+            try
+            {
+                return await _review.Where(r => r.OrderId == orderId).Include(r => r.Order).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error fetching reviews by order ID: " + ex.Message);
+            }
         }
 
+        // Delete a review
         public async Task<bool> DeleteOneAsync(Review review)
         {
-            _review.Remove(review);
-            await _databaseContext.SaveChangesAsync();
-            return true;
+            try
+            {
+                _review.Remove(review);
+                await _databaseContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error deleting review: " + ex.Message);
+            }
         }
 
+        // Update a review
         public async Task<bool> UpdateOneAsync(Review updatedReview)
         {
-            _review.Update(updatedReview);
-            await _databaseContext.SaveChangesAsync();
-            return true;
+            try
+            {
+                _review.Update(updatedReview);
+                await _databaseContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("Error updating review: " + ex.Message);
+            }
         }
     }
 }
