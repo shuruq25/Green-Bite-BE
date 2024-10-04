@@ -1,52 +1,142 @@
-# E-commerce Application API
+# CareQuest Backend Project 🚀
 
-This repository contains ASP.NET Core application with RESTful API endpoints for e-commerce application. The API allows you to interact with products in the store.
+## Project Overview ✨
 
-`This is a teamwork assignment where you will work as a team within your group`
+**CareQuest** is a backend solution for an e-commerce platform specializing in health and wellness products, pharmacy items, and related services. Built using .NET 8, this project includes core functionalities like user authentication, product management, cart management, orders, payments, and more.
 
-**_DEADLINE: 06.10.2024_**
 
-## How to work
 
-1. One team member (admin) should fork the repo and add other members to that admin repo as collaborators.
-2. The other team members should fork then clone the forked repo (the admin repo).
-3. Any change/update made should be submitted to admin repo as pull request.
-4. Each change should be done in a separate pull request.
-5. Pull request must be reviewed by at least 2 members before merged to admin repo.
-6. Admin should open a PR to the original (Integrify) repo.
+## Features
+**User Managment**
+  - Register new user
+  - User authentication with JWT token
+  - Role-based access control (Admin, Customer).
+  
+**Product Management**:
+  - Create new product 
+  - Delete product 
+  - Update product
+  - Search Products: Provides functionality to search for products based on various filters, such as name, category, and price range. This includes the ability to search products within a maximum and minimum price range.
+  - Role-based access control (Admin, Customer)
+  
+**Order Management**:
 
-Please ask your instructor or supporting instructor if you have any questions or need help.
+**Cart Management**:
+  - Add Item to Cart
+  - Update Cart Item
+  - Remove Cart
+  - View Cart
+  - Role-based access control (Admin, Customer)
 
-## Level 1: Basic Requirements
+## Technologies Used
 
-In this level, the application includes the following features:
+- **.Net 8**: Web API Framework
+- **Entity Framework Core**: ORM for database interactions
+- **PostgreSQl**: Relational database for storing data
+- **JWT**: For user authentication and authorization
+- **AutoMapper**: For object mapping
+- **Swagger**: API documentation
 
-1. Identify Entities: Identify the main entities that need to be stored in the database. These could include customers, products, categories, orders, etc.
-2. Define Attributes: For each entity, list and define the attributes or properties associated with it. For example, for a "customer" entity, attributes might include "id," "firstName," "lastName," "email" and so on.
-3. Establish Relationships: Determine the relationships between entities. Relationships can be one-to-one, one-to-many, or many-to-many. For instance, in an E-commerce system, a "customer" may have multiple "orders".
-4. Key: When establishing relationships, remember to create a key in your ERD to explain the notation used for relationships.
-5. According to the ERD above, create the entities, and build the database with Entity Framework Core. Add ERD in screenshots folders
-6. Create basic CRUD operations for each endpoint.
-7. Use authentication and role-based authorization
+## Prerequisites
 
-## Level 2: Additional Requirements
+- .NET 8 SDK
+- SQL Server
+- VSCode 
+- Postman or similar API testing tools
 
-In addition to the basic requirements, the application enhances its functionality with the following features:
+## Getting Started
 
-1. Include pagination functionality to the method getting all products. done 
-2. Implement search functionality to allow users to search for specific products based on keywords or specific fields (e.g., by title). done 
-3. Add validation checks to ensure the data meets certain criteria before executing the actions. 
+### 1. Clone the repository:
+```bash
+git clone `https://github.com/shuruq25/sda-3-online-Backend_Teamwork.git` 
 
-## Level 3: Advanced Requirements
 
-If you have a higher skill level and finish the previous requirements before the deadline, you can tackle the following bonus tasks:
+```
 
-1. Refactor method getting all products to also handle query parameters for filtering and sorting products based on specific criteria (e.g., price range, by title, by date, etc). Pagination still need to be integrated.
-2. Use claim-based or resource-based where applicable. done
-3. Peer Review:
-   - Review 2 assignments from other teams.
-   - Provide constructive feedback and suggestions for improvement.
+### 2. Setup database
 
-`Please note that the bonus requirements and reviews are optional and can be completed if you have additional time and advanced skills.`
+- Make sure PostgreSQL Server is running
+- Create `appsettings.json` file
+- Update the connection string in `appsettings.json`
 
-Happy coding!
+```json
+{
+  "ConnectionStrings": {
+    "Local": "Server=localhost;Database=ECommerceDb;User Id=your_username;Password=your_password;"
+  }
+}
+```
+
+- Run migrations to create database
+
+```bash
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+- Run the application
+
+```bash
+dotnet watch
+```
+
+The API will be available at:  'http://localhost:5125'
+
+### Swagger
+
+- Navigate to `http://localhost:5125/swagger/index.html` to explore the API endpoints.
+
+
+## Project structure
+
+```bash
+|-- Controllers: #API controllers with request and response
+|-- Database # DbContext and Database Configurations
+|-- DTOs # Data Transfer Objects
+|-- Entities # Database Entities (User, Product, Category, Order, Address , Cart , Cart Details , Coupon , Payment , Review)
+|-- Middleware # Logging request, response and Error Handler
+|-- Repositories # Repository Layer for database operations
+|-- Services # Business Logic Layer
+|-- Utils # Common logics
+|-- Migrations # Entity Framework Migrations
+|-- Program.cs # Application Entry Point
+```
+
+## API Endpoints
+
+### User
+
+- **POST** `/api/users/register` – Register a new user.
+- **POST** `/api/users/login` – Login and get JWT token.
+  
+### Product 
+
+- **POST** `/api/v1/product` - Creating a product only the admin.
+- **GET** `/api/v1/product` - Viewing all products for both user and admin.
+- **GET** `/api/v1/product/Id` - Viewing product to user/admin. 
+- **GET** `/api/v1/product/search` - Search product based on the name. 
+- **PUT** `/api/v1/product/adminId` - Updating product only the admin.
+- **DELETE** `/api/vi/Product/adminId` - Deleting product only for admin.
+  
+### Cart
+
+- **POST** `/api/v1/cart` - Creating a only one cart for admin and user.
+- **GET** `/api/v1/cart/Id` -  retrieves the cart for a specific user and admin by their Id.
+- **PUT** `/api/v1/cart/Id` - Updating cart item for both user and admin.
+- **DELETE** `/api/vi/Product/Id` - Deleting cart item for both user and admin.
+- 
+## Deployment
+
+The application is deployed and can be accessed at: [https://your-deploy-link.com](https://your-deploy-link.com)
+
+## Team Members💻✨
+
+- **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻 
+- Abdullah Alkhwahir() 👨‍💻
+- Hadeel Alghashmari ()👩‍💻
+- Raghad Alharbi()👩‍💻
+- Reema Algureshie()👩‍💻
+
+## License
+
+This project is licensed under the MIT License.

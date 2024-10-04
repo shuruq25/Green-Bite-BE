@@ -53,7 +53,7 @@ namespace src.Repository
         {
             try
             {
-                var result = _review.Include(r => r.Order).Where(r => r.Comment.ToLower().Contains(paginationOptions.Search));
+                var result = _review.Include(r => r.Order).Where(r => r.Comment.ToLower().Contains(paginationOptions.Name));
                 return await result
                     .Skip(paginationOptions.Offset)
                     .Take(paginationOptions.Limit)
