@@ -84,16 +84,6 @@ namespace src.Utils
         .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
-
-            // Order Mappings
-            CreateMap<Order, OrderDTO.Get>()
-            .ForMember(dest => dest.reviews, opt => opt.MapFrom(src => src.Reviews));
-            CreateMap<OrderDTO.Create, Order>();
-            CreateMap<OrderDTO, Order>()
-                .ForAllMembers(opts =>
-                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
-                );
-
         }
     }
 }
