@@ -18,7 +18,7 @@ namespace src.Controllers
         protected readonly ICartService _cartService;
         protected readonly ILogger<LoggingMiddleware> _logger;
 
-        public CartController(ICartService service , ILogger<LoggingMiddleware> logger)
+        public CartController(ICartService service, ILogger<LoggingMiddleware> logger)
         {
             _cartService = service;
             _logger = logger;
@@ -34,23 +34,26 @@ namespace src.Controllers
         //     ]
         // }
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<CartReadDto>> CreateOneAsync([FromBody] CartCreateDto cartCreate)
         {
-           try{
-            var authenticateClaims = HttpContext.User;
-            var userId = authenticateClaims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
-            if (userId == null){
-                throw CustomException.UnAuthorized("User is not authenticated.");
-            }
-            var userGuid = new Guid(userId);
-            return await _cartService.CreateOneAsync(userGuid, cartCreate);
-            }
-            catch (CustomException ex )
+            try
             {
-            _logger.LogError(ex, $"An error occurred while creating the cart for User ID" );
+                var authenticateClaims = HttpContext.User;
+                var userId = authenticateClaims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+                if (userId == null)
+                {
+                    throw CustomException.UnAuthorized("User is not authenticated.");
+                }
+                var userGuid = new Guid(userId);
+            
+                return await _cartService.CreateOneAsync(userGuid, cartCreate);
+            }
+            catch (CustomException ex)
+            {
+                _logger.LogError(ex, $"An error occurred while creating the cart for User ID");
 
-                throw CustomException.InternalError("An error occurred while creating the cart." );
+                throw CustomException.InternalError("An error occurred while creating the cart.");
             }
 
 
@@ -76,11 +79,11 @@ namespace src.Controllers
 
                 return Ok(cart);
             }
-            catch (CustomException ex )
+            catch (CustomException ex)
             {
-                    _logger.LogError(ex, $"An error occurred while retrieving the cart for User ID {userId}.", userId);
+                _logger.LogError(ex, $"An error occurred while retrieving the cart for User ID {userId}.", userId);
 
-                throw CustomException.InternalError("An error occurred while retrieving the cart." );
+                throw CustomException.InternalError("An error occurred while retrieving the cart.");
             }
         }
         // DELETE: api/cart/{id}

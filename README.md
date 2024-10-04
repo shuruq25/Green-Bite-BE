@@ -1,6 +1,6 @@
-# CareQuest Backend Project
+# CareQuest Backend Project 🚀
 
-## Project Overview
+## Project Overview ✨
 
 **CareQuest** is a backend solution for an e-commerce platform specializing in health and wellness products, pharmacy items, and related services. Built using .NET 8, this project includes core functionalities like user authentication, product management, cart management, orders, payments, and more.
 
@@ -129,13 +129,13 @@ The API will be available at:  'http://localhost:5125'
 
 The application is deployed and can be accessed at: [https://your-deploy-link.com](https://your-deploy-link.com)
 
-## Team Members
+## Team Members💻✨
 
-- **Lead** : Shuruq Almuhalbidi (@shuruq25)
-- Abdullah Alkhwahir()
-- Hadeel Alghashmari ()
-- Raghad Alharbi()
-- Reema Algureshie()
+- **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻 
+- Abdullah Alkhwahir() 👨‍💻
+- Hadeel Alghashmari ()👩‍💻
+- Raghad Alharbi()👩‍💻
+- Reema Algureshie()👩‍💻
 
 ## License
 
