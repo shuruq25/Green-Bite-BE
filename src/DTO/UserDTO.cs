@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using src.Utils;
 using static src.Entity.User;
 
 namespace src.DTO
@@ -10,15 +12,22 @@ namespace src.DTO
     {
         public class UserCreateDto
         {
-            public string? Name { get; set; }
-            public string? Password { get; set; }
-            public string? EmailAddress { get; set; }
+            public string Name { get; set; }
+
+            [PasswordComplexity]
+            public string Password { get; set; }
+
+            [EmailAddress(ErrorMessage = "Please provide email with right format")]
+            public string EmailAddress { get; set; }
             public string? Phone { get; set; }
         }
 
         public class UserSignInDto
         {
+            [EmailAddress(ErrorMessage = "Please provide email with right format")]
             public string EmailAddress { get; set; }
+
+            [PasswordComplexity]
             public string Password { get; set; }
         }
 
