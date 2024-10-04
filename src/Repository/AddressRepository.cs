@@ -51,23 +51,6 @@ namespace src.Repository
             return await _address.ToListAsync();
         }
 
-
-
-        // get all Addresses:
-
-        // add the Pagination
-
-        // public async Task<List<Address>> GetAllAsync(PaginationOptions paginationOptions)
-        // {
-        //     var result = _address.Where(c =>
-        //         c.Country.ToLower().Contains(paginationOptions.Search)
-        //     );
-        //     return await result
-        //         .Skip(paginationOptions.Offset)
-        //         .Take(paginationOptions.Limit)
-        //         .ToListAsync();
-        // }
-
         // get by Address by ID
 
         public async Task<Address?> GetAddressByIdAsync(Guid id)

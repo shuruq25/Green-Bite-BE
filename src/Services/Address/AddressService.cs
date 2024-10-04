@@ -38,15 +38,7 @@ namespace src.Services
             return _mapper.Map<List<Address>, List<AddressReadDto>>(addressList);
         }
 
-        //get all
-        // add Pagination
-
-
-        // public async Task<List<AddressReadDto>> GetAllAsync(PaginationOptions paginationOptions)
-        // {
-        //     var addressList = await _addressRepo.GetAllAsync(paginationOptions);
-        //     return _mapper.Map<List<Address>, List<AddressReadDto>>(addressList);
-        // }
+      
 
         //get by id
         public async Task<AddressReadDto> GetByIdAsync(Guid id)
