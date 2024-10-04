@@ -4,29 +4,47 @@
 
 **CareQuest** is a backend solution for an e-commerce platform specializing in health and wellness products, pharmacy items, and related services. Built using .NET 8, this project includes core functionalities like user authentication, product management, cart management, orders, payments, and more.
 
-
-
 ## Features
+
 **User Managment**
-  - Register new user
-  - User authentication with JWT token
-  - Role-based access control (Admin, Customer).
-  
+
+- Register new user
+- User authentication with JWT token
+- Role-based access control (Admin, Customer).
+
 **Product Management**:
-  - Create new product 
-  - Delete product 
-  - Update product
-  - Search Products: Provides functionality to search for products based on various filters, such as name, category, and price range. This includes the ability to search products within a maximum and minimum price range.
-  - Role-based access control (Admin, Customer)
-  
+
+- Create new product
+- Delete product
+- Update product
+- Search Products: Provides functionality to search for products based on various filters, such as name, category, and price range. This includes the ability to search products within a maximum and minimum price range.
+- Role-based access control (Admin, Customer)
+
 **Order Management**:
 
 **Cart Management**:
-  - Add Item to Cart
-  - Update Cart Item
-  - Remove Cart
-  - View Cart
-  - Role-based access control (Admin, Customer)
+
+- Add Item to Cart
+- Update Cart Item
+- Remove Cart
+- View Cart
+- Role-based access control (Admin, Customer)
+
+**Category Management**:
+
+- Create new category
+- Delete category
+- Update category
+- view category
+- Role-based access control (Admin, Customer)
+
+  **Review Management**:
+
+- Create new review
+- Delete review
+- Update review
+- view review
+- Role-based access control (Admin, Customer)
 
 ## Technologies Used
 
@@ -41,14 +59,15 @@
 
 - .NET 8 SDK
 - SQL Server
-- VSCode 
+- VSCode
 - Postman or similar API testing tools
 
 ## Getting Started
 
 ### 1. Clone the repository:
+
 ```bash
-git clone `https://github.com/shuruq25/sda-3-online-Backend_Teamwork.git` 
+git clone `https://github.com/shuruq25/sda-3-online-Backend_Teamwork.git`
 
 
 ```
@@ -80,12 +99,11 @@ dotnet ef database update
 dotnet watch
 ```
 
-The API will be available at:  'http://localhost:5125'
+The API will be available at: 'http://localhost:5125'
 
 ### Swagger
 
 - Navigate to `http://localhost:5125/swagger/index.html` to explore the API endpoints.
-
 
 ## Project structure
 
@@ -108,30 +126,47 @@ The API will be available at:  'http://localhost:5125'
 
 - **POST** `/api/users/register` – Register a new user.
 - **POST** `/api/users/login` – Login and get JWT token.
-  
-### Product 
+
+### Product
 
 - **POST** `/api/v1/product` - Creating a product only the admin.
 - **GET** `/api/v1/product` - Viewing all products for both user and admin.
-- **GET** `/api/v1/product/Id` - Viewing product to user/admin. 
-- **GET** `/api/v1/product/search` - Search product based on the name. 
+- **GET** `/api/v1/product/Id` - Viewing product to user/admin.
+- **GET** `/api/v1/product/search` - Search product based on the name.
 - **PUT** `/api/v1/product/adminId` - Updating product only the admin.
 - **DELETE** `/api/vi/Product/adminId` - Deleting product only for admin.
-  
+
 ### Cart
 
 - **POST** `/api/v1/cart` - Creating a only one cart for admin and user.
-- **GET** `/api/v1/cart/Id` -  retrieves the cart for a specific user and admin by their Id.
+- **GET** `/api/v1/cart/Id` - retrieves the cart for a specific user and admin by their Id.
 - **PUT** `/api/v1/cart/Id` - Updating cart item for both user and admin.
 - **DELETE** `/api/vi/Product/Id` - Deleting cart item for both user and admin.
-- 
+-
+
+### Category
+
+- **POST** `/api/v1/category` - Creating a category only for admin.
+- **GET** `/api/v1/category` - retrieves all existed category for both user and admin.
+- **GET** `/api/v1/category/Id` - retrieves the category by the category Id.
+- **PUT** `/api/v1/category/Id` - Updating category only for admin.
+- **DELETE** `/api/vi/category/Id` - Delete a category only for admin.
+
+### Review
+
+- **POST** `/api/v1/review` - Creating a review only for authorized users.
+- **GET** `/api/v1/review` - retrieves all reviews.
+- **GET** `/api/v1/review/Id` - retrieves the review by the review Id.
+- **PUT** `/api/v1/review/Id` - Updating review only for authorized users.
+- **DELETE** `/api/vi/review/Id` - Delete a review only for authorized users.
+
 ## Deployment
 
 The application is deployed and can be accessed at: [https://your-deploy-link.com](https://your-deploy-link.com)
 
 ## Team Members💻✨
 
-- **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻 
+- **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻
 - Abdullah Alkhwahir() 👨‍💻
 - Hadeel Alghashmari ()👩‍💻
 - Raghad Alharbi()👩‍💻

@@ -1,5 +1,6 @@
 namespace src.Utils
-{public class CustomException : Exception
+{
+    public class CustomException : Exception
     {
         public int StatusCode { get; set; }
         public CustomException(int statusCode, string message) : base(message)
@@ -11,11 +12,11 @@ namespace src.Utils
             return new CustomException(404, message);
         }
 
-        public static CustomException BadRequest(string message )
+        public static CustomException BadRequest(string message)
         {
             return new CustomException(400, message);
         }
-        public static CustomException UnAuthorized(string message )
+        public static CustomException UnAuthorized(string message)
         {
             return new CustomException(401, message);
         }
@@ -28,6 +29,16 @@ namespace src.Utils
         public static CustomException InternalError(string message)
         {
             return new CustomException(500, message);
+        }
+
+        internal static Exception NotFound()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static Exception UnAuthorized()
+        {
+            throw new NotImplementedException();
         }
     }
 }
