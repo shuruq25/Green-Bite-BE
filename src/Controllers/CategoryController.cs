@@ -35,7 +35,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-       // [Authorize(Policy = "AdminOnly")]
+        // [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<CategoryReadDto>> CreateOne(
             [FromBody] CategoryCreateDto createDto
         )
@@ -51,7 +51,7 @@ namespace src.Controllers
             var deletedCategory = await _categoryService.DeleteOneAsync(id);
             if (!deletedCategory)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }
@@ -66,7 +66,7 @@ namespace src.Controllers
             var updateCategory = await _categoryService.UpdateOneAsync(id, updateDto);
             if (!updateCategory)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             var updatedCategory = await _categoryService.GetCategoryAsync(id);
             return Ok(updatedCategory);

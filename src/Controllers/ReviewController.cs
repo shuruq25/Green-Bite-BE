@@ -38,7 +38,7 @@ namespace src.Controllers
             var review = await _reviewService.GetByIdAsync(id);
             if (review == null)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return Ok(review);
         }
@@ -59,7 +59,7 @@ namespace src.Controllers
             var userIdClaim = HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
             {
-                return Unauthorized();
+                throw CustomException.UnAuthorized();
             }
             var userGuid = Guid.Parse(userIdClaim.Value);
             var reivewCreated = await _reviewService.CreateOneAsync(createDto, userGuid);
@@ -75,7 +75,7 @@ namespace src.Controllers
             var isDeleted = await _reviewService.DeleteOneAsync(id);
             if (!isDeleted)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }
@@ -90,7 +90,7 @@ namespace src.Controllers
             var isUpdated = await _reviewService.UpdateOneAsync(id, updateDto);
             if (!isUpdated)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             var updatedReview = await _reviewService.UpdateOneAsync(id, updateDto);
             return Ok(updatedReview);

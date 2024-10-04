@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Entity;
 using src.Services;
+using src.Utils;
 
 namespace src.Controllers
 {
@@ -12,7 +13,7 @@ namespace src.Controllers
     {
         protected IOrderService _orderService;
 
-        public OrderController( IOrderService orderService)
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
         }
@@ -51,7 +52,7 @@ namespace src.Controllers
             {
                 return NoContent();
             }
-            return NotFound();
+            throw CustomException.NotFound();
         }
 
         [HttpDelete]
@@ -63,7 +64,7 @@ namespace src.Controllers
             {
                 return NoContent();
             }
-            return NotFound();
+            throw CustomException.NotFound();
         }
     }
 }
