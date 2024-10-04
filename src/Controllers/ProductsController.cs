@@ -55,7 +55,7 @@ namespace src.Controllers
             var result = await _productService.UpdateOneAsync(id, updateDto);
             if (!result)
             {
-                return NotFound();
+                 throw CustomException.NotFound($"Product with ID {id} not found.");
             }
             var updatedProduct = await _productService.GetByIdAsync(id);
             return Ok(updatedProduct);
@@ -68,7 +68,7 @@ namespace src.Controllers
             var deleted = await _productService.DeleteOneAsync(id);
             if (!deleted)
             {
-                return NotFound();
+                 throw CustomException.NotFound($"Product with ID {id} not found.");
             }
             return NoContent();
         }
@@ -81,7 +81,7 @@ namespace src.Controllers
             var products = await _productService.SearchProductsAsync(options);
             if (products == null || products.Count == 0)
             {
-                return NotFound();
+                 throw CustomException.NotFound("No products found matching the search criteria.");
             }
             return Ok(products);
         }

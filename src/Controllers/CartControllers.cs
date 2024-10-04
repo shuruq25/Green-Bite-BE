@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Entity;
+using src.Middlewares;
 using src.Services;
+using src.Utils;
 using static src.DTO.CartDTO;
 
 
@@ -14,10 +16,12 @@ namespace src.Controllers
     public class CartController : ControllerBase
     {
         protected readonly ICartService _cartService;
+        protected readonly ILogger<LoggingMiddleware> _logger;
 
-        public CartController(ICartService service)
+        public CartController(ICartService service , ILogger<LoggingMiddleware> logger)
         {
             _cartService = service;
+            _logger = logger;
         }
 
         // POST: api/cart
@@ -33,10 +37,21 @@ namespace src.Controllers
         //[Authorize]
         public async Task<ActionResult<CartReadDto>> CreateOneAsync([FromBody] CartCreateDto cartCreate)
         {
+           try{
             var authenticateClaims = HttpContext.User;
             var userId = authenticateClaims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+            if (userId == null){
+                throw CustomException.UnAuthorized("User is not authenticated.");
+            }
             var userGuid = new Guid(userId);
             return await _cartService.CreateOneAsync(userGuid, cartCreate);
+            }
+            catch (CustomException ex )
+            {
+            _logger.LogError(ex, $"An error occurred while creating the cart for User ID" );
+
+                throw CustomException.InternalError("An error occurred while creating the cart." );
+            }
 
 
         }
@@ -56,14 +71,16 @@ namespace src.Controllers
 
                 if (cart == null)
                 {
-                    return NotFound(new { message = $"Cart for User ID {userId} not found." });
+                    throw CustomException.NotFound($"Cart for User ID {userId} not found.");
                 }
 
                 return Ok(cart);
             }
-            catch (Exception ex)
+            catch (CustomException ex )
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving the cart.", error = ex.Message });
+                    _logger.LogError(ex, $"An error occurred while retrieving the cart for User ID {userId}.", userId);
+
+                throw CustomException.InternalError("An error occurred while retrieving the cart." );
             }
         }
         // DELETE: api/cart/{id}
@@ -77,7 +94,7 @@ namespace src.Controllers
 
             if (!deleted)
             {
-                return NotFound();
+                throw CustomException.NotFound($"Cart with ID {id} not found.");
             }
 
             return NoContent();
@@ -93,15 +110,12 @@ namespace src.Controllers
         //     ]
         // }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(
-                   [FromRoute] Guid id,
-                   [FromBody] CartUpdateDto updateDto
-               )
+        public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] CartUpdateDto updateDto)
         {
             var result = await _cartService.UpdateOneAsync(id, updateDto);
             if (!result)
             {
-                return NotFound();
+                throw CustomException.NotFound($"Cart with ID {id} not found.");
             }
             var updatedProduct = await _cartService.GetCartByUserIdAsync(id);
             return Ok(updatedProduct);
