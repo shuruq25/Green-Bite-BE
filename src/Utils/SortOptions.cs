@@ -7,6 +7,7 @@ namespace src.Utils
 {
     public class SortOptions
     {
-        public bool SortByPriceAscending { get; set; }
+     public string SortBy { get; set; } = "Name";  
+    public bool SortDescending { get; set; } = false;
     }
 }

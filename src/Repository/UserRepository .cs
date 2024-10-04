@@ -36,7 +36,7 @@ namespace src.Repository
 
         public async Task<List<User>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            var result = _user.Where(u => u.Name.ToLower().Contains(paginationOptions.Search));
+            var result = _user.Where(u => u.Name.ToLower().Contains(paginationOptions.Name));
             return await result
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)

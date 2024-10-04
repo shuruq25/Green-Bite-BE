@@ -1,4 +1,5 @@
 using AutoMapper;
+using src.DTO;
 using src.Entity;
 using static src.DTO.AddressDTO;
 using static src.DTO.CartDetailsDTO;
@@ -83,6 +84,7 @@ namespace src.Utils
         .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
+           
         }
     }
 }

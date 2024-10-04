@@ -20,7 +20,7 @@ namespace src.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<CategoryReadDto>>> GetCategories(
-            [FromQuery] PaginationOptions paginationOptions
+           [FromQuery] PaginationOptions paginationOptions
         )
         {
             var categories = await _categoryService.GetCategoriesAsync(paginationOptions);
