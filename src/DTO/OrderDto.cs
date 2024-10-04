@@ -17,6 +17,7 @@ namespace src.DTO
             public DateTime CreatedAt { get; set; }
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
+            public Guid UserID { get; set; }
         }
 
 
@@ -31,7 +32,7 @@ namespace src.DTO
             public OrderStatuses Status { get; set; }
             public Guid PaymentId { get; set; }
             public PaymentDTO.PaymentReadDto? Payment { get; set; }
-            public List<ReviewReadDto> Reviews { get; set; }
+            public ICollection<ReviewDTO.ReviewReadDto> reviews { get; set; }
         }
     }
 }

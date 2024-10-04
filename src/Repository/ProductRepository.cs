@@ -13,6 +13,8 @@ namespace src.Repository
         Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions);
         Task<Product?> GetByIdAsync(Guid id);
         Task<bool> UpdateOneAsync(Product updateProduct);
+        Task<List<Product>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions);
+        Task<List<Product>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions);
     }
 
     public class ProductRepository : IProductRepository
@@ -28,7 +30,7 @@ namespace src.Repository
 
         public async Task<Product> CreateOneAsync(Product newProduct)
         {
-        
+
             await _product.AddAsync(newProduct);
             await _databaseContext.SaveChangesAsync();
             return newProduct;
@@ -36,35 +38,8 @@ namespace src.Repository
 
         public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            var searchResult = _product.Where(c =>
-                c.Name.ToLower().Contains(paginationOptions.Search)
-            );
-            if (paginationOptions.Filter.MinPrice.HasValue)
-            {
-                searchResult = searchResult.Where(p =>
-                    p.Price >= paginationOptions.Filter.MinPrice.Value
-                );
-            }
-            if (paginationOptions.Filter.MaxPrice.HasValue)
-            {
-                searchResult = searchResult.Where(p =>
-                    p.Price <= paginationOptions.Filter.MaxPrice.Value
-                );
-            }
+            return await _product.ToListAsync();
 
-          
-            if (paginationOptions.Sort.SortByPriceAscending)
-            {
-                searchResult = searchResult.OrderBy(p => p.Price);
-            }
-            else
-            {
-                searchResult = searchResult.OrderByDescending(p => p.Price);
-            }
-            return await searchResult
-                .Skip(paginationOptions.Offset)
-                .Take(paginationOptions.Limit)
-                .ToListAsync();
         }
 
         public async Task<Product?> GetByIdAsync(Guid id)
@@ -85,5 +60,62 @@ namespace src.Repository
             await _databaseContext.SaveChangesAsync();
             return true;
         }
+        public async Task<List<Product>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions)
+        {
+            var query = _product.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchOptions.Name))
+            {
+                query = query.Where(p => p.Name.ToLower().Contains(searchOptions.Name.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchOptions.Description))
+            {
+                query = query.Where(p => p.Description.ToLower().Contains(searchOptions.Description.ToLower()));
+            }
+
+            var products = await query
+                .Skip(paginationOptions.Offset)
+                .Take(paginationOptions.Limit)
+                .ToListAsync();
+
+            return products;
+        }
+        public async Task<List<Product>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions)
+        {
+            var query = _product.AsQueryable();
+
+            if (paginationOptions.Filter.MinPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= paginationOptions.Filter.MinPrice.Value);
+            }
+
+            if (paginationOptions.Filter.MaxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= paginationOptions.Filter.MaxPrice.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(paginationOptions.Filter.Category))
+            {
+                query = query.Where(p => p.Category.Name.ToLower().Contains(paginationOptions.Filter.Category.ToLower()));
+            }
+
+            query = paginationOptions.Sort.SortBy.ToLower() switch
+            {
+                "price" => paginationOptions.Sort.SortDescending ? query.OrderByDescending(p => p.Price) : query.OrderBy(p => p.Price),
+                "name" => paginationOptions.Sort.SortDescending ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name),
+                _ => query.OrderBy(p => p.Name)  
+            };
+            var totalItems = await query.CountAsync();
+            var products = await query
+                .Skip(paginationOptions.Offset)
+                .Take(paginationOptions.Limit)
+                .ToListAsync();
+            return products;
+        }
+
+
+
+
     }
 }

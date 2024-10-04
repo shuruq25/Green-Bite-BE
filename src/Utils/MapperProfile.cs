@@ -1,4 +1,5 @@
 using AutoMapper;
+using src.DTO;
 using src.Entity;
 using static src.DTO.AddressDTO;
 using static src.DTO.CartDetailsDTO;
@@ -53,7 +54,7 @@ namespace src.Utils
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
             // Review Mappings
-            CreateMap<Review, ReviewReadDto>();
+            CreateMap<Review, ReviewDTO.ReviewReadDto>();
             CreateMap<ReviewCreateDto, Review>();
             CreateMap<ReviewUpdateDto, Review>()
                 .ForAllMembers(opts =>

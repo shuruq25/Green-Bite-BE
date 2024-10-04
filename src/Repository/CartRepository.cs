@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
+using src.Utils;
 
 namespace src.Repository
 {
@@ -35,7 +37,7 @@ namespace src.Repository
             var userExists = await _databaseContext.User.AnyAsync(u => u.UserID == cart.UserId);
             if (!userExists)
             {
-                throw new Exception("User not found.");
+                throw CustomException.NotFound("User not found.");
             }
 
             await _carts.AddAsync(cart);
@@ -47,16 +49,23 @@ namespace src.Repository
                 await _databaseContext.Entry(details).Reference(cd => cd.Product).LoadAsync();
             }
 
-            return cart; 
+            return cart;
         }
         // Get Cart by User ID
         public async Task<Cart> GetByIdAsync(Guid id)
         {
 
-            return await _databaseContext.Cart
+            var cart = await _databaseContext.Cart
                           .Include(c => c.CartDetails)
                               .ThenInclude(cd => cd.Product)
                               .FirstOrDefaultAsync(c => c.UserId == id);
+
+            if (cart == null)
+            {
+                throw CustomException.NotFound($"Cart for User ID {id} not found.");
+
+            }
+            return cart;
         }
         // Remove a Cart
         public async Task RemoveCart(Cart cart)
@@ -67,11 +76,29 @@ namespace src.Repository
 
                 await _databaseContext.SaveChangesAsync();
             }
+            else
+            {
+                throw CustomException.NotFound("Cart not found");
+            }
         }
 
         // Update an existing Cart
         public async Task<bool> UpdateOneAsync(Cart updateCart)
         {
+            if (updateCart == null)
+            {
+                throw CustomException.BadRequest("Cart data is null.");
+            }
+
+            // Ensure the cart exists in the database
+            var existingCart = await _databaseContext.Cart
+                .FirstOrDefaultAsync(c => c.UserId == updateCart.UserId);
+
+            if (existingCart == null)
+            {
+                throw CustomException.NotFound($"Cart for User ID {updateCart.UserId} not found.");
+            }
+
             _carts.Update(updateCart);
             await _databaseContext.SaveChangesAsync();
             return true;

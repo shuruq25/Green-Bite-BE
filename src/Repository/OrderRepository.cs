@@ -25,6 +25,7 @@ namespace src.Repository
         public async Task<Order?> GetOrderByIdAsync(Guid id) => await _orders
             .Include(order => order.User)
             .Include(order => order.Payment)
+            .Include(order => order.Reviews)
             .FirstOrDefaultAsync(o => o.ID == id);
 
         public async Task<List<Order>> GetAllOrdersAsync() => await _orders
