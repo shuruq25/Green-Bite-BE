@@ -62,14 +62,14 @@ namespace src.Services
                     throw CustomException.BadRequest("Order does not exist.");
                 }
 
-                if (newPaymentDto.CouponId.HasValue)
-                {
-                    var coupon = await _couponRepo.GetCouponByIdAsync(newPaymentDto.CouponId.Value);
-                    if (coupon == null)
-                    {
-                        throw CustomException.BadRequest("Coupon does not exist.");
-                    }
-                }
+                // if (newPaymentDto.CouponId.HasValue)
+                // {
+                //     var coupon = await _couponRepo.GetCouponByIdAsync(newPaymentDto.CouponId.Value);
+                //     if (coupon == null)
+                //     {
+                //         throw CustomException.BadRequest("Coupon does not exist.");
+                //     }
+                // }
                 
 
                 var createdPayment = new Payment
