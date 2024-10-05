@@ -95,13 +95,24 @@ namespace src.Utils
 
             CreateMap<OrderDTO.Update, Order>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                    CreateMap<Order, OrderDTO.Get>()
+            .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails));
+
+        // Map from OrderDetail to OrderDetailCreateDto
+        CreateMap<OrderDetails, OrderDetailDTO.OrderDetailCreateDto>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
+
+        // You might also need to map from OrderDetailCreateDto to OrderDetails (for Create operations)
+        CreateMap<OrderDetailDTO.OrderDetailCreateDto, OrderDetails>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
 
             //Payment Mappings
             CreateMap<PaymentDTO.PaymentCreateDto, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<Payment, PaymentDTO.PaymentReadDto>();
-            CreateMap<PaymentDTO.PaymentUpdateDto, Payment>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+     
 
             CreateMap<OrderDetails, OrderDetailReadDto>();
             CreateMap<OrderDetailCreateDto, OrderDetails>()

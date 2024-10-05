@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
 using src.Utils;
+using static src.DTO.PaymentDTO;
 
 namespace src.Controllers
 {
@@ -10,7 +11,7 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class PaymentsController : ControllerBase
     {
-        protected readonly IPaymentService _paymentService;
+        private readonly IPaymentService _paymentService;
 
         public PaymentsController(IPaymentService paymentService)
         {
@@ -19,68 +20,44 @@ namespace src.Controllers
 
         [HttpGet]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult> GetAllPayments()
+        public async Task<ActionResult> GetAllPayments(int page = 1, int pageSize = 10)
         {
-            return Ok(await _paymentService.GetAllPaymets());
+            var payments = await _paymentService.GetAllPayments(page, pageSize);
+            return Ok(payments);
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        //filite user in service
-        public async Task<ActionResult> GetPaymentById(Guid id)
+        public async Task<ActionResult<PaymentReadDto>> GetPaymentById(Guid id)
         {
             var payment = await _paymentService.GetPaymentById(id);
             if (payment == null)
             {
-                throw CustomException.NotFound();
+                return NotFound();
             }
             return Ok(payment);
         }
 
+
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> CreatePayment(
-            [FromBody] PaymentDTO.PaymentCreateDto newPayment
-        )
+        public async Task<ActionResult<PaymentReadDto>> CreatePayment([FromBody] PaymentCreateDto newPaymentDto)
         {
-            if (newPayment == null || newPayment.FinalPrice <= 0)
-            {
-                throw CustomException.BadRequest("Invalid payment data.");
-            }
-            var createdPaymentDto = await _paymentService.CreatePayment(newPayment);
-
-            return CreatedAtAction(
-                nameof(GetPaymentById),
-                new { id = createdPaymentDto.Id },
-                createdPaymentDto
-            );
-        }
-
-        [HttpPut("{id}")]
-        [Authorize]
-        public async Task<ActionResult> UpdatePayment(
-            Guid id,
-            [FromBody] PaymentDTO.PaymentUpdateDto updatedPayment
-        )
-        {
-            if (await _paymentService.UpdatePaymentById(id, updatedPayment))
-            {
-                return NoContent();
-            }
-            throw CustomException.NotFound();
+            var createdPayment = await _paymentService.CreatePayment(newPaymentDto);
+            return CreatedAtAction(nameof(GetPaymentById), new { id = createdPayment.Id }, createdPayment);
         }
 
         [HttpDelete("{id}")]
         [Authorize]
-        //in the service check the py statues
         public async Task<ActionResult> DeletePayment(Guid id)
         {
-            if (await _paymentService.DeletePaymentById(id))
+            var deleted = await _paymentService.DeletePaymentById(id);
+            if (deleted)
             {
                 return NoContent();
             }
-
             throw CustomException.NotFound();
         }
     }
 }
+

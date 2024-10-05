@@ -67,11 +67,6 @@ namespace src.Repository
 
         //Update Coupon:
 
-        public async Task<bool> UpdateOneAsync(Coupon updatedCoupon)
-        {
-            _coupon.Update(updatedCoupon);
-            await _databaseContext.SaveChangesAsync();
-            return true;
-        }
+      
     }
 }
