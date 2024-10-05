@@ -12,7 +12,7 @@ namespace src.DTO
     {
         public class UserCreateDto
         {
-            public string Name { get; set; }
+            public string? Name { get; set; }
 
             [PasswordComplexity]
             public string Password { get; set; }

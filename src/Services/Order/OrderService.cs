@@ -1,7 +1,7 @@
 using AutoMapper;
-using src.Repository;
 using src.DTO;
 using src.Entity;
+using src.Repository;
 
 namespace src.Services
 {
@@ -18,14 +18,17 @@ namespace src.Services
 
         public async Task<IEnumerable<OrderDTO.Get>> GetAllOrdersAsync()
         {
-            return (await _ordersRepo.GetAllOrdersAsync())
-                .Select(order => _mapper.Map<OrderDTO.Get>(order));
+            return (await _ordersRepo.GetAllOrdersAsync()).Select(order =>
+                _mapper.Map<OrderDTO.Get>(order)
+            );
         }
 
-        public async Task<OrderDTO.Get> CreateOneOrderAsync(OrderDTO.Create orderDTO)
+        public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO)
         {
-            Order createdOrder = await _ordersRepo.AddOrderAsync(_mapper.Map<Order>(orderDTO));
-            return _mapper.Map<OrderDTO.Get>(createdOrder);
+            Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
+            order.UserID = userID;
+            Order createdOrder = await _ordersRepo.AddOrderAsync(order);
+            return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
         }
 
         public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)
@@ -49,7 +52,5 @@ namespace src.Services
         {
             return await _ordersRepo.DeleteOrderAsync(id);
         }
-
-
     }
 }
