@@ -36,7 +36,6 @@ namespace src.Services
             Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
             order.UserID = userID;
 
-            // Add the order to the repository (this will calculate OriginalPrice dynamically)
             Order createdOrder = await _ordersRepo.AddOrderAsync(order);
 
             // Map the created order back to the DTO for response

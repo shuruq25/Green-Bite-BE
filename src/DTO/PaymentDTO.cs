@@ -20,6 +20,7 @@ namespace src.DTO
             public DateTime PaymentDate { get; set; }
             public PaymentStatus Status { get; set; }
             public Guid CouponId { get; set; }
+            public string Code { get; set; }
             public Guid OrderId { get; set; }
         }
 
