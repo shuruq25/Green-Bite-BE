@@ -25,7 +25,7 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
             [FromQuery] PaginationOptions paginationOptions
         )
@@ -35,7 +35,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<UserReadDto>> GetById(Guid id)
         {
             var user = await _userService.GetByIdAsync(id);

@@ -52,7 +52,7 @@ namespace src.Controllers
 
         // Create a new category
         [HttpPost]
-     [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<CategoryReadDto>> CreateOne(
             [FromBody] CategoryCreateDto createDto
         )
@@ -72,7 +72,7 @@ namespace src.Controllers
 
         // Delete a category
         [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> DeleteCategory([FromRoute] Guid id)
         {
             try
@@ -92,7 +92,7 @@ namespace src.Controllers
 
         // Update a category
         [HttpPut("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> UpdateCategory(
             [FromRoute] Guid id,
             [FromBody] CategoryUpdateDto updateDto
