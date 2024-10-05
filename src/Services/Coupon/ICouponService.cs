@@ -5,8 +5,7 @@ namespace src.Services
     public interface ICouponService
     {
         //create
-        Task<CouponReadDto> CreatOneAsync(CouponCreateDto createDto);
-
+        Task<CouponReadDto> CreateOneAsync(CouponCreateDto createDto);
         //get all
         Task<List<CouponReadDto>> GetAllAsync();
 
@@ -21,6 +20,5 @@ namespace src.Services
         Task<bool> DeleteOneAsync(Guid id);
 
         //update
-        Task<bool> UpdateOneAsync(Guid id, CouponUpdateDto updateDto);
     }
 }

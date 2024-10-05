@@ -1,6 +1,7 @@
 using AutoMapper;
 using src.Entity;
 using src.Repository;
+using src.Utils;
 using static src.DTO.CouponDTO;
 
 namespace src.Services
@@ -17,13 +18,35 @@ namespace src.Services
         }
 
         //create
-        public async Task<CouponReadDto> CreatOneAsync(CouponCreateDto createDto)
+        public async Task<CouponReadDto> CreateOneAsync(CouponCreateDto createDto)
         {
-            var Coupon = _mapper.Map<CouponCreateDto, Coupon>(createDto);
-            Coupon.CreatedDate = DateTime.UtcNow;
-            var ddressCreate = await _couponRepo.CreateOneAsync(Coupon);
-            return _mapper.Map<Coupon, CouponReadDto>(ddressCreate);
+            if (createDto.DiscountPercentage < 0 || createDto.DiscountPercentage > 100)
+            {
+                throw new ArgumentException("Discount percentage must be between 0 and 100.");
+            }
+
+            var expireUtc = DateTime.SpecifyKind(createDto.Expire, DateTimeKind.Utc);
+
+            var newCoupon = new Coupon
+            {
+                CouponId = Guid.NewGuid(),
+                Code = createDto.Code,
+                DiscountPercentage = createDto.DiscountPercentage,
+                Expire = expireUtc,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            await _couponRepo.CreateOneAsync(newCoupon);
+
+            return new CouponReadDto
+            {
+                CouponId = newCoupon.CouponId,
+                Code = newCoupon.Code,
+                DiscountPercentage = newCoupon.DiscountPercentage,
+                Expire = newCoupon.Expire
+            };
         }
+
 
         //get all
         public async Task<List<CouponReadDto>> GetAllAsync()
@@ -61,18 +84,6 @@ namespace src.Services
             return false;
         }
 
-        // //update
-        public async Task<bool> UpdateOneAsync(Guid id, CouponUpdateDto updateDto)
-        {
-            var foundCoupon = await _couponRepo.GetCouponByIdAsync(id);
 
-            if (foundCoupon == null)
-            {
-                return false;
-            }
-
-            _mapper.Map(updateDto, foundCoupon);
-            return await _couponRepo.UpdateOneAsync(foundCoupon);
-        }
     }
 }

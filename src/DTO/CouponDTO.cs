@@ -7,7 +7,7 @@ namespace src.DTO
         public class CouponCreateDto()
         {
             public string? Code { get; set; }
-            public decimal? DiscountPercentage { get; set; }
+            public decimal DiscountPercentage { get; set; }
             public DateTime Expire { get; set; }
         }
 

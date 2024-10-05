@@ -15,8 +15,6 @@ namespace src.DTO
         {
 
             public string Name { get; set; }
-            public ICollection<OrderDetails> OrderDetails { get; set; }
-
 
             [PasswordComplexity]
             public string Password { get; set; }
