@@ -120,6 +120,12 @@ namespace src.Utils
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
+
+            CreateMap<OrderDetails, OrderDetailReadDto>();
+            CreateMap<OrderDetailCreateDto, OrderDetails>()
+                .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
         }
     }
 }

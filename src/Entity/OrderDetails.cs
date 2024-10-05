@@ -14,4 +14,7 @@ namespace src.Entity
 
         public Product Product { get; set; }
     }
+
+
 }
+
