@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using src.Entity;
+
 using src.Services.category;
 using src.Utils;
 using static src.DTO.CategoryDTO;
@@ -52,7 +52,7 @@ namespace src.Controllers
 
         // Create a new category
         [HttpPost]
-        // [Authorize(Policy = "AdminOnly")]
+     [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<CategoryReadDto>> CreateOne(
             [FromBody] CategoryCreateDto createDto
         )

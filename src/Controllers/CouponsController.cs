@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using src.Entity;
 using src.Services;
 using src.Utils;
 using static src.DTO.CouponDTO;
@@ -25,7 +20,7 @@ namespace src.Controllers
         //create
 
         [HttpPost]
-        [Authorize(Policy = "AdminOnly")]
+        // [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<CouponReadDto>> CreateOne(
             [FromBody] CouponCreateDto createDto
         )

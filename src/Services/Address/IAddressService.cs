@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using src.Utils;
 using static src.DTO.AddressDTO;
 
 namespace src.Services

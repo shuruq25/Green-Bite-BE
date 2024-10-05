@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using src.Entity;
 using static src.DTO.CartDetailsDTO;
 
@@ -11,8 +7,8 @@ namespace src.DTO
     {
         public class CartCreateDto
         {
-         public List<CartDetailsCreateDto> CartDetails { get; set; } = new List<CartDetailsCreateDto>();
-            
+            public List<CartDetailsCreateDto> CartDetails { get; set; } =
+                new List<CartDetailsCreateDto>();
         }
 
         public class CartReadDto
@@ -22,15 +18,12 @@ namespace src.DTO
             public List<CartDetails> CartDetails { get; set; }
             public int CartTotal { get; set; }
             public decimal TotalPrice { get; set; }
-
         }
 
         public class CartUpdateDto
         {
-         public List<CartDetailsUpdateDto> CartDetails { get; set; } = new List<CartDetailsUpdateDto>();
-
+            public List<CartDetailsUpdateDto> CartDetails { get; set; } =
+                new List<CartDetailsUpdateDto>();
         }
-
-
     }
 }
