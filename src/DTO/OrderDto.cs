@@ -1,4 +1,5 @@
 using src.Entity;
+using static src.DTO.OrderDetailDTO;
 using static src.DTO.ReviewDTO;
 namespace src.DTO
 {
@@ -18,6 +19,7 @@ namespace src.DTO
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
             public Guid UserID { get; set; }
+            public List<OrderDetailCreateDto> OrderDetails { get; set; }
         }
 
 

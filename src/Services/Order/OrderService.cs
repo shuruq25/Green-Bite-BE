@@ -22,10 +22,12 @@ namespace src.Services
                 .Select(order => _mapper.Map<OrderDTO.Get>(order));
         }
 
-        public async Task<OrderDTO.Get> CreateOneOrderAsync(OrderDTO.Create orderDTO)
+        public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid UserID, OrderDTO.Create orderDTO)
         {
-            Order createdOrder = await _ordersRepo.AddOrderAsync(_mapper.Map<Order>(orderDTO));
-            return _mapper.Map<OrderDTO.Get>(createdOrder);
+            Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
+            order.UserID = UserID;
+            Order createdOrder = await _ordersRepo.AddOrderAsync(order);
+            return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
         }
 
         public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)

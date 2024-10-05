@@ -17,6 +17,7 @@ namespace src.Repository
     {
         protected readonly DatabaseContext _db;
         private DbSet<Order> _orders => _db.Order;
+
         public OrderRepository(DatabaseContext db)
         {
             _db = db;
@@ -35,9 +36,14 @@ namespace src.Repository
 
         public async Task<Order> AddOrderAsync(Order newOrder)
         {
-            var result = await _orders.AddAsync(newOrder);
+            await _orders.AddAsync(newOrder);
             await _db.SaveChangesAsync();
-            return result.Entity;
+            await _orders.Entry(newOrder).Collection(o => o.OrderDetails).LoadAsync();
+            foreach (var detail in newOrder.OrderDetails)
+            {
+                await _db.Entry(detail).Reference(od => od.Product).LoadAsync();
+            }
+            return newOrder;
         }
 
         public async Task<bool> UpdateOrderAsync(Order order)

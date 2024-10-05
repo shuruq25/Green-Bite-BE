@@ -25,7 +25,7 @@ namespace src.Services
         public async Task<CouponReadDto> CreatOneAsync(CouponCreateDto createDto)
         {
             var Coupon = _mapper.Map<CouponCreateDto, Coupon>(createDto);
-
+            Coupon.CreatedDate = DateTime.UtcNow;
             var ddressCreate = await _couponRepo.CreateOneAsync(Coupon);
             return _mapper.Map<Coupon, CouponReadDto>(ddressCreate);
         }

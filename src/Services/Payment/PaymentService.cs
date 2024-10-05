@@ -18,7 +18,17 @@ namespace src.Services
         public async Task<IEnumerable<PaymentDTO.PaymentReadDto>> GetAllPaymets()
         {
             return (await _paymentRepo.GetAllAsync())
-                    .Select(payment => _mapper.Map<PaymentDTO.PaymentReadDto>(payment));
+                    .Select(payment => new PaymentDTO.PaymentReadDto
+                    {
+                        Id = payment.Id,
+                        FinalPrice = payment.FinalPrice,
+                        Method = payment.Method,
+                        PaymentDate = payment.PaymentDate,
+                        Status = payment.Status,
+                        CouponId = payment.CouponId,
+                        Code = payment.Coupon.Code,
+                        OrderId = payment.OrderId
+                    });
         }
 
         public async Task<PaymentDTO.PaymentReadDto?> GetPaymentById(Guid id)
@@ -28,6 +38,7 @@ namespace src.Services
 
         public async Task<PaymentDTO.PaymentReadDto> CreatePayment(PaymentDTO.PaymentCreateDto newPaymentDto)
         {
+            newPaymentDto.PaymentDate = DateTime.UtcNow;
             var createdPyment = await _paymentRepo.CreateOneAsync(_mapper.Map<Payment>(newPaymentDto));
             return _mapper.Map<PaymentDTO.PaymentReadDto>(createdPyment);
         }

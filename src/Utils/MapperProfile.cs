@@ -6,6 +6,7 @@ using static src.DTO.CartDetailsDTO;
 using static src.DTO.CartDTO;
 using static src.DTO.CategoryDTO;
 using static src.DTO.CouponDTO;
+using static src.DTO.OrderDetailDTO;
 using static src.DTO.ProductDTO;
 using static src.DTO.ReviewDTO;
 using static src.DTO.UserDTO;
@@ -82,6 +83,12 @@ namespace src.Utils
             CreateMap<CartDetailsCreateDto, CartDetails>();
             CreateMap<CartDetailsUpdateDto, CartDetails>()
         .ForAllMembers(opts =>
+                    opts.Condition((src, dest, srcProperty) => srcProperty != null)
+                );
+
+            CreateMap<OrderDetails, OrderDetailReadDto>();
+            CreateMap<OrderDetailCreateDto, OrderDetails>()
+                .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
         }
