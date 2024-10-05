@@ -1,5 +1,5 @@
 using src.Entity;
-using static src.DTO.ReviewDTO;
+
 namespace src.DTO
 {
     public class OrderDTO
@@ -19,7 +19,6 @@ namespace src.DTO
             public OrderStatuses Status { get; set; }
             public Guid UserID { get; set; }
         }
-
 
         public class Get
         {

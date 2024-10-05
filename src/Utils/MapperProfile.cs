@@ -73,7 +73,7 @@ namespace src.Utils
             CreateMap<Cart, CartReadDto>();
             CreateMap<CartCreateDto, Cart>();
             CreateMap<CartUpdateDto, Cart>()
-        .ForAllMembers(opts =>
+                .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
             // Cart Details Mappings
@@ -81,14 +81,26 @@ namespace src.Utils
             CreateMap<CartDetails, CartDetailsReadDto>();
             CreateMap<CartDetailsCreateDto, CartDetails>();
             CreateMap<CartDetailsUpdateDto, CartDetails>()
-        .ForAllMembers(opts =>
+                .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
+            //Order Mappings
+            CreateMap<OrderDTO.Create, Order>()
+                .ForMember(dest => dest.ID, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+
+            CreateMap<Order, OrderDTO.Get>()
+                .ForMember(dest => dest.reviews, opt => opt.MapFrom(src => src.Reviews));
+
+            CreateMap<OrderDTO.Update, Order>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            //Payment Mappings
+            CreateMap<PaymentDTO.PaymentCreateDto, Payment>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<Payment, PaymentDTO.PaymentReadDto>();
+            CreateMap<PaymentDTO.PaymentUpdateDto, Payment>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
-
-
-
-
-

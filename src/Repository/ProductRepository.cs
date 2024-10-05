@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
 using src.Utils;
-using static src.DTO.ProductDTO;
 
 namespace src.Repository
 {
@@ -13,7 +12,10 @@ namespace src.Repository
         Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions);
         Task<Product?> GetByIdAsync(Guid id);
         Task<bool> UpdateOneAsync(Product updateProduct);
-        Task<List<Product>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions);
+        Task<List<Product>> SearchProductsAsync(
+            PaginationOptions searchOptions,
+            PaginationOptions paginationOptions
+        );
         Task<List<Product>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions);
     }
 
@@ -30,7 +32,6 @@ namespace src.Repository
 
         public async Task<Product> CreateOneAsync(Product newProduct)
         {
-
             await _product.AddAsync(newProduct);
             await _databaseContext.SaveChangesAsync();
             return newProduct;
@@ -39,7 +40,6 @@ namespace src.Repository
         public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
         {
             return await _product.ToListAsync();
-
         }
 
         public async Task<Product?> GetByIdAsync(Guid id)
@@ -60,7 +60,11 @@ namespace src.Repository
             await _databaseContext.SaveChangesAsync();
             return true;
         }
-        public async Task<List<Product>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions)
+
+        public async Task<List<Product>> SearchProductsAsync(
+            PaginationOptions searchOptions,
+            PaginationOptions paginationOptions
+        )
         {
             var query = _product.AsQueryable();
 
@@ -71,7 +75,9 @@ namespace src.Repository
 
             if (!string.IsNullOrWhiteSpace(searchOptions.Description))
             {
-                query = query.Where(p => p.Description.ToLower().Contains(searchOptions.Description.ToLower()));
+                query = query.Where(p =>
+                    p.Description.ToLower().Contains(searchOptions.Description.ToLower())
+                );
             }
 
             var products = await query
@@ -81,7 +87,10 @@ namespace src.Repository
 
             return products;
         }
-        public async Task<List<Product>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions)
+
+        public async Task<List<Product>> GetAllWithSortingAndFilteringAsync(
+            PaginationOptions paginationOptions
+        )
         {
             var query = _product.AsQueryable();
 
@@ -97,14 +106,20 @@ namespace src.Repository
 
             if (!string.IsNullOrWhiteSpace(paginationOptions.Filter.Category))
             {
-                query = query.Where(p => p.Category.Name.ToLower().Contains(paginationOptions.Filter.Category.ToLower()));
+                query = query.Where(p =>
+                    p.Category.Name.ToLower().Contains(paginationOptions.Filter.Category.ToLower())
+                );
             }
 
             query = paginationOptions.Sort.SortBy.ToLower() switch
             {
-                "price" => paginationOptions.Sort.SortDescending ? query.OrderByDescending(p => p.Price) : query.OrderBy(p => p.Price),
-                "name" => paginationOptions.Sort.SortDescending ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name),
-                _ => query.OrderBy(p => p.Name)  
+                "price" => paginationOptions.Sort.SortDescending
+                    ? query.OrderByDescending(p => p.Price)
+                    : query.OrderBy(p => p.Price),
+                "name" => paginationOptions.Sort.SortDescending
+                    ? query.OrderByDescending(p => p.Name)
+                    : query.OrderBy(p => p.Name),
+                _ => query.OrderBy(p => p.Name),
             };
             var totalItems = await query.CountAsync();
             var products = await query
@@ -113,9 +128,5 @@ namespace src.Repository
                 .ToListAsync();
             return products;
         }
-
-
-
-
     }
 }

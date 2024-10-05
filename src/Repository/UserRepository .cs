@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Update;
 using src.Database;
 using src.Entity;
 using src.Utils;
@@ -28,8 +23,8 @@ namespace src.Repository
             return newUser;
         }
 
-        // get all original method 
-          public async Task<List<User>> GetAllAsync()
+        // get all original method
+        public async Task<List<User>> GetAllAsync()
         {
             return await _user.ToListAsync();
         }
