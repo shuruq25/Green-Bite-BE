@@ -28,7 +28,14 @@ namespace src.Database
             modelBuilder.HasPostgresEnum<OrderStatuses>();
             modelBuilder.HasPostgresEnum<PaymentMethod>();
             modelBuilder.HasPostgresEnum<PaymentStatus>();
-            modelBuilder.HasPostgresEnum<Role>();
+           // modelBuilder.HasPostgresEnum<Role>();
+              modelBuilder.Entity<User>()
+        .Property(u => u.UserRole)
+        .HasConversion(
+            v => v.ToString(),    // Convert enum to string before saving to DB
+            v => Enum.Parse<Role>(v)) // Convert string back to enum when reading from DB
+        .IsRequired();
+
 
             modelBuilder
                 .Entity<User>()
