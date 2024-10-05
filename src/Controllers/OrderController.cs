@@ -59,7 +59,7 @@ namespace src.Controllers
             {
                 return NoContent();
             }
-            throw CustomException.NotFound();
+            throw CustomException.NotFound($"An error occurred while updating the order.");
         }
 
         [HttpDelete]
