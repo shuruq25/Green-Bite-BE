@@ -79,7 +79,7 @@ namespace src.Services
                     FinalPrice = newPaymentDto.FinalPrice, 
                     PaymentDate = DateTime.UtcNow,
                     Status = PaymentStatus.Pending,
-                    CouponId = newPaymentDto.CouponId 
+                    //CouponId = newPaymentDto.CouponId 
                 };
 
                 var paymentEntity = await _paymentRepo.CreateOneAsync(createdPayment);
