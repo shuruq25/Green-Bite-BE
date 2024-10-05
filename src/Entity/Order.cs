@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using src.DTO;
 
 namespace src.Entity
 {
@@ -22,6 +21,7 @@ namespace src.Entity
         public OrderStatuses Status { get; set; }
         public Guid? PaymentID { get; set; }
         public Payment? Payment { get; set; }
+        public ICollection<OrderDetails> OrderDetails { get; set; }
         public ICollection<Review> Reviews { get; set; }
     }
 }

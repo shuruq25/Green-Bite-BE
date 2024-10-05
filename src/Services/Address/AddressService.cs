@@ -1,7 +1,6 @@
 using AutoMapper;
 using src.Entity;
 using src.Repository;
-using src.Utils;
 using static src.DTO.AddressDTO;
 
 namespace src.Services

@@ -1,7 +1,4 @@
-using System.Security.Claims;
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using src.Entity;
 using src.Repository;
 using src.Utils;
@@ -25,7 +22,10 @@ namespace src.Services.review
         {
             if (createDto.Rating < 1 || createDto.Rating > 5)
             {
-                throw new ArgumentOutOfRangeException(nameof(createDto.Rating), "Rating must be between 1 and 5.");
+                throw new ArgumentOutOfRangeException(
+                    nameof(createDto.Rating),
+                    "Rating must be between 1 and 5."
+                );
             }
 
             var review = new Review
@@ -34,7 +34,7 @@ namespace src.Services.review
                 Comment = createDto.Comment,
                 Rating = createDto.Rating,
                 ReviewDate = DateTime.UtcNow,
-                UserID = userId
+                UserID = userId,
             };
             var reviewCreated = await _reviewRepo.CreateOneAsync(review);
             return _mapper.Map<Review, ReviewReadDto>(reviewCreated);

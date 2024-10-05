@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using src.Database;
 using src.Entity;
 using src.Repository;
 using src.Services;
 using src.Utils;
-using static src.DTO.CartDetailsDTO;
 using static src.DTO.CartDTO;
 
 namespace Services
@@ -20,25 +14,26 @@ namespace Services
 
         private readonly IMapper _mapper;
 
-
-        public CartService(ICartRepository cartRepository, IMapper mapper, IProductRepository productRepository)
+        public CartService(
+            ICartRepository cartRepository,
+            IMapper mapper,
+            IProductRepository productRepository
+        )
         {
             _cartRepository = cartRepository;
             _mapper = mapper;
             _productRepository = productRepository;
         }
-        // to create a cart 
+
+        // to create a cart
         public async Task<CartReadDto> CreateOneAsync(Guid userId, CartCreateDto cartCreate)
         {
-
             var cart = _mapper.Map<CartCreateDto, Cart>(cartCreate);
             cart.UserId = userId;
-
 
             var savedCart = await _cartRepository.CreateOneAsync(cart);
 
             return _mapper.Map<Cart, CartReadDto>(savedCart);
-
         }
 
         // get the cart by user id
@@ -65,6 +60,7 @@ namespace Services
             await _cartRepository.RemoveCart(existingCart);
             return true;
         }
+
         // Update an existing cart
         public async Task<bool> UpdateOneAsync(Guid id, CartUpdateDto UpdateDto)
         {

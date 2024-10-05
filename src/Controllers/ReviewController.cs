@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using src.Entity;
 using src.Services.review;
 using src.Utils;
 using static src.DTO.ReviewDTO;
@@ -14,7 +9,6 @@ namespace src.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-
     public class ReviewController : ControllerBase
     {
         protected readonly IReviewService _reviewService;
@@ -27,7 +21,8 @@ namespace src.Controllers
         // GET api/v1/review
         [HttpGet]
         public async Task<ActionResult<List<ReviewReadDto>>> GetAll(
-            [FromQuery] PaginationOptions paginationOptions)
+            [FromQuery] PaginationOptions paginationOptions
+        )
         {
             try
             {
@@ -61,7 +56,9 @@ namespace src.Controllers
 
         // Get reviews by order ID
         [HttpGet("/order/{orderId}")]
-        public async Task<ActionResult<List<ReviewReadDto>>> GetReviewsByOrderId([FromRoute] Guid orderId)
+        public async Task<ActionResult<List<ReviewReadDto>>> GetReviewsByOrderId(
+            [FromRoute] Guid orderId
+        )
         {
             try
             {
@@ -87,7 +84,9 @@ namespace src.Controllers
         {
             try
             {
-                var userIdClaim = HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
+                var userIdClaim = HttpContext.User.FindFirst(c =>
+                    c.Type == ClaimTypes.NameIdentifier
+                );
                 if (userIdClaim == null)
                 {
                     throw CustomException.UnAuthorized();

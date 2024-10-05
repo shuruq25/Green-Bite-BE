@@ -1,16 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using src.Entity;
-using static src.DTO.CartDTO;
-using static src.DTO.ProductDTO;
-
 namespace src.DTO
 {
     public class CartDetailsDTO
     {
-
         public class CartDetailsCreateDto
         {
             public Guid ProductId { get; set; }
@@ -28,7 +19,6 @@ namespace src.DTO
         {
             public Guid ProductId { get; set; }
             public int Quantity { get; set; }
-
         }
     }
 }

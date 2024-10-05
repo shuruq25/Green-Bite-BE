@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
@@ -11,26 +5,25 @@ using src.Utils;
 
 namespace src.Repository
 {
-
     public interface ICartRepository
     {
         Task<Cart> CreateOneAsync(Cart cart);
         Task<Cart> GetByIdAsync(Guid id);
         Task RemoveCart(Cart cart);
         Task<bool> UpdateOneAsync(Cart updateCart);
-
-
     }
 
     public class CartRepository : ICartRepository
     {
         protected readonly DbSet<Cart> _carts;
         protected DatabaseContext _databaseContext;
+
         public CartRepository(DatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
             _carts = _databaseContext.Set<Cart>();
         }
+
         // Create a new Cart
         public async Task<Cart> CreateOneAsync(Cart cart)
         {
@@ -51,22 +44,22 @@ namespace src.Repository
 
             return cart;
         }
+
         // Get Cart by User ID
         public async Task<Cart> GetByIdAsync(Guid id)
         {
-
-            var cart = await _databaseContext.Cart
-                          .Include(c => c.CartDetails)
-                              .ThenInclude(cd => cd.Product)
-                              .FirstOrDefaultAsync(c => c.UserId == id);
+            var cart = await _databaseContext
+                .Cart.Include(c => c.CartDetails)
+                .ThenInclude(cd => cd.Product)
+                .FirstOrDefaultAsync(c => c.UserId == id);
 
             if (cart == null)
             {
                 throw CustomException.NotFound($"Cart for User ID {id} not found.");
-
             }
             return cart;
         }
+
         // Remove a Cart
         public async Task RemoveCart(Cart cart)
         {
@@ -91,8 +84,9 @@ namespace src.Repository
             }
 
             // Ensure the cart exists in the database
-            var existingCart = await _databaseContext.Cart
-                .FirstOrDefaultAsync(c => c.UserId == updateCart.UserId);
+            var existingCart = await _databaseContext.Cart.FirstOrDefaultAsync(c =>
+                c.UserId == updateCart.UserId
+            );
 
             if (existingCart == null)
             {

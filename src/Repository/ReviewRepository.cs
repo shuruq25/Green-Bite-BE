@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Database;
 using src.Entity;
@@ -40,7 +36,9 @@ namespace src.Repository
         {
             try
             {
-                return await _review.Include(i => i.Order).FirstOrDefaultAsync(i => i.ReviewId == id);
+                return await _review
+                    .Include(i => i.Order)
+                    .FirstOrDefaultAsync(i => i.ReviewId == id);
             }
             catch (Exception ex)
             {
@@ -53,7 +51,9 @@ namespace src.Repository
         {
             try
             {
-                var result = _review.Include(r => r.Order).Where(r => r.Comment.ToLower().Contains(paginationOptions.Name));
+                var result = _review
+                    .Include(r => r.Order)
+                    .Where(r => r.Comment.ToLower().Contains(paginationOptions.Name));
                 return await result
                     .Skip(paginationOptions.Offset)
                     .Take(paginationOptions.Limit)
@@ -70,11 +70,16 @@ namespace src.Repository
         {
             try
             {
-                return await _review.Where(r => r.OrderId == orderId).Include(r => r.Order).ToListAsync();
+                return await _review
+                    .Where(r => r.OrderId == orderId)
+                    .Include(r => r.Order)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
-                throw CustomException.InternalError("Error fetching reviews by order ID: " + ex.Message);
+                throw CustomException.InternalError(
+                    "Error fetching reviews by order ID: " + ex.Message
+                );
             }
         }
 

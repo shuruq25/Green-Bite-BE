@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using src.Entity;
 using src.Services.UserService;
 using src.Utils;
 using static src.DTO.UserDTO;
@@ -42,7 +35,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<UserReadDto>> GetById(Guid id)
         {
             var user = await _userService.GetByIdAsync(id);
