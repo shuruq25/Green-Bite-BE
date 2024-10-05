@@ -20,7 +20,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-         [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<ProductReadDto>> CreateOne(
             [FromBody] ProductCreateDto createDto
         )
@@ -47,7 +47,7 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> Update(
             [FromRoute] Guid id,
             [FromBody] ProductUpdateDto updateDto
@@ -63,7 +63,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var deleted = await _productService.DeleteOneAsync(id);

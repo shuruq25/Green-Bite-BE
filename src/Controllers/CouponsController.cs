@@ -37,11 +37,11 @@ namespace src.Controllers
             return Ok(await _couponService.GetAllAsync());
         }
 
-      
+
         // Delete
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> DeleteCoupon([FromRoute] Guid id)
         {
             var deleted = await _couponService.DeleteOneAsync(id);
