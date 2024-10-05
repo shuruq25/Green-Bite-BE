@@ -80,7 +80,7 @@ builder
     });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
 
 builder.Services.AddControllers();

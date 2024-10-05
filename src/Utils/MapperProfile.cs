@@ -112,8 +112,7 @@ namespace src.Utils
             CreateMap<PaymentDTO.PaymentCreateDto, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<Payment, PaymentDTO.PaymentReadDto>();
-            CreateMap<PaymentDTO.PaymentUpdateDto, Payment>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+     
 
             CreateMap<OrderDetails, OrderDetailReadDto>();
             CreateMap<OrderDetailCreateDto, OrderDetails>()
