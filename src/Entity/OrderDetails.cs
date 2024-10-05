@@ -12,4 +12,7 @@ namespace src.Entity
         public Guid OrderId { get; set; }
         public Product Product { get; set; }
     }
+
+
 }
+

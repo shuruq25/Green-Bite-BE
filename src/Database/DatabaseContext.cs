@@ -69,6 +69,11 @@ namespace src.Database
             .HasOne(r => r.Order) // Each Review has one Order
             .WithMany(o => o.Reviews) // Each Order can have many Reviews
             .HasForeignKey(r => r.OrderId); // The foreign key in Review is OrderId
+
+            modelBuilder.Entity<Payment>()
+            .HasOne(p => p.Coupon) // A payment has one coupon
+            .WithMany(c => c.Payments) // A coupon can have many payments
+            .HasForeignKey(p => p.CouponId); // The foreign key in Payment is CouponId
         }
     }
 }

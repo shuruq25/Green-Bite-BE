@@ -27,6 +27,7 @@ namespace src.Services
         {
             Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
             order.UserID = userID;
+
             Order createdOrder = await _ordersRepo.AddOrderAsync(order);
             return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
         }

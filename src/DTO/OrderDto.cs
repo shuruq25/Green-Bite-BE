@@ -1,6 +1,8 @@
 using src.Entity;
 using static src.DTO.OrderDetailDTO;
 
+using static src.DTO.ReviewDTO;
+
 namespace src.DTO
 {
     public class OrderDTO
@@ -19,7 +21,9 @@ namespace src.DTO
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
             public Guid UserID { get; set; }
-            public ICollection<OrderDetailCreateDto> OrderDetails { get; set; }
+
+            public List<OrderDetailCreateDto> OrderDetails { get; set; }
+
         }
 
         public class Get
