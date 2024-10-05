@@ -43,7 +43,7 @@ namespace src.Controllers
                 return BadRequest("Invalid User ID.");
             }
             order.UserID = parsedUserId;
-            var createdOrderDTO = await _orderService.CreateOneOrderAsync(order);
+            var createdOrderDTO = await _orderService.CreateOneOrderAsync(parsedUserId, order);
             return CreatedAtAction(
                 nameof(GetOrderById),
                 new { id = createdOrderDTO.ID },

@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using src.Repository;
 using src.Entity;
-using static src.DTO.CategoryDTO;
+using src.Repository;
 using src.Utils;
+using static src.DTO.CategoryDTO;
 
 namespace src.Services.category
 {
@@ -14,6 +10,7 @@ namespace src.Services.category
     {
         protected ICategoryRepository _categoryRepo;
         protected IMapper _mapper;
+
         public CategoryService(ICategoryRepository categoryRepo, IMapper mapper)
         {
             _categoryRepo = categoryRepo;
@@ -36,7 +33,9 @@ namespace src.Services.category
         }
 
         // Get all categories
-        public async Task<List<CategoryReadDto>> GetCategoriesAsync(PaginationOptions paginationOptions)
+        public async Task<List<CategoryReadDto>> GetCategoriesAsync(
+            PaginationOptions paginationOptions
+        )
         {
             try
             {
@@ -57,7 +56,6 @@ namespace src.Services.category
                 var foundCategory = await _categoryRepo.GetCategoryAsync(id);
                 if (foundCategory == null)
                 {
-
                     throw CustomException.NotFound($"Category with {id} cant find");
                 }
                 return _mapper.Map<Category, CategoryReadDto>(foundCategory);

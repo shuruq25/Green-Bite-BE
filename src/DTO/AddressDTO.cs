@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using src.Entity;
 
 namespace src.DTO
@@ -24,7 +20,7 @@ namespace src.DTO
             public Guid AddressId { get; set; }
             public string? Country { get; set; }
             public string? Street { get; set; }
-            public  User User { get; set; } // to return the whole information of User
+            public User User { get; set; } // to return the whole information of User
         }
 
         // Class to : Update Address
