@@ -25,10 +25,29 @@ namespace src.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasPostgresEnum<OrderStatuses>();
-            modelBuilder.HasPostgresEnum<PaymentMethod>();
-            modelBuilder.HasPostgresEnum<PaymentStatus>();
-            modelBuilder.HasPostgresEnum<Role>();
+             modelBuilder.Entity<Order>()
+                .Property(o => o.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (OrderStatuses)Enum.Parse(typeof(OrderStatuses), v));
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Method)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (PaymentMethod)Enum.Parse(typeof(PaymentMethod), v));
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (PaymentStatus)Enum.Parse(typeof(PaymentStatus), v));
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.UserRole)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (Role)Enum.Parse(typeof(Role), v));
 
             modelBuilder
                 .Entity<User>()

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using src.Entity;
 using src.Services;
 using src.Utils;
 using static src.DTO.CouponDTO;
@@ -78,7 +73,6 @@ namespace src.Controllers
         [Authorize]
         public async Task<ActionResult<CouponReadDto>> GetById([FromRoute] Guid id)
         {
-
             CouponReadDto? coupon = await _couponService.GetByIdAsync(id);
             if (coupon is null)
             {

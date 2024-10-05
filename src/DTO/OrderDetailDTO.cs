@@ -1,0 +1,20 @@
+using static src.DTO.ProductDTO;
+
+namespace src.DTO
+{
+    public class OrderDetailDTO
+    {
+        public class OrderDetailCreateDto
+        {
+            public Guid ProductId { get; set; }
+        }
+
+        public class OrderDetailReadDto
+        {
+            public Guid Id { get; set; }
+            public ProductReadDto Product { get; set; }
+        }
+
+     
+    }
+}

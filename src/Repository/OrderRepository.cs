@@ -23,17 +23,25 @@ namespace src.Repository
             _db = db;
         }
 
-        public async Task<Order?> GetOrderByIdAsync(Guid id) => await _orders
-            .Include(order => order.User)
-            .Include(order => order.Payment)
-            .Include(order => order.Reviews)
-            .FirstOrDefaultAsync(o => o.ID == id);
+        public async Task<Order?> GetOrderByIdAsync(Guid id) =>
+            await _orders
+                .Include(order => order.User)
+                .Include(order => order.Payment)
+                .Include(order => order.Reviews)
+                .FirstOrDefaultAsync(o => o.ID == id);
 
-        public async Task<List<Order>> GetAllOrdersAsync() => await _orders
-            .Include(order => order.User)
-            .Include(order => order.Payment)
-            .ToListAsync();
+        public async Task<List<Order>> GetAllOrdersAsync() =>
+            await _orders
+                .Include(order => order.User)
+                .Include(order => order.Payment)
+                .ToListAsync();
 
+        // public async Task<Order> AddOrderAsync(Order newOrder)
+        // {
+        //     var result = await _orders.AddAsync(newOrder);
+        //     await _db.SaveChangesAsync();
+        //     return result.Entity;
+        // }
         public async Task<Order> AddOrderAsync(Order newOrder)
         {
             await _orders.AddAsync(newOrder);
@@ -43,6 +51,7 @@ namespace src.Repository
             {
                 await _db.Entry(detail).Reference(od => od.Product).LoadAsync();
             }
+
             return newOrder;
         }
 
@@ -52,8 +61,6 @@ namespace src.Repository
             await _db.SaveChangesAsync();
             return true;
         }
-
-
 
         public async Task<bool> DeleteOrderAsync(Guid id)
         {

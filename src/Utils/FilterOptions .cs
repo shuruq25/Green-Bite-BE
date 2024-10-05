@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace src.Utils
 {
     public class FilterOptions
@@ -10,7 +5,5 @@ namespace src.Utils
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
         public string Category { get; set; }
-
-
     }
 }

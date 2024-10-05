@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using src.Database;
-using src.DTO;
 using src.Entity;
-using src.Utils;
 
 namespace src.Repository
 {
@@ -42,16 +36,12 @@ namespace src.Repository
             return newAddress;
         }
 
-
-
-  // get all Addresses:
+        // get all Addresses:
 
         public async Task<List<Address>> GetAllAsync()
         {
             return await _address.ToListAsync();
         }
-
-
 
         // get all Addresses:
 
@@ -72,7 +62,7 @@ namespace src.Repository
 
         public async Task<Address?> GetAddressByIdAsync(Guid id)
         {
-            return await _address.Include(a=>a.User).FirstOrDefaultAsync(a=>a.AddressId == id);
+            return await _address.Include(a => a.User).FirstOrDefaultAsync(a => a.AddressId == id);
         }
 
         //delete Address:
