@@ -19,7 +19,7 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> GetAllPayments(int page = 1, int pageSize = 10)
         {
             var payments = await _paymentService.GetAllPayments(page, pageSize);
