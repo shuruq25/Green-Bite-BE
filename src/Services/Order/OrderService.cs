@@ -23,13 +23,27 @@ namespace src.Services
             );
         }
 
+        // public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO)
+        // {
+        //     Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
+        //     order.UserID = userID;
+        //     Order createdOrder = await _ordersRepo.AddOrderAsync(order);
+        //     return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
+        // }
         public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO)
         {
+            // Map DTO to Entity
             Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
             order.UserID = userID;
+
+            // Add the order to the repository (this will calculate OriginalPrice dynamically)
             Order createdOrder = await _ordersRepo.AddOrderAsync(order);
+
+            // Map the created order back to the DTO for response
             return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
         }
+
+
 
         public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)
         {
@@ -52,5 +66,8 @@ namespace src.Services
         {
             return await _ordersRepo.DeleteOrderAsync(id);
         }
+
+
+
     }
 }

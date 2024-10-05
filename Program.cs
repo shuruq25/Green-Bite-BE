@@ -33,6 +33,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
+
 builder
     .Services.AddScoped<ICategoryService, CategoryService>()
     .AddScoped<ICategoryRepository, CategoryRepository>()

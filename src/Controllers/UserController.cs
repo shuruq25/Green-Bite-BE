@@ -17,7 +17,7 @@ namespace src.Controllers
             _userService = service;
         }
 
-        [HttpPost("signUp")]
+        [HttpPost("signup")]
         public async Task<ActionResult<UserReadDto>> UserSignUp([FromBody] UserCreateDto createDto)
         {
             var userCreated = await _userService.CreateOneAsync(createDto);
@@ -74,7 +74,7 @@ namespace src.Controllers
             return Ok(updatedUser);
         }
 
-        [HttpPost("signIn")]
+        [HttpPost("signin")]
         public async Task<ActionResult<string>> SignInUser([FromBody] UserSignInDto signInDtoDto)
         {
             var token = await _userService.SignInAsync(signInDtoDto);

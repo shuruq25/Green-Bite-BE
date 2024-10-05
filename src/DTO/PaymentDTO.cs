@@ -1,3 +1,4 @@
+using src.Entity;
 using static src.Entity.Payment;
 
 namespace src.DTO
@@ -8,9 +9,7 @@ namespace src.DTO
         {
             public decimal FinalPrice { get; set; }
             public PaymentMethod? Method { get; set; }
-            public DateTime PaymentDate { get; set; }
-            public PaymentStatus Status { get; set; }
-            public Guid CouponId { get; set; }
+            public Guid? CouponId { get; set; }
             public Guid OrderId { get; set; }
         }
         public class PaymentReadDto
