@@ -92,8 +92,8 @@ namespace src.Repository
         }
 
         public async Task<List<Product>> GetAllWithSortingAndFilteringAsync(
-            PaginationOptions paginationOptions
-        )
+           PaginationOptions paginationOptions
+       )
         {
             var query = _product.AsQueryable();
 
@@ -109,28 +109,34 @@ namespace src.Repository
 
             if (!string.IsNullOrWhiteSpace(paginationOptions.Filter.Category))
             {
-                query = query.Where(p =>
-                    p.Category.Name.ToLower().Contains(paginationOptions.Filter.Category.ToLower())
-                );
+                var categoryFilter = paginationOptions.Filter.Category.ToLower(); 
+                query = query.Where(p => p.Category.Name.ToLower().Contains(categoryFilter));
             }
 
             query = paginationOptions.Sort.SortBy.ToLower() switch
             {
-                "price" => paginationOptions.Sort.SortDescending
+                "price" => (paginationOptions.Sort.SortDescending ?? false)
                     ? query.OrderByDescending(p => p.Price)
                     : query.OrderBy(p => p.Price),
-                "name" => paginationOptions.Sort.SortDescending
+
+                "name" => (paginationOptions.Sort.SortDescending ?? false)
                     ? query.OrderByDescending(p => p.Name)
                     : query.OrderBy(p => p.Name),
-                _ => query.OrderBy(p => p.Name),
+
+                _ => query.OrderBy(p => p.Name), 
             };
+
             var totalItems = await query.CountAsync();
+
             var products = await query
                 .Include(p => p.Category)
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
+                .AsNoTracking() 
                 .ToListAsync();
+
             return products;
         }
+
     }
 }

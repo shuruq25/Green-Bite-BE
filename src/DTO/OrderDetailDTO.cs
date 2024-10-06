@@ -1,4 +1,5 @@
 
+using src.Entity;
 using static src.DTO.ProductDTO;
 
 namespace src.DTO
@@ -9,6 +10,7 @@ namespace src.DTO
         {
             public Guid ProductId { get; set; }
             public int Quantity { get; set; }
+            public  Product? Product {  get; internal set; }
 
         }
 

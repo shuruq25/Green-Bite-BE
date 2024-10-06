@@ -7,10 +7,11 @@ namespace src.DTO
     {
         public class PaymentCreateDto
         {
-            public decimal FinalPrice { get; set; }
+          public decimal FinalPrice { get; set; }
             public PaymentMethod Method { get; set; }
 
-              public Guid? CouponId { get; set; }
+            public Guid CouponId { get; set; }
+                        
             public Guid OrderId { get; set; }
         }
 
@@ -21,9 +22,9 @@ namespace src.DTO
             public PaymentMethod? Method { get; set; }
             public DateTime PaymentDate { get; set; }
             public PaymentStatus Status { get; set; }
-           // public Guid CouponId { get; set; }
+            public Guid CouponId { get; set; }
 
-            public string Code { get; set; }
+            //public string Code { get; set; }
             public Guid OrderId { get; set; }
         }
     }
