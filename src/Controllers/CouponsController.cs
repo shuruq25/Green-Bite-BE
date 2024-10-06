@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using src.Entity;
 using src.Services;
 using src.Utils;
 using static src.DTO.CouponDTO;
@@ -25,7 +20,7 @@ namespace src.Controllers
         //create
 
         [HttpPost]
-        [Authorize(Policy = "AdminOnly")]
+        // [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<CouponReadDto>> CreateOne(
             [FromBody] CouponCreateDto createDto
         )
@@ -53,7 +48,7 @@ namespace src.Controllers
             var isUpdated = await _couponService.UpdateOneAsync(id, updateCoupon);
             if (!isUpdated)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             var result = await _couponService.GetByIdAsync(id);
             return Ok(result);
@@ -68,7 +63,7 @@ namespace src.Controllers
             var deleted = await _couponService.DeleteOneAsync(id);
             if (!deleted)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }
@@ -78,8 +73,12 @@ namespace src.Controllers
         [Authorize]
         public async Task<ActionResult<CouponReadDto>> GetById([FromRoute] Guid id)
         {
-            var Coupon = await _couponService.GetByIdAsync(id);
-            return Ok(Coupon);
+            CouponReadDto? coupon = await _couponService.GetByIdAsync(id);
+            if (coupon is null)
+            {
+                throw CustomException.NotFound();
+            }
+            return Ok(coupon);
         }
     }
 }

@@ -66,10 +66,17 @@ namespace src.Services.product
             return await _productRepository.UpdateOneAsync(foundProduct);
         }
 
-        public async Task<List<ProductReadDto>> SearchProductsAsync(PaginationOptions options)
+        public async Task<List<ProductReadDto>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions)
         {
-            var products = await _productRepository.GetAllAsync(options);
-            return _mapper.Map<List<ProductReadDto>>(products); 
+            var products = await _productRepository.SearchProductsAsync(searchOptions, paginationOptions);
+            return _mapper.Map<List<ProductReadDto>>(products);
         }
+        public async Task<List<ProductReadDto>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions)
+        {
+            var products = await _productRepository.GetAllWithSortingAndFilteringAsync(paginationOptions);
+
+            return _mapper.Map<List<ProductReadDto>>(products);
+        }
+
     }
 }

@@ -1,5 +1,8 @@
 using src.Entity;
+using static src.DTO.OrderDetailDTO;
+
 using static src.DTO.ReviewDTO;
+
 namespace src.DTO
 {
     public class OrderDTO
@@ -12,13 +15,14 @@ namespace src.DTO
 
         public class Create
         {
-            public DateTime CreatedAt { get; set; } 
-            public DateTime EstimatedArrival { get; set; } 
+            public DateTime CreatedAt { get; set; }
+            public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
-            public Guid UserId { get; set; }
+            public Guid UserID { get; set; }
             public List<ProductDTO.ProductReadDto> Products { get; set; }
         }
 
+        public List<OrderDetailCreateDto> OrderDetails { get; set; }
 
         public class Get
         {
@@ -33,4 +37,6 @@ namespace src.DTO
             public decimal OriginalPrice => Products.Sum(p => p.Price);
         }
     }
+
+
 }

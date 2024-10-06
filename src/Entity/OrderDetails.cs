@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 namespace src.Entity
 {
-    public class CartProduct
+    public class OrderDetails
     {
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
-        public Guid CartId { get; set; }
-        public int Quantity { get; }
-
-
+        public Guid OrderId { get; set; }
+        public Product Product { get; set; }
     }
+
+
 }
+

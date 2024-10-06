@@ -33,7 +33,7 @@ namespace src.Services
         {
             if (newPaymentDto.OrderId == null)
             {
-                throw CustomException.BadRequest();
+                throw CustomException.NotFound();
             }
             var updatedOrder = await _orderRepo.GetOrderByIdAsync(newPaymentDto.OrderId);
             if (updatedOrder == null)
@@ -54,7 +54,6 @@ namespace src.Services
             returnValue.FinalPrice = updatedOrder.OriginalPrice - (updatedOrder.OriginalPrice * (createdPayment.Coupon?.DiscountPercentage) ?? updatedOrder.OriginalPrice);
             return returnValue;
         }
-
 
         public async Task<bool> UpdatePaymentById(Guid id, PaymentDTO.PaymentUpdateDto updatedPaymentDto)
         {

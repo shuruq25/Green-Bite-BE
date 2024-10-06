@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using src.Entity;
 using src.Services.UserService;
 using src.Utils;
 using static src.DTO.UserDTO;
@@ -48,7 +41,7 @@ namespace src.Controllers
             var user = await _userService.GetByIdAsync(id);
             if (user == null)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return Ok(user);
         }
@@ -60,7 +53,7 @@ namespace src.Controllers
             var isDeleted = await _userService.DeleteOneAsync(id);
             if (!isDeleted)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }

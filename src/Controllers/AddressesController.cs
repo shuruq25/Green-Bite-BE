@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using src.DTO;
-using src.Entity;
 using src.Services;
 using src.Utils;
 using static src.DTO.AddressDTO;
@@ -64,7 +62,7 @@ namespace src.Controllers
             var deleted = await _addressService.DeleteOneAsync(id);
             if (!deleted)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }

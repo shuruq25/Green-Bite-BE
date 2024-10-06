@@ -21,11 +21,12 @@ namespace src.Services
 
         public async Task<IEnumerable<OrderDTO.Get>> GetAllOrdersAsync()
         {
-            return (await _ordersRepo.GetAllOrdersAsync())
-                .Select(order => _mapper.Map<OrderDTO.Get>(order));
+            return (await _ordersRepo.GetAllOrdersAsync()).Select(order =>
+                _mapper.Map<OrderDTO.Get>(order)
+            );
         }
 
-        public async Task<OrderDTO.Get> CreateOneOrderAsync(OrderDTO.Create orderDTO)
+        public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO)
         {
             var prods = orderDTO.Products;
             if (prods.Count == 0)
@@ -72,7 +73,5 @@ namespace src.Services
         {
             return await _ordersRepo.DeleteOrderAsync(id);
         }
-
-
     }
 }

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace src.Entity
@@ -28,7 +27,7 @@ namespace src.Entity
 
         public Guid Id { get; set; }
         public PaymentMethod? Method { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
         public PaymentStatus Status { get; set; }
         public Guid? CouponId { get; set; }
         public Coupon Coupon { get; set; }

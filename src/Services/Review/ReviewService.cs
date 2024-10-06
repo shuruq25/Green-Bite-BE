@@ -1,7 +1,4 @@
-using System.Security.Claims;
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using src.Entity;
 using src.Repository;
 using src.Utils;
@@ -20,11 +17,15 @@ namespace src.Services.review
             _mapper = mapper;
         }
 
+        // Create a new review
         public async Task<ReviewReadDto> CreateOneAsync(ReviewCreateDto createDto, Guid userId)
         {
             if (createDto.Rating < 1 || createDto.Rating > 5)
             {
-                throw new ArgumentOutOfRangeException(nameof(createDto.Rating), "Rating must be between 1 and 5.");
+                throw new ArgumentOutOfRangeException(
+                    nameof(createDto.Rating),
+                    "Rating must be between 1 and 5."
+                );
             }
 
             var review = new Review
@@ -33,24 +34,34 @@ namespace src.Services.review
                 Comment = createDto.Comment,
                 Rating = createDto.Rating,
                 ReviewDate = DateTime.UtcNow,
-                UserID = userId
+                UserID = userId,
             };
             var reviewCreated = await _reviewRepo.CreateOneAsync(review);
             return _mapper.Map<Review, ReviewReadDto>(reviewCreated);
         }
 
+        // Get all reviews
         public async Task<List<ReviewReadDto>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            var reviewList = await _reviewRepo.GetReviewsAsync(paginationOptions);
-            return _mapper.Map<List<Review>, List<ReviewReadDto>>(reviewList);
+            try
+            {
+                var reviewList = await _reviewRepo.GetReviewsAsync(paginationOptions);
+                return _mapper.Map<List<Review>, List<ReviewReadDto>>(reviewList);
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError(ex.Message);
+            }
         }
 
+        // Get a review by ID
         public async Task<ReviewReadDto> GetByIdAsync(Guid id)
         {
             var foundReview = await _reviewRepo.GetReviewAsync(id);
             return _mapper.Map<Review?, ReviewReadDto>(foundReview);
         }
 
+        // Delete a review
         public async Task<bool> DeleteOneAsync(Guid id)
         {
             var foundReview = await _reviewRepo.GetReviewAsync(id);
@@ -66,12 +77,14 @@ namespace src.Services.review
             return false;
         }
 
+        // Get reviews by order ID
         public async Task<List<ReviewReadDto>> GetReviewsByOrderIdAsync(Guid orderId)
         {
             var reviews = await _reviewRepo.GetReviewByOrderIdAsync(orderId);
             return _mapper.Map<List<Review>, List<ReviewReadDto>>(reviews);
         }
 
+        // Update a review
         public async Task<bool> UpdateOneAsync(Guid id, ReviewUpdateDto updateDto)
         {
             var foundReview = await _reviewRepo.GetReviewAsync(id);

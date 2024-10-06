@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using src.Services;
+using src.Utils;
 using static src.DTO.WishlistDTO;
 
 namespace src.Controllers
@@ -29,7 +30,7 @@ namespace src.Controllers
             var wishlistItem = await _wishlistService.GetByIdAsync(id);
             if (wishlistItem == null)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return Ok(wishlistItem);
         }
@@ -59,7 +60,7 @@ namespace src.Controllers
             var isDeleted = await _wishlistService.DeleteOneAsync(id);
             if (!isDeleted)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             return NoContent();
         }
@@ -73,7 +74,7 @@ namespace src.Controllers
             var isUpdated = await _wishlistService.UpdateOneAsync(id, updateDto);
             if (!isUpdated)
             {
-                return NotFound();
+                throw CustomException.NotFound();
             }
             var updatedWishlistItem = await _wishlistService.GetByIdAsync(id);
             return Ok(updatedWishlistItem);

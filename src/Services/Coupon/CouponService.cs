@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using src.Entity;
 using src.Repository;
-using src.Utils;
 using static src.DTO.CouponDTO;
 
 namespace src.Services
@@ -25,7 +20,7 @@ namespace src.Services
         public async Task<CouponReadDto> CreatOneAsync(CouponCreateDto createDto)
         {
             var Coupon = _mapper.Map<CouponCreateDto, Coupon>(createDto);
-
+            Coupon.CreatedDate = DateTime.UtcNow;
             var ddressCreate = await _couponRepo.CreateOneAsync(Coupon);
             return _mapper.Map<Coupon, CouponReadDto>(ddressCreate);
         }

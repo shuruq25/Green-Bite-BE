@@ -14,6 +14,11 @@ namespace src.Repository
         Task<Product?> GetByIdAsync(Guid id);
         Task<bool> DeleteOneAsync(Product product);
         Task<bool> UpdateOneAsync(Product updateProduct);
+        Task<List<Product>> SearchProductsAsync(
+            PaginationOptions searchOptions,
+            PaginationOptions paginationOptions
+        );
+        Task<List<Product>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions);
     }
 
     public class ProductRepository : IProductRepository
@@ -40,13 +45,7 @@ namespace src.Repository
         }
         public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            var searchResult = _product.Where(c =>
-                c.Name.ToLower().Contains(paginationOptions.Search)
-            );
-            return await searchResult
-                .Skip(paginationOptions.Offset)
-                .Take(paginationOptions.Limit)
-                .ToListAsync();
+            return await _product.ToListAsync();
         }
 
         public async Task<List<Product>> GetByIdsAsync(IEnumerable<Guid> ids)
@@ -57,7 +56,7 @@ namespace src.Repository
 
         public async Task<Product?> GetByIdAsync(Guid id)
         {
-            return await _product.FindAsync(id);
+            return await _product.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<bool> UpdateOneAsync(Product updateProduct)
@@ -72,6 +71,74 @@ namespace src.Repository
             _product.Remove(product);
             await _databaseContext.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<Product>> SearchProductsAsync(
+            PaginationOptions searchOptions,
+            PaginationOptions paginationOptions
+        )
+        {
+            var query = _product.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchOptions.Name))
+            {
+                query = query.Where(p => p.Name.ToLower().Contains(searchOptions.Name.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchOptions.Description))
+            {
+                query = query.Where(p =>
+                    p.Description.ToLower().Contains(searchOptions.Description.ToLower())
+                );
+            }
+
+            var products = await query
+                .Skip(paginationOptions.Offset)
+                .Take(paginationOptions.Limit)
+                .ToListAsync();
+
+            return products;
+        }
+
+        public async Task<List<Product>> GetAllWithSortingAndFilteringAsync(
+            PaginationOptions paginationOptions
+        )
+        {
+            var query = _product.AsQueryable();
+
+            if (paginationOptions.Filter.MinPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= paginationOptions.Filter.MinPrice.Value);
+            }
+
+            if (paginationOptions.Filter.MaxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= paginationOptions.Filter.MaxPrice.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(paginationOptions.Filter.Category))
+            {
+                query = query.Where(p =>
+                    p.Category.Name.ToLower().Contains(paginationOptions.Filter.Category.ToLower())
+                );
+            }
+
+            query = paginationOptions.Sort.SortBy.ToLower() switch
+            {
+                "price" => paginationOptions.Sort.SortDescending ?? false
+                    ? query.OrderByDescending(p => p.Price)
+                    : query.OrderBy(p => p.Price),
+                "name" => paginationOptions.Sort.SortDescending ?? false
+                    ? query.OrderByDescending(p => p.Name)
+                    : query.OrderBy(p => p.Name),
+                _ => query.OrderBy(p => p.Name),
+            };
+            var totalItems = await query.CountAsync();
+            var products = await query
+                .Skip(paginationOptions.Offset)
+                .Take(paginationOptions.Limit)
+                .ToListAsync();
+            return products;
         }
     }
 
