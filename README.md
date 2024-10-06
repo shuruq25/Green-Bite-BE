@@ -219,7 +219,7 @@ The application is deployed and can be accessed at: [https://your-deploy-link.co
 - **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻
 - Abdullah Alkhwahir() 👨‍💻
 - Hadeel Alghashmari ()👩‍💻
-- Raghad Alharbi()👩‍💻
+- Raghad Alharbi(@Rad109)👩‍💻
 - Reema Algureshie(ReemaAlqu)👩‍💻
 
 ## License
