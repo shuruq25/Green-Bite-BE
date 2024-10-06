@@ -21,9 +21,9 @@ namespace src.DTO
             public OrderStatuses Status { get; set; }
             public Guid UserID { get; set; }
             public List<ProductDTO.ProductReadDto> Products { get; set; }
+            /*public List<OrderDetailCreateDto> OrderDetails { get; set; }*/
         }
 
-        public List<OrderDetailCreateDto> OrderDetails { get; set; }
 
         public class Get
         {

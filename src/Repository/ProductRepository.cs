@@ -41,7 +41,10 @@ namespace src.Repository
 
         public async Task<List<Product>> GetAllAsync()
         {
-            return await _product.Include(p => p.Order).ToListAsync();
+            return await _product
+                .Include(p => p.Order)
+                .Include(p => p.Category)
+                .ToListAsync();
         }
         public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
         {
@@ -56,7 +59,10 @@ namespace src.Repository
 
         public async Task<Product?> GetByIdAsync(Guid id)
         {
-            return await _product.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            return await _product
+                .Include(p => p.Order)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<bool> UpdateOneAsync(Product updateProduct)
