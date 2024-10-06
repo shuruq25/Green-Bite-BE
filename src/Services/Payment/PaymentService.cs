@@ -13,7 +13,7 @@ namespace src.Services
     {
         private readonly IPaymentRepository _paymentRepo;
         private readonly IOrderRepository _orderRepo;
-                private readonly CouponRepository _couponRepo ;
+        private readonly CouponRepository _couponRepo;
 
         private readonly IMapper _mapper;
 
@@ -62,24 +62,14 @@ namespace src.Services
                     throw CustomException.BadRequest("Order does not exist.");
                 }
 
-                if (newPaymentDto.CouponId.HasValue)
-                {
-                    var coupon = await _couponRepo.GetCouponByIdAsync(newPaymentDto.CouponId.Value);
-                    if (coupon == null)
-                    {
-                        throw CustomException.BadRequest("Coupon does not exist.");
-                    }
-                }
-                
-
                 var createdPayment = new Payment
                 {
                     Method = newPaymentDto.Method,
                     OrderId = newPaymentDto.OrderId,
-                    FinalPrice = newPaymentDto.FinalPrice, 
+                    FinalPrice = newPaymentDto.FinalPrice,
                     PaymentDate = DateTime.UtcNow,
                     Status = PaymentStatus.Pending,
-                    CouponId = (Guid)newPaymentDto.CouponId
+                    CouponId = newPaymentDto.CouponId
                 };
 
                 var paymentEntity = await _paymentRepo.CreateOneAsync(createdPayment);

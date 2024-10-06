@@ -69,7 +69,7 @@ namespace src.Controllers
 
         // Delete a category
         [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> DeleteCategory([FromRoute] Guid id)
         {
             try
@@ -89,7 +89,7 @@ namespace src.Controllers
 
         // Update a category
         [HttpPut("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> UpdateCategory(
             [FromRoute] Guid id,
             [FromBody] CategoryUpdateDto updateDto
