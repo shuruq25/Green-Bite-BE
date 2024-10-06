@@ -18,14 +18,8 @@ namespace src.Utils
     {
         public MapperProfile()
         {
-            CreateMap<Order, OrderDTO.Get>();
-            CreateMap<OrderDTO.Update, Order>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            CreateMap<OrderDTO.Create, Order>()
-                   .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
-
+            // Product Mappings
             CreateMap<Product, ProductReadDto>();
-            CreateMap<ProductReadDto, Product>();
             CreateMap<ProductCreateDto, Product>();
             CreateMap<ProductUpdateDto, Product>()
                 .ForAllMembers(opts =>
@@ -97,22 +91,22 @@ namespace src.Utils
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
 
             CreateMap<Order, OrderDTO.Get>()
-                .ForMember(dest => dest.Reviews, opt => opt.MapFrom(src => src.Reviews));
+                .ForMember(dest => dest.reviews, opt => opt.MapFrom(src => src.Reviews));
 
             CreateMap<OrderDTO.Update, Order>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                    CreateMap<Order, OrderDTO.Get>();
-            /*.ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails));*/
+                    CreateMap<Order, OrderDTO.Get>()
+            .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails));
 
         // Map from OrderDetail to OrderDetailCreateDto
         CreateMap<OrderDetails, OrderDetailDTO.OrderDetailCreateDto>()
-            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId));
-            /*.ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));*/
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
 
         // You might also need to map from OrderDetailCreateDto to OrderDetails (for Create operations)
         CreateMap<OrderDetailDTO.OrderDetailCreateDto, OrderDetails>()
-            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId));
-            /*.ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));*/
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
 
             //Payment Mappings
             CreateMap<PaymentDTO.PaymentCreateDto, Payment>()

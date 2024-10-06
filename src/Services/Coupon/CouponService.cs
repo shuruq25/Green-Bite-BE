@@ -1,6 +1,7 @@
 using AutoMapper;
 using src.Entity;
 using src.Repository;
+using src.Utils;
 using static src.DTO.CouponDTO;
 
 namespace src.Services

@@ -3,15 +3,19 @@ using src.DTO;
 using src.Entity;
 using src.Repository;
 using src.Utils;
+using static src.Entity.Payment;
+using System.Net;
 using static src.DTO.PaymentDTO;
 
 namespace src.Services
 {
     public class PaymentService : IPaymentService
     {
-        public readonly IPaymentRepository _paymentRepo;
-        public readonly IOrderRepository _orderRepo;
-        public readonly IMapper _mapper;
+        private readonly IPaymentRepository _paymentRepo;
+        private readonly IOrderRepository _orderRepo;
+        private readonly CouponRepository _couponRepo;
+
+        private readonly IMapper _mapper;
 
         public PaymentService(IPaymentRepository paymentRepo, IOrderRepository orderRepo, IMapper mapper)
         {
@@ -36,31 +40,6 @@ namespace src.Services
             });
         }
 
-        public async Task<PaymentDTO.PaymentReadDto> CreatePayment(PaymentDTO.PaymentCreateDto newPaymentDto)
-        {
-            if (newPaymentDto.OrderId == null)
-            {
-                throw CustomException.NotFound();
-            }
-            var updatedOrder = await _orderRepo.GetOrderByIdAsync(newPaymentDto.OrderId);
-            if (updatedOrder == null)
-            {
-                throw CustomException.NotFound();
-            }
-            if (newPaymentDto.PaidPrice < updatedOrder.OriginalPrice)
-            {
-                throw CustomException.BadRequest($"not enough money, at least you need {updatedOrder.OriginalPrice}");
-            }
-            var createdPayment = await _paymentRepo.CreateOneAsync(_mapper.Map<Payment>(newPaymentDto));
-            updatedOrder.PaymentID = createdPayment.Id;
-            updatedOrder.Status = OrderStatuses.Shipped;
-            createdPayment.Status = Payment.PaymentStatus.Completed;
-
-            await _orderRepo.UpdateOrderAsync(updatedOrder);
-            var returnValue = _mapper.Map<PaymentDTO.PaymentReadDto>(createdPayment);
-            returnValue.FinalPrice = updatedOrder.OriginalPrice - (updatedOrder.OriginalPrice * (createdPayment.Coupon?.DiscountPercentage) ?? updatedOrder.OriginalPrice);
-            return returnValue;
-        }
         public async Task<PaymentDTO.PaymentReadDto?> GetPaymentById(Guid id)
         {
             var foundPayment = await _paymentRepo.GetByIdAsync(id);
@@ -70,6 +49,37 @@ namespace src.Services
             }
 
             return _mapper.Map<Payment, PaymentReadDto>(foundPayment);
+        }
+
+
+        public async Task<PaymentDTO.PaymentReadDto> CreatePayment(PaymentDTO.PaymentCreateDto newPaymentDto)
+        {
+            try
+            {
+                var order = await _orderRepo.GetOrderByIdAsync(newPaymentDto.OrderId);
+                if (order == null)
+                {
+                    throw CustomException.BadRequest("Order does not exist.");
+                }
+
+                var createdPayment = new Payment
+                {
+                    Method = newPaymentDto.Method,
+                    OrderId = newPaymentDto.OrderId,
+                    FinalPrice = newPaymentDto.FinalPrice,
+                    PaymentDate = DateTime.UtcNow,
+                    Status = PaymentStatus.Pending,
+                   CouponId = newPaymentDto.CouponId
+                };
+
+                var paymentEntity = await _paymentRepo.CreateOneAsync(createdPayment);
+
+                return _mapper.Map<PaymentDTO.PaymentReadDto>(paymentEntity);
+            }
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("An error occurred while creating the payment.");
+            }
         }
 
         public async Task<bool> DeletePaymentById(Guid id)

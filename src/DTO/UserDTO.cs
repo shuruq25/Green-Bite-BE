@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using src.Entity;
 using src.Utils;
 using static src.Entity.User;
 
@@ -10,8 +15,10 @@ namespace src.DTO
         {
 
             public string Name { get; set; }
+
             [PasswordComplexity]
             public string Password { get; set; }
+
             [EmailAddress(ErrorMessage = "Please provide email with right format")]
             public string EmailAddress { get; set; }
             public string? Phone { get; set; }
