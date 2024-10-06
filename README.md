@@ -11,8 +11,10 @@
 - Register new user
 - User authentication with JWT token
 - Role-based access control (Admin, Customer).
+- Update user information.
+- Delete user information.
 
- **Address Management**:
+  **Address Management**:
 
 - Create new Address
 - Delete Address
@@ -46,7 +48,7 @@
 - view category
 - Role-based access control (Admin, Customer)
 
- **Coupon Management**:
+  **Coupon Management**:
 
 - Create new Coupon (AdminOnly)
 - Delete Coupon (AdminOnly)
@@ -139,8 +141,20 @@ The API will be available at: 'http://localhost:5125'
 
 ### User
 
-- **POST** `/api/users/register` – Register a new user.
-- **POST** `/api/users/login` – Login and get JWT token.
+- **POST** `/api/v1/user/signUp` – Register a new user.
+- **POST** `/api/v1/user/signIn` – Login and get JWT token.
+- **GET** `/api/v1/user` – Get a paginated list of users. (Admin only)
+- **GET** `/api/v1/user/{id}` – Get user details by ID. (Admin only)
+- **DELETE** `/api/v1/user/{id}` – Delete a user by ID. (Authorized users only)
+- **PUT** `/api/v1/user/{id}` – Update user details by ID. (Authorized users only)
+
+### order
+
+- **POST** `/api/v1/order` – Create a new order.
+- **GET** `/api/v1/order/{id}` – Retrieve an order by ID. (Authorized users only)
+- **GET** `/api/v1/order` – Retrieve all orders. (Admin only)
+- **PUT** `/api/v1/order/{id} ` – Update an order by ID. (Authorized users only)
+- **DELETE** `/api/v1/order/{id}` – Delete an order by ID. (Authorized users only)
 
 ### Address
 
@@ -182,7 +196,6 @@ The API will be available at: 'http://localhost:5125'
 - **PUT** `/api/v1/coupons/Id` - Updating coupon only for authorized users (Admin).
 - **DELETE** `/api/vi/coupons/Id` - Delete a coupon only for authorized users (Admin).
 
-
 ### Review
 
 - **POST** `/api/v1/review` - Creating a review only for authorized users.
@@ -191,7 +204,11 @@ The API will be available at: 'http://localhost:5125'
 - **PUT** `/api/v1/review/Id` - Updating review only for authorized users.
 - **DELETE** `/api/vi/review/Id` - Delete a review only for authorized users.
 
-
+- **GET** `/api/v1/payments` - Retrieve all payments (Admin only).
+- **GET** `/api/v1/payments/{id}` - Retrieve a payment by its ID (Authorized users only).
+- **POST** `/api/v1/payments` - Create a new payment (Authorized users only).
+- **PUT** `/api/v1/payments/{id}` - Update a payment by ID (Authorized users only).
+- **DELETE** `/api/v1/payments/{id}` - Delete a payment by ID (Authorized users only).
 
 ## Deployment
 
