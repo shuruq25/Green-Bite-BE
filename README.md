@@ -219,10 +219,11 @@ The API will be available at: 'http://localhost:5125'
 
 ### Payments
 
-- **POST** `/api/v1/payment` - Creating a payment only for authorized users.
-- **GET** `/api/v1/payment` - retrieves all payments.
-- **GET** `/api/v1/payment/Id` - retrieves the payment by the payment Id.
-- **DELETE** `/api/vi/payment/Id` - Delete a payment only for authorized users.
+- **GET** `/api/v1/payments` - Retrieve all payments (Admin only).
+- **GET** `/api/v1/payments/{id}` - Retrieve a payment by its ID (Authorized users only).
+- **POST** `/api/v1/payments` - Create a new payment (Authorized users only).
+- **PUT** `/api/v1/payments/{id}` - Update a payment by ID (Authorized users only).
+- **DELETE** `/api/v1/payments/{id}` - Delete a payment by ID (Authorized users only).
 
 ## Deployment
 
