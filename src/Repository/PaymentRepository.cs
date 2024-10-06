@@ -27,19 +27,25 @@ namespace src.Repository
 
         public async Task<Payment> CreateOneAsync(Payment newPayment)
         {
-            await _payment.AddAsync(newPayment);
+            var payment = await _payment.AddAsync(newPayment);
             await _databaseContext.SaveChangesAsync();
-            return newPayment;
+            return payment.Entity;
         }
 
         public async Task<List<Payment>> GetAllAsync()
         {
-            return await _payment.Include(payment => payment.Order).ToListAsync();
+            return await _payment
+                .Include(payment => payment.Order)
+                .Include(payment => payment.Coupon)
+                .ToListAsync();
         }
 
         public async Task<Payment?> GetByIdAsync(Guid id)
         {
-            return await _payment.Include(payment => payment.Order).FirstOrDefaultAsync(payment => payment.Id == id);
+            return await _payment
+                .Include(payment => payment.Order)
+                .Include(payment => payment.Coupon)
+                .FirstOrDefaultAsync(payment => payment.Id == id);
         }
 
         public async Task<bool> UpdatePaymentAsync(Payment updatedPayment)

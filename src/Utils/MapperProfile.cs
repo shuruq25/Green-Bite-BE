@@ -1,4 +1,5 @@
 using AutoMapper;
+using src.DTO;
 using src.Entity;
 using static src.DTO.AddressDTO;
 using static src.DTO.CategoryDTO;
@@ -14,7 +15,14 @@ namespace src.Utils
     {
         public MapperProfile()
         {
+            CreateMap<Order, OrderDTO.Get>();
+            CreateMap<OrderDTO.Update, Order>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<OrderDTO.Create, Order>()
+                   .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+
             CreateMap<Product, ProductReadDto>();
+            CreateMap<ProductReadDto, Product>();
             CreateMap<ProductCreateDto, Product>();
             CreateMap<ProductUpdateDto, Product>()
                 .ForAllMembers(opts =>

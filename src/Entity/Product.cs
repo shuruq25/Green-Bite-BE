@@ -7,5 +7,6 @@ namespace src.Entity
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public Guid? CategroyId { get; set; }
+        public Order? Order { get; set; }
     }
 }

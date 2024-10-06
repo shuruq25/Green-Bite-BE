@@ -2,16 +2,19 @@ using AutoMapper;
 using src.DTO;
 using src.Entity;
 using src.Repository;
+using src.Utils;
 namespace src.Services
 {
     public class PaymentService : IPaymentService
     {
         public readonly IPaymentRepository _paymentRepo;
+        public readonly IOrderRepository _orderRepo;
         public readonly IMapper _mapper;
 
-        public PaymentService(IPaymentRepository paymentRepo, IMapper mapper)
+        public PaymentService(IPaymentRepository paymentRepo, IOrderRepository orderRepo, IMapper mapper)
         {
             _paymentRepo = paymentRepo;
+            _orderRepo = orderRepo;
             _mapper = mapper;
         }
 
@@ -28,9 +31,30 @@ namespace src.Services
 
         public async Task<PaymentDTO.PaymentReadDto> CreatePayment(PaymentDTO.PaymentCreateDto newPaymentDto)
         {
-            var createdPyment = await _paymentRepo.CreateOneAsync(_mapper.Map<Payment>(newPaymentDto));
-            return _mapper.Map<PaymentDTO.PaymentReadDto>(createdPyment);
+            if (newPaymentDto.OrderId == null)
+            {
+                throw CustomException.BadRequest();
+            }
+            var updatedOrder = await _orderRepo.GetOrderByIdAsync(newPaymentDto.OrderId);
+            if (updatedOrder == null)
+            {
+                throw CustomException.NotFound();
+            }
+            if (newPaymentDto.PaidPrice < updatedOrder.OriginalPrice)
+            {
+                throw CustomException.BadRequest($"not enough money, at least you need {updatedOrder.OriginalPrice}");
+            }
+            var createdPayment = await _paymentRepo.CreateOneAsync(_mapper.Map<Payment>(newPaymentDto));
+            updatedOrder.PaymentID = createdPayment.Id;
+            updatedOrder.Status = OrderStatuses.Shipped;
+            createdPayment.Status = Payment.PaymentStatus.Completed;
+
+            await _orderRepo.UpdateOrderAsync(updatedOrder);
+            var returnValue = _mapper.Map<PaymentDTO.PaymentReadDto>(createdPayment);
+            returnValue.FinalPrice = updatedOrder.OriginalPrice - (updatedOrder.OriginalPrice * (createdPayment.Coupon?.DiscountPercentage) ?? updatedOrder.OriginalPrice);
+            return returnValue;
         }
+
 
         public async Task<bool> UpdatePaymentById(Guid id, PaymentDTO.PaymentUpdateDto updatedPaymentDto)
         {

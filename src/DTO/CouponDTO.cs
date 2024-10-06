@@ -1,24 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace src.DTO
 {
     public class CouponDTO
     {
         // Class to : create Coupon
 
-        public class CouponCreateDto()
+        public class CouponCreateDto
         {
-            public string? Code { get; set; }
-            public decimal? DiscountPercentage { get; set; }
-            public DateTime Expire { get; set; }
+            public string Code { get; set; }
+            public decimal DiscountPercentage { get; set; }
+            public DateTime? Expire { get; set; } = DateTime.UtcNow.AddDays(7);
         }
 
         // Class to : get/read data
 
-        public class CouponReadDto()
+        public class CouponReadDto
         {
             public Guid CouponId { get; set; }
             public string? Code { get; set; }
@@ -28,7 +23,7 @@ namespace src.DTO
 
         // Class to : Update Coupon
 
-        public class CouponUpdateDto()
+        public class CouponUpdateDto
         {
             public string? Code { get; set; }
             public decimal? DiscountPercentage { get; set; }

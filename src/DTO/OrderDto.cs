@@ -6,32 +6,31 @@ namespace src.DTO
     {
         public class Update
         {
-            public decimal? OriginalPrice { get; set; }
             public DateTime? EstimatedArrival { get; set; }
             public OrderStatuses? Status { get; set; }
         }
 
         public class Create
         {
-            public decimal OriginalPrice { get; set; }
-            public DateTime CreatedAt { get; set; }
-            public DateTime EstimatedArrival { get; set; }
+            public DateTime CreatedAt { get; set; } 
+            public DateTime EstimatedArrival { get; set; } 
             public OrderStatuses Status { get; set; }
+            public Guid UserId { get; set; }
+            public List<ProductDTO.ProductReadDto> Products { get; set; }
         }
 
 
         public class Get
         {
             public Guid ID { get; set; }
-            public Guid UserID { get; set; }
-            public UserDTO.UserReadDto? User { get; set; }
-            public decimal OriginalPrice { get; set; }
+            public UserDTO.UserReadDto User { get; set; }
             public DateTime CreatedAt { get; set; }
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
-            public Guid PaymentId { get; set; }
             public PaymentDTO.PaymentReadDto? Payment { get; set; }
             public List<ReviewReadDto> Reviews { get; set; }
+            public List<ProductDTO.ProductReadDto> Products { get; set; }
+            public decimal OriginalPrice => Products.Sum(p => p.Price);
         }
     }
 }

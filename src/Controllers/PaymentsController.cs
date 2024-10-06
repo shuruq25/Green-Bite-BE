@@ -42,7 +42,7 @@ namespace src.Controllers
             [FromBody] PaymentDTO.PaymentCreateDto newPayment
         )
         {
-            if (newPayment == null || newPayment.FinalPrice <= 0)
+            if (newPayment == null || newPayment.PaidPrice <= 0)
             {
                 return BadRequest("Invalid payment data.");
             }

@@ -25,6 +25,7 @@ namespace src.DTO
             public decimal Price { get; set; }
             public string? Description { get; set; }
             public Guid? CategroyId { get; set; }
+            public OrderDTO.Get? Order { get; set; }
         }
     }
 

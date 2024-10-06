@@ -32,11 +32,6 @@ namespace src.Database
             modelBuilder.HasPostgresEnum<PaymentStatus>();
             modelBuilder.HasPostgresEnum<Role>();
 
-            modelBuilder.Entity<User>()
-                .HasMany(user => user.Orders)
-                .WithOne(order => order.User)
-                .HasForeignKey(order => order.UserID)
-                .HasPrincipalKey(user => user.UserID);
 
             modelBuilder.Entity<Order>()
                 .HasOne(order => order.Payment)
