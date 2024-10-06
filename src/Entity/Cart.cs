@@ -6,8 +6,8 @@ namespace src.Entity
         public Guid UserId { get; set; }
         public User User { get; set; }
         public List<CartDetails> CartDetails { get; set; }
-        public int CartTotal => CartDetails.Sum(cd => cd.Quantity);
-        public decimal TotalPrice => CartDetails.Sum(cd => cd.Product.Price * cd.Quantity);
+        public int CartTotal => CartDetails.Count;
+        public decimal TotalPrice => CartDetails.Sum(cd => cd.Product.Price /* * cd.Quantity*/);
 
 
 

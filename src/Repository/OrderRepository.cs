@@ -23,18 +23,20 @@ namespace src.Repository
             _db = db;
         }
 
-        public async Task<Order?> GetOrderByIdAsync(Guid id) =>
-            await _orders
-                .Include(order => order.User)
-                .Include(order => order.Payment)
-                .Include(order => order.Reviews)
-                .FirstOrDefaultAsync(o => o.ID == id);
+        public async Task<Order?> GetOrderByIdAsync(Guid id) => await _orders
+            .Include(order => order.User)
+            .Include(order => order.Payment)
+            .ThenInclude(payment => payment.Coupon)
+            .Include(order => order.Products)
+            .FirstOrDefaultAsync(o => o.ID == id);
 
-        public async Task<List<Order>> GetAllOrdersAsync() =>
-            await _orders
-                .Include(order => order.User)
-                .Include(order => order.Payment)
-                .ToListAsync();
+        public async Task<List<Order>> GetAllOrdersAsync() => await _orders
+            .Include(order => order.User)
+            .Include(order => order.Payment)
+            .Include(order => order.Payment)
+            .ThenInclude(payment => payment.Coupon)
+            .Include(order => order.Products)
+            .ToListAsync();
 
         // public async Task<Order> AddOrderAsync(Order newOrder)
         // {

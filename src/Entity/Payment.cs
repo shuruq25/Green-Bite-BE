@@ -24,7 +24,6 @@ namespace src.Entity
         }
 
         public Guid Id { get; set; }
-        public decimal FinalPrice { get; set; }
         public PaymentMethod? Method { get; set; }
         public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
         public PaymentStatus Status { get; set; }
@@ -33,5 +32,6 @@ namespace src.Entity
            public Coupon Coupon { get; set; }
         public Guid OrderId { get; set; }
         public Order Order { get; set; }
+        public decimal FinalPrice => (Order.OriginalPrice) - (Order.OriginalPrice * (Coupon?.DiscountPercentage ?? 0));
     }
 }

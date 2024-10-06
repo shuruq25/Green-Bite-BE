@@ -31,6 +31,11 @@
 - Role-based access control (Admin, Customer)
 
 **Order Management**:
+- Create new order
+- Delete order
+- Update order
+- Get order
+- Role-based access control (Admin, Customer)
 
 **Cart Management**:
 
@@ -204,6 +209,16 @@ The API will be available at: 'http://localhost:5125'
 - **PUT** `/api/v1/review/Id` - Updating review only for authorized users.
 - **DELETE** `/api/vi/review/Id` - Delete a review only for authorized users.
 
+### Order
+
+- **POST** `/api/v1/order` - Creating a order only for authorized users.
+- **GET** `/api/v1/order` - retrieves all orders.
+- **GET** `/api/v1/order/Id` - retrieves the order by the order Id.
+- **PUT** `/api/v1/order/Id` - Updating order only for authorized users.
+- **DELETE** `/api/vi/order/Id` - Delete a order only for authorized users.
+
+### Payments
+
 - **GET** `/api/v1/payments` - Retrieve all payments (Admin only).
 - **GET** `/api/v1/payments/{id}` - Retrieve a payment by its ID (Authorized users only).
 - **POST** `/api/v1/payments` - Create a new payment (Authorized users only).
@@ -217,7 +232,7 @@ The application is deployed and can be accessed at: [https://your-deploy-link.co
 ## Team Members💻✨
 
 - **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻
-- Abdullah Alkhwahir() 👨‍💻
+- Abdullah Alkhwahir(@Abdullah-Khawahir) 👨‍💻
 - Hadeel Alghashmari ()👩‍💻
 - Raghad Alharbi(@Rad109)👩‍💻
 - Reema Algureshie(ReemaAlqu)👩‍💻
