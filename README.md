@@ -12,6 +12,14 @@
 - User authentication with JWT token
 - Role-based access control (Admin, Customer).
 
+ **Address Management**:
+
+- Create new Address
+- Delete Address
+- Update Address
+- view Address
+- Role-based access control (Admin, Customer)
+
 **Product Management**:
 
 - Create new product
@@ -37,6 +45,13 @@
 - Update category
 - view category
 - Role-based access control (Admin, Customer)
+
+ **Coupon Management**:
+
+- Create new Coupon (AdminOnly)
+- Delete Coupon (AdminOnly)
+- Update Coupon (AdminOnly)
+- view Coupons (Admin, Customer)
 
   **Review Management**:
 
@@ -127,6 +142,14 @@ The API will be available at: 'http://localhost:5125'
 - **POST** `/api/users/register` – Register a new user.
 - **POST** `/api/users/login` – Login and get JWT token.
 
+### Address
+
+- **POST** `/api/v1/addresses` - Creating a address only for authorized users .
+- **GET** `/api/v1/addresses` - retrieves all addresses.
+- **GET** `/api/v1/addresses/Id` - retrieves the address by the address Id.
+- **PUT** `/api/v1/addresses/Id` - Updating address only for authorized users.
+- **DELETE** `/api/vi/addresses/Id` - Delete a address only for authorized users.
+
 ### Product
 
 - **POST** `/api/v1/product` - Creating a product only the admin.
@@ -152,6 +175,14 @@ The API will be available at: 'http://localhost:5125'
 - **PUT** `/api/v1/category/Id` - Updating category only for admin.
 - **DELETE** `/api/vi/category/Id` - Delete a category only for admin.
 
+### Coupon
+
+- **POST** `/api/v1/coupons` - Creating a coupon only for authorized users (Admin).
+- **GET** `/api/v1/coupons` - retrieves all coupons (Admin,Customer).
+- **PUT** `/api/v1/coupons/Id` - Updating coupon only for authorized users (Admin).
+- **DELETE** `/api/vi/coupons/Id` - Delete a coupon only for authorized users (Admin).
+
+
 ### Review
 
 - **POST** `/api/v1/review` - Creating a review only for authorized users.
@@ -159,6 +190,8 @@ The API will be available at: 'http://localhost:5125'
 - **GET** `/api/v1/review/Id` - retrieves the review by the review Id.
 - **PUT** `/api/v1/review/Id` - Updating review only for authorized users.
 - **DELETE** `/api/vi/review/Id` - Delete a review only for authorized users.
+
+
 
 ## Deployment
 
@@ -170,7 +203,7 @@ The application is deployed and can be accessed at: [https://your-deploy-link.co
 - Abdullah Alkhwahir() 👨‍💻
 - Hadeel Alghashmari ()👩‍💻
 - Raghad Alharbi()👩‍💻
-- Reema Algureshie()👩‍💻
+- Reema Algureshie(ReemaAlqu)👩‍💻
 
 ## License
 
