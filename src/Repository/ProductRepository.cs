@@ -39,12 +39,14 @@ namespace src.Repository
 
         public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            return await _product.ToListAsync();
+            return await _product.Include(p => p.Category).ToListAsync();
         }
 
         public async Task<Product?> GetByIdAsync(Guid id)
         {
-            return await _product.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            return await _product
+                .Include(p => p.Category.Name)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<bool> UpdateOneAsync(Product updateProduct)
@@ -81,6 +83,7 @@ namespace src.Repository
             }
 
             var products = await query
+                .Include(p => p.Category)
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
                 .ToListAsync();
@@ -123,6 +126,7 @@ namespace src.Repository
             };
             var totalItems = await query.CountAsync();
             var products = await query
+                .Include(p => p.Category)
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
                 .ToListAsync();

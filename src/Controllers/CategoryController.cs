@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using src.Services.category;
 using src.Utils;
 using static src.DTO.CategoryDTO;
@@ -21,7 +20,7 @@ namespace src.Controllers
         // Get all categories with pagination
         [HttpGet]
         public async Task<ActionResult<List<CategoryReadDto>>> GetCategories(
-           [FromQuery] PaginationOptions paginationOptions
+            [FromQuery] PaginationOptions paginationOptions
         )
         {
             try
@@ -66,8 +65,6 @@ namespace src.Controllers
             {
                 throw CustomException.InternalError(ex.Message);
             }
-
-
         }
 
         // Delete a category

@@ -38,13 +38,18 @@ namespace src.Controllers
             return Ok(payment);
         }
 
-
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<PaymentReadDto>> CreatePayment([FromBody] PaymentCreateDto newPaymentDto)
+        public async Task<ActionResult<PaymentReadDto>> CreatePayment(
+            [FromBody] PaymentCreateDto newPaymentDto
+        )
         {
             var createdPayment = await _paymentService.CreatePayment(newPaymentDto);
-            return CreatedAtAction(nameof(GetPaymentById), new { id = createdPayment.Id }, createdPayment);
+            return CreatedAtAction(
+                nameof(GetPaymentById),
+                new { id = createdPayment.Id },
+                createdPayment
+            );
         }
 
         [HttpDelete("{id}")]
@@ -60,4 +65,3 @@ namespace src.Controllers
         }
     }
 }
-

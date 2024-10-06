@@ -43,8 +43,6 @@ namespace src.Services
             return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
         }
 
-
-
         public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)
         {
             var requestedOrder = await _ordersRepo.GetOrderByIdAsync(id);
@@ -66,8 +64,5 @@ namespace src.Services
         {
             return await _ordersRepo.DeleteOrderAsync(id);
         }
-
-
-
     }
 }

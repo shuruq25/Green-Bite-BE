@@ -35,7 +35,7 @@ namespace src.Services
                 PaymentDate = payment.PaymentDate,
                 Status = payment.Status,
                 //CouponId = payment.CouponId,
-                Code = payment.Coupon.Code,
+             //   Code = payment.Coupon.Code,
                 OrderId = payment.OrderId
             });
         }
@@ -69,7 +69,7 @@ namespace src.Services
                     FinalPrice = newPaymentDto.FinalPrice,
                     PaymentDate = DateTime.UtcNow,
                     Status = PaymentStatus.Pending,
-                    CouponId = newPaymentDto.CouponId
+                   CouponId = newPaymentDto.CouponId
                 };
 
                 var paymentEntity = await _paymentRepo.CreateOneAsync(createdPayment);
