@@ -48,7 +48,7 @@ namespace src.Repository
         }
         public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
         {
-            return await _product.ToListAsync();
+            return await _product.Include(p => p.Category).ToListAsync();
         }
 
         public async Task<List<Product>> GetByIdsAsync(IEnumerable<Guid> ids)
@@ -99,6 +99,7 @@ namespace src.Repository
             }
 
             var products = await query
+                .Include(p => p.Category)
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
                 .ToListAsync();
@@ -141,6 +142,7 @@ namespace src.Repository
             };
             var totalItems = await query.CountAsync();
             var products = await query
+                .Include(p => p.Category)
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
                 .ToListAsync();

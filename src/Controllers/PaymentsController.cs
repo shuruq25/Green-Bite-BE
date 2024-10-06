@@ -37,7 +37,6 @@ namespace src.Controllers
             return Ok(payment);
         }
 
-
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<PaymentReadDto>> CreatePayment([FromBody] PaymentCreateDto newPayment)
@@ -82,4 +81,3 @@ namespace src.Controllers
         }
     }
 }
-

@@ -31,7 +31,7 @@ namespace src.Services
                 PaymentDate = payment.PaymentDate,
                 Status = payment.Status,
                 //CouponId = payment.CouponId,
-                Code = payment.Coupon.Code,
+             //   Code = payment.Coupon.Code,
                 OrderId = payment.OrderId
             });
         }

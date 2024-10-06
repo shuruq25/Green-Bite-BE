@@ -59,6 +59,7 @@ namespace src.Services
             order.Products.Add(prod);
             await _ordersRepo.UpdateOrderAsync(order);
         }
+
         public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)
         {
             var requestedOrder = await _ordersRepo.GetOrderByIdAsync(id);
@@ -80,8 +81,5 @@ namespace src.Services
         {
             return await _ordersRepo.DeleteOrderAsync(id);
         }
-
-
-
     }
 }
