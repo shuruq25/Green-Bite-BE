@@ -8,7 +8,7 @@ namespace src.DTO
         public class OrderDetailCreateDto
         {
             public Guid ProductId { get; set; }
-            /*public int Quantity { get; set; }*/
+            public int Quantity { get; set; }
 
         }
 
@@ -16,8 +16,10 @@ namespace src.DTO
         {
             public Guid Id { get; set; }
             public ProductReadDto Product { get; set; }
-            /*public int Quantity { get; set; }*/
+             public int Quantity { get; set; }
 
         }
+
+     
     }
 }

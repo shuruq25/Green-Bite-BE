@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using src.DTO;
 using src.Services;
 using src.Utils;
 using static src.DTO.PaymentDTO;
@@ -39,34 +40,17 @@ namespace src.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<PaymentReadDto>> CreatePayment([FromBody] PaymentCreateDto newPayment)
+        public async Task<ActionResult<PaymentReadDto>> CreatePayment(
+            [FromBody] PaymentCreateDto newPaymentDto
+        )
         {
-            if (newPayment == null || newPayment.PaidPrice <= 0)
-            {
-                throw CustomException.BadRequest("Invalid payment data.");
-            }
-            var createdPaymentDto = await _paymentService.CreatePayment(newPayment);
-
+            var createdPayment = await _paymentService.CreatePayment(newPaymentDto);
             return CreatedAtAction(
                 nameof(GetPaymentById),
-                new { id = createdPaymentDto.Id },
-                createdPaymentDto
+                new { id = createdPayment.Id },
+                createdPayment
             );
         }
-
-        /*[HttpPut("{id}")]*/
-        /*[Authorize]*/
-        /*public async Task<ActionResult> UpdatePayment(*/
-        /*    Guid id,*/
-        /*    [FromBody] PaymentDTO.PaymentUpdateDto updatedPayment*/
-        /*)*/
-        /*{*/
-        /*    if (await _paymentService.UpdatePaymentById(id, updatedPayment))*/
-        /*    {*/
-        /*        return NoContent();*/
-        /*    }*/
-        /*    throw CustomException.NotFound();*/
-        /*}*/
 
         [HttpDelete("{id}")]
         [Authorize]

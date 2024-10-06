@@ -3,6 +3,9 @@ using src.Database;
 using src.Entity;
 using src.Utils;
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace src.Repository
 {
     public interface IPaymentRepository
@@ -26,13 +29,11 @@ namespace src.Repository
 
         public async Task<Payment> CreateOneAsync(Payment newPayment)
         {
-            Payment payment;
-            await _databaseContext.SaveChangesAsync();
             try
             {
-                payment = (await _payment.AddAsync(newPayment)).Entity;
+                await _payment.AddAsync(newPayment);
                 await _databaseContext.SaveChangesAsync();
-                return payment;
+                return newPayment;
             }
             catch (DbUpdateException ex)
             {
@@ -44,7 +45,6 @@ namespace src.Repository
         {
             return await _payment
                 .Include(payment => payment.Order)
-                .Include(payment => payment.Coupon)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -52,10 +52,8 @@ namespace src.Repository
 
         public async Task<Payment?> GetByIdAsync(Guid id)
         {
-            return await _payment
-                .Include(payment => payment.Order)
-                .Include(payment => payment.Coupon)
-                .FirstOrDefaultAsync(payment => payment.Id == id);
+            return await _payment.Include(payment => payment.Order)
+                                 .FirstOrDefaultAsync(payment => payment.Id == id);
         }
 
 
@@ -69,7 +67,7 @@ namespace src.Repository
             }
             catch (DbUpdateException ex)
             {
-                throw CustomException.InternalError("An error occurred while deleting the payment.");
+                throw  CustomException.InternalError("An error occurred while deleting the payment.");
             }
         }
     }
