@@ -21,6 +21,11 @@
 - Role-based access control (Admin, Customer)
 
 **Order Management**:
+- Create new order
+- Delete order
+- Update order
+- Get order
+- Role-based access control (Admin, Customer)
 
 **Cart Management**:
 
@@ -160,6 +165,22 @@ The API will be available at: 'http://localhost:5125'
 - **PUT** `/api/v1/review/Id` - Updating review only for authorized users.
 - **DELETE** `/api/vi/review/Id` - Delete a review only for authorized users.
 
+### Order
+
+- **POST** `/api/v1/order` - Creating a order only for authorized users.
+- **GET** `/api/v1/order` - retrieves all orders.
+- **GET** `/api/v1/order/Id` - retrieves the order by the order Id.
+- **PUT** `/api/v1/order/Id` - Updating order only for authorized users.
+- **DELETE** `/api/vi/order/Id` - Delete a order only for authorized users.
+
+### Payments
+
+- **POST** `/api/v1/payment` - Creating a payment only for authorized users.
+- **GET** `/api/v1/payment` - retrieves all payments.
+- **GET** `/api/v1/payment/Id` - retrieves the payment by the payment Id.
+- **PUT** `/api/v1/payment/Id` - Updating payment only for authorized users.
+- **DELETE** `/api/vi/payment/Id` - Delete a payment only for authorized users.
+
 ## Deployment
 
 The application is deployed and can be accessed at: [https://your-deploy-link.com](https://your-deploy-link.com)
@@ -167,7 +188,7 @@ The application is deployed and can be accessed at: [https://your-deploy-link.co
 ## Team Members💻✨
 
 - **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻
-- Abdullah Alkhwahir() 👨‍💻
+- Abdullah Alkhwahir(@Abdullah-Khawahir) 👨‍💻
 - Hadeel Alghashmari ()👩‍💻
 - Raghad Alharbi()👩‍💻
 - Reema Algureshie()👩‍💻
