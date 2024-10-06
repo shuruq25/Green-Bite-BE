@@ -24,7 +24,6 @@ namespace src.Entity
             Failed,
             Refunded,
         }
-
         public Guid Id { get; set; }
         public PaymentMethod? Method { get; set; }
         public DateTime PaymentDate { get; set; } = DateTime.UtcNow;

@@ -17,7 +17,7 @@ namespace src.Controllers
             _userService = service;
         }
 
-        [HttpPost("signUp")]
+        [HttpPost("signup")]
         public async Task<ActionResult<UserReadDto>> UserSignUp([FromBody] UserCreateDto createDto)
         {
             var userCreated = await _userService.CreateOneAsync(createDto);
@@ -25,7 +25,7 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
             [FromQuery] PaginationOptions paginationOptions
         )
@@ -35,7 +35,7 @@ namespace src.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<UserReadDto>> GetById(Guid id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -74,7 +74,7 @@ namespace src.Controllers
             return Ok(updatedUser);
         }
 
-        [HttpPost("signIn")]
+        [HttpPost("signin")]
         public async Task<ActionResult<string>> SignInUser([FromBody] UserSignInDto signInDtoDto)
         {
             var token = await _userService.SignInAsync(signInDtoDto);

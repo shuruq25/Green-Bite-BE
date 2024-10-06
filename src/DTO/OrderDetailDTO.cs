@@ -1,3 +1,4 @@
+
 using static src.DTO.ProductDTO;
 
 namespace src.DTO
@@ -7,14 +8,18 @@ namespace src.DTO
         public class OrderDetailCreateDto
         {
             public Guid ProductId { get; set; }
+            public int Quantity { get; set; }
+
         }
 
         public class OrderDetailReadDto
         {
             public Guid Id { get; set; }
             public ProductReadDto Product { get; set; }
+             public int Quantity { get; set; }
+
         }
 
-
+     
     }
 }

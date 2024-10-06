@@ -73,6 +73,7 @@ namespace src.Controllers
         public async Task<ActionResult<AddressReadDto>> GetById([FromRoute] Guid id)
         {
             var Address = await _addressService.GetByIdAsync(id);
+
             return Ok(Address);
         }
     }

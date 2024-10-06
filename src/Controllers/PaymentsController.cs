@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
 using src.Utils;
+using static src.DTO.PaymentDTO;
 
 namespace src.Controllers
 {
@@ -10,7 +11,7 @@ namespace src.Controllers
     [Route("api/v1/[controller]")]
     public class PaymentsController : ControllerBase
     {
-        protected readonly IPaymentService _paymentService;
+        private readonly IPaymentService _paymentService;
 
         public PaymentsController(IPaymentService paymentService)
         {
@@ -18,30 +19,29 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult> GetAllPayments()
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> GetAllPayments(int page = 1, int pageSize = 10)
         {
-            return Ok(await _paymentService.GetAllPaymets());
+            var payments = await _paymentService.GetAllPayments(page, pageSize);
+            return Ok(payments);
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        //filite user in service
-        public async Task<ActionResult> GetPaymentById(Guid id)
+        public async Task<ActionResult<PaymentReadDto>> GetPaymentById(Guid id)
         {
             var payment = await _paymentService.GetPaymentById(id);
             if (payment == null)
             {
-                throw CustomException.NotFound();
+                return NotFound();
             }
             return Ok(payment);
         }
 
+
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> CreatePayment(
-            [FromBody] PaymentDTO.PaymentCreateDto newPayment
-        )
+        public async Task<ActionResult<PaymentReadDto>> CreatePayment([FromBody] PaymentCreateDto newPaymentDto)
         {
             if (newPayment == null || newPayment.PaidPrice <= 0)
             {
@@ -72,15 +72,15 @@ namespace src.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        //in the service check the py statues
         public async Task<ActionResult> DeletePayment(Guid id)
         {
-            if (await _paymentService.DeletePaymentById(id))
+            var deleted = await _paymentService.DeletePaymentById(id);
+            if (deleted)
             {
                 return NoContent();
             }
-
             throw CustomException.NotFound();
         }
     }
 }
+

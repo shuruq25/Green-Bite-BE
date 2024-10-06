@@ -20,7 +20,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-         [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<ProductReadDto>> CreateOne(
             [FromBody] ProductCreateDto createDto
         )
@@ -41,12 +41,13 @@ namespace src.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductReadDto>> GetById([FromRoute] Guid id)
         {
+
             var product = await _productService.GetByIdAsync(id);
             return Ok(product);
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> Update(
             [FromRoute] Guid id,
             [FromBody] ProductUpdateDto updateDto
@@ -62,7 +63,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var deleted = await _productService.DeleteOneAsync(id);

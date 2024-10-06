@@ -3,6 +3,8 @@ using src.DTO;
 using src.Entity;
 using src.Repository;
 using src.Utils;
+using static src.DTO.PaymentDTO;
+
 namespace src.Services
 {
     public class PaymentService : IPaymentService
@@ -18,15 +20,20 @@ namespace src.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PaymentDTO.PaymentReadDto>> GetAllPaymets()
+        public async Task<IEnumerable<PaymentDTO.PaymentReadDto>> GetAllPayments(int page = 1, int pageSize = 10)
         {
-            return (await _paymentRepo.GetAllAsync())
-                    .Select(payment => _mapper.Map<PaymentDTO.PaymentReadDto>(payment));
-        }
-
-        public async Task<PaymentDTO.PaymentReadDto?> GetPaymentById(Guid id)
-        {
-            return _mapper.Map<PaymentDTO.PaymentReadDto>(await _paymentRepo.GetByIdAsync(id));
+            var payments = await _paymentRepo.GetAllAsync(page, pageSize);
+            return payments.Select(payment => new PaymentDTO.PaymentReadDto
+            {
+                Id = payment.Id,
+                FinalPrice = payment.FinalPrice,
+                Method = payment.Method,
+                PaymentDate = payment.PaymentDate,
+                Status = payment.Status,
+                //CouponId = payment.CouponId,
+                Code = payment.Coupon.Code,
+                OrderId = payment.OrderId
+            });
         }
 
         public async Task<PaymentDTO.PaymentReadDto> CreatePayment(PaymentDTO.PaymentCreateDto newPaymentDto)
@@ -54,29 +61,32 @@ namespace src.Services
             returnValue.FinalPrice = updatedOrder.OriginalPrice - (updatedOrder.OriginalPrice * (createdPayment.Coupon?.DiscountPercentage) ?? updatedOrder.OriginalPrice);
             return returnValue;
         }
-
-        public async Task<bool> UpdatePaymentById(Guid id, PaymentDTO.PaymentUpdateDto updatedPaymentDto)
+        public async Task<PaymentDTO.PaymentReadDto?> GetPaymentById(Guid id)
         {
             var foundPayment = await _paymentRepo.GetByIdAsync(id);
             if (foundPayment == null)
             {
-                return false;
+                throw CustomException.NotFound($"Product with ID '{id}' not found.");
             }
 
-            _mapper.Map(updatedPaymentDto, foundPayment);
-            return await _paymentRepo.UpdatePaymentAsync(foundPayment);
+            return _mapper.Map<Payment, PaymentReadDto>(foundPayment);
         }
 
         public async Task<bool> DeletePaymentById(Guid id)
         {
-            var foundPayment = await _paymentRepo.GetByIdAsync(id);
-            if (foundPayment != null)
+            try
             {
-                return await _paymentRepo.DeletePaymentAsync(foundPayment);
+                var foundPayment = await _paymentRepo.GetByIdAsync(id);
+                if (foundPayment != null)
+                {
+                    return await _paymentRepo.DeletePaymentAsync(foundPayment);
+                }
+                return false;
             }
-
-            return false;
+            catch (Exception ex)
+            {
+                throw CustomException.InternalError("An error occurred while deleting payment.");
+            }
         }
     }
-
 }

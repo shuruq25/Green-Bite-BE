@@ -11,7 +11,7 @@ namespace src.DTO
             public PaymentMethod? Method { get; set; }
             public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
             public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
-            public Guid CouponId { get; set; }
+            public Guid? CouponId { get; set; }
             public Guid OrderId { get; set; }
         }
         public class PaymentReadDto
@@ -21,7 +21,7 @@ namespace src.DTO
             public PaymentMethod? Method { get; set; }
             public DateTime PaymentDate { get; set; }
             public PaymentStatus Status { get; set; }
-            public Guid CouponId { get; set; }
+            public Guid? CouponId { get; set; }
             public string Code { get; set; }
             public Guid OrderId { get; set; }
         }

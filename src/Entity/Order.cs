@@ -17,7 +17,7 @@ namespace src.Entity
         public User User { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime EstimatedArrival { get; set; }
-        public OrderStatuses Status { get; set; }
+        public OrderStatuses Status { get; set; } = OrderStatuses.Pending;
         public Guid? PaymentID { get; set; }
         public Payment? Payment { get; set; }
         public List<Product> Products { get; set; }

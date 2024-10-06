@@ -20,12 +20,12 @@ namespace src.Controllers
         //create
 
         [HttpPost]
-        // [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<CouponReadDto>> CreateOne(
             [FromBody] CouponCreateDto createDto
         )
         {
-            var CouponCreated = await _couponService.CreatOneAsync(createDto);
+            var CouponCreated = await _couponService.CreateOneAsync(createDto);
             return Created($"/api/v1/Coupons/{CouponCreated.CouponId}", CouponCreated);
         }
 
@@ -37,27 +37,11 @@ namespace src.Controllers
             return Ok(await _couponService.GetAllAsync());
         }
 
-        // Update
-        [HttpPut("{id}")]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult> UpdateCoupon(
-            Guid id,
-            [FromBody] CouponUpdateDto updateCoupon
-        )
-        {
-            var isUpdated = await _couponService.UpdateOneAsync(id, updateCoupon);
-            if (!isUpdated)
-            {
-                throw CustomException.NotFound();
-            }
-            var result = await _couponService.GetByIdAsync(id);
-            return Ok(result);
-        }
 
         // Delete
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> DeleteCoupon([FromRoute] Guid id)
         {
             var deleted = await _couponService.DeleteOneAsync(id);

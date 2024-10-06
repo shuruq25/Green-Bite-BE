@@ -11,6 +11,7 @@ namespace src.DTO
         {
             public DateTime? EstimatedArrival { get; set; }
             public OrderStatuses? Status { get; set; }
+            public ICollection<OrderDetailCreateDto> OrderDetails { get; set; }
         }
 
         public class Create
@@ -28,6 +29,7 @@ namespace src.DTO
         {
             public Guid ID { get; set; }
             public UserDTO.UserReadDto User { get; set; }
+            public Guid UserID { get; set; }
             public DateTime CreatedAt { get; set; }
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }

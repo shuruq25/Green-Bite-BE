@@ -44,18 +44,23 @@ namespace src.Repository
         //     await _db.SaveChangesAsync();
         //     return result.Entity;
         // }
-        public async Task<Order> AddOrderAsync(Order newOrder)
+           public async Task<Order> AddOrderAsync(Order newOrder)
         {
+            // Add the new order to the repository
             await _orders.AddAsync(newOrder);
             await _db.SaveChangesAsync();
-            await _orders.Entry(newOrder).Collection(o => o.OrderDetails).LoadAsync();
-            foreach (var detail in newOrder.OrderDetails)
-            {
-                await _db.Entry(detail).Reference(od => od.Product).LoadAsync();
-            }
+
+            // Load related entities in one go for better performance.
+            await _db.Entry(newOrder)
+                     .Collection(o => o.OrderDetails)
+                     .Query()
+                     .Include(od => od.Product)  // Eager load the related Product entity for each OrderDetail
+                     .LoadAsync();
 
             return newOrder;
         }
+
+        
 
         public async Task<bool> UpdateOrderAsync(Order order)
         {
