@@ -35,7 +35,7 @@ namespace src.Services
                 PaymentDate = payment.PaymentDate,
                 Status = payment.Status,
                 //CouponId = payment.CouponId,
-             //   Code = payment.Coupon.Code,
+                //   Code = payment.Coupon.Code,
                 OrderId = payment.OrderId
             });
         }
@@ -61,15 +61,15 @@ namespace src.Services
                 {
                     throw CustomException.BadRequest("Order does not exist.");
                 }
-
+               
                 var createdPayment = new Payment
                 {
                     Method = newPaymentDto.Method,
                     OrderId = newPaymentDto.OrderId,
-                    FinalPrice = newPaymentDto.FinalPrice,
+                   FinalPrice = newPaymentDto.FinalPrice ,
                     PaymentDate = DateTime.UtcNow,
-                    Status = PaymentStatus.Pending,
-                   CouponId = newPaymentDto.CouponId
+                    Status = PaymentStatus.Completed,
+                    CouponId = newPaymentDto.CouponId
                 };
 
                 var paymentEntity = await _paymentRepo.CreateOneAsync(createdPayment);

@@ -31,7 +31,12 @@
 - Role-based access control (Admin, Customer)
 
 **Order Management**:
-
+- Create new order
+- Delete order
+- Update order
+- Get order
+- Role-based access control (Admin, Customer)
+  
 **Cart Management**:
 
 - Add Item to Cart
@@ -169,7 +174,8 @@ The API will be available at: 'http://localhost:5125'
 - **POST** `/api/v1/product` - Creating a product only the admin.
 - **GET** `/api/v1/product` - Viewing all products for both user and admin.
 - **GET** `/api/v1/product/Id` - Viewing product to user/admin.
-- **GET** `/api/v1/product/search` - Search product based on the name.
+- **GET** `/api/v1/product/search` - Search product based on the name or categeory.
+- **GET** `/api/v1/product/sorted-filtered` - filtered and sorted product based on price or name  .
 - **PUT** `/api/v1/product/adminId` - Updating product only the admin.
 - **DELETE** `/api/vi/Product/adminId` - Deleting product only for admin.
 
@@ -204,21 +210,20 @@ The API will be available at: 'http://localhost:5125'
 - **PUT** `/api/v1/review/Id` - Updating review only for authorized users.
 - **DELETE** `/api/vi/review/Id` - Delete a review only for authorized users.
 
+### Payment
+
 - **GET** `/api/v1/payments` - Retrieve all payments (Admin only).
 - **GET** `/api/v1/payments/{id}` - Retrieve a payment by its ID (Authorized users only).
 - **POST** `/api/v1/payments` - Create a new payment (Authorized users only).
 - **PUT** `/api/v1/payments/{id}` - Update a payment by ID (Authorized users only).
 - **DELETE** `/api/v1/payments/{id}` - Delete a payment by ID (Authorized users only).
 
-## Deployment
-
-The application is deployed and can be accessed at: [https://your-deploy-link.com](https://your-deploy-link.com)
 
 ## Team Members💻✨
 
 - **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻
-- Abdullah Alkhwahir() 👨‍💻
-- Hadeel Alghashmari ()👩‍💻
+- Abdullah Alkhwahir(@Abdullah-Khawahir) 👨‍💻
+- Hadeel Alghashmari (@hdoll0)👩‍💻
 - Raghad Alharbi(@Rad109)👩‍💻
 - Reema Algureshie(ReemaAlqu)👩‍💻
 

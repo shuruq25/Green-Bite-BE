@@ -8,9 +8,9 @@ namespace src.DTO
 
         public class AddressCreateDto
         {
-            public string? Country { get; set; }
-            public string? Street { get; set; }
-            public Guid? UserId { get; set; }
+            public string Country { get; set; }
+            public string Street { get; set; }
+            public Guid UserId { get; set; }
         }
 
         // Class to : get/read data
@@ -18,8 +18,8 @@ namespace src.DTO
         public class AddressReadDto
         {
             public Guid AddressId { get; set; }
-            public string? Country { get; set; }
-            public string? Street { get; set; }
+            public string Country { get; set; }
+            public string Street { get; set; }
             public User User { get; set; } // to return the whole information of User
         }
 
@@ -27,8 +27,8 @@ namespace src.DTO
 
         public class AddressUpdateDto
         {
-            public string? Country { get; set; }
-            public string? Street { get; set; }
+            public string Country { get; set; }
+            public string Street { get; set; }
         }
     }
 }

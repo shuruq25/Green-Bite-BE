@@ -8,7 +8,7 @@ namespace src.DTO
         {
             public string? Code { get; set; }
             public decimal DiscountPercentage { get; set; }
-            public DateTime Expire { get; set; }
+            public DateTime Expire { get; set; }=DateTime.UtcNow.AddDays(7);
         }
 
         // Class to : get/read data

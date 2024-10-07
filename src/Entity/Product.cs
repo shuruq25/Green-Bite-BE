@@ -18,5 +18,10 @@ namespace src.Entity
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
+
+        internal static decimal Sum(Func<object, object> value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
