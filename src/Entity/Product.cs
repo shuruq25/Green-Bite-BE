@@ -16,12 +16,9 @@ namespace src.Entity
             ErrorMessage = "Description must contain only letters, numbers ."
         )]
         public string Description { get; set; }
+
+        public string NutritionalInfo{ get; set; }
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
-
-        internal static decimal Sum(Func<object, object> value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

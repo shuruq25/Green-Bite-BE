@@ -18,6 +18,8 @@ namespace src.Controllers
             _paymentService = paymentService;
         }
 
+        // GET: /api/v1/payments
+        // Retrieves a list of payments with pagination (Admin only)
         [HttpGet]
         [Authorize(Policy = "Admin")]
         public async Task<ActionResult> GetAllPayments(int page = 1, int pageSize = 10)
@@ -26,6 +28,8 @@ namespace src.Controllers
             return Ok(payments);
         }
 
+        // GET: /api/v1/payments/{id}
+        // Retrieves a payment by its ID (Authenticated user)
         [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<PaymentReadDto>> GetPaymentById(Guid id)
@@ -38,11 +42,11 @@ namespace src.Controllers
             return Ok(payment);
         }
 
+        // POST: /api/v1/payments
+        // Creates a new payment (Authenticated user)
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<PaymentReadDto>> CreatePayment(
-            [FromBody] PaymentCreateDto newPaymentDto
-        )
+        public async Task<ActionResult<PaymentReadDto>> CreatePayment([FromBody] PaymentCreateDto newPaymentDto)
         {
             var createdPayment = await _paymentService.CreatePayment(newPaymentDto);
             return CreatedAtAction(
@@ -52,6 +56,8 @@ namespace src.Controllers
             );
         }
 
+        // DELETE: /api/v1/payments/{id}
+        // Deletes a payment by its ID (Authenticated user)
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeletePayment(Guid id)
@@ -61,7 +67,8 @@ namespace src.Controllers
             {
                 return NoContent();
             }
-            throw CustomException.NotFound();
+            throw CustomException.NotFound($"Payment with ID {id} not found.");
         }
     }
 }
+

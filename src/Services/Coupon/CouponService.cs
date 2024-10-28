@@ -55,13 +55,7 @@ namespace src.Services
             return _mapper.Map<List<Coupon>, List<CouponReadDto>>(CouponList);
         }
 
-        // get all
-        // add Pagination
-        // public async Task<List<CouponReadDto>> GetAllAsync(PaginationOptions paginationOptions)
-        // {
-        //     var CouponList = await _couponRepo.GetAllAsync(paginationOptions);
-        //     return _mapper.Map<List<Coupon>, List<CouponReadDto>>(CouponList);
-        // }
+      
 
         // //get by id
         public async Task<CouponReadDto> GetByIdAsync(Guid id)

@@ -1,0 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace src.Entity
+{
+    public class MealPlanMeal
+    {
+        public Guid ID { get; set; }
+        public Guid mealPlanID { get; set; }
+         public Guid ProductId { get; set; }
+        public Product Product { get; set; }
+        public MealPlan mealPlan{ get; set; }
+        
+
+
+        
+    }
+}

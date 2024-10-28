@@ -63,7 +63,7 @@ namespace src.Controllers
             try
             {
                 var reviews = await _reviewService.GetReviewsByOrderIdAsync(orderId);
-                if (reviews == null || !reviews.Any())
+                if (reviews == null || reviews.Count ==0 )
                 {
                     CustomException.NotFound();
                 }

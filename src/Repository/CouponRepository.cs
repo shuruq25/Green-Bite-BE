@@ -37,18 +37,7 @@ namespace src.Repository
             return await _coupon.ToListAsync();
         }
 
-        // get all Coupons:
-        // add the Pagination
-
-        // public async Task<List<Coupon>> GetAllAsync(PaginationOptions paginationOptions)
-        // {
-        //     var result = _coupon.Where(c => c.Code.ToLower().Contains(paginationOptions.Search));
-        //     return await result
-        //         .Skip(paginationOptions.Offset)
-        //         .Take(paginationOptions.Limit)
-        //         .ToListAsync();
-        // }
-
+        
         // get by Coupon by ID
 
         public async Task<Coupon?> GetCouponByIdAsync(Guid id)
