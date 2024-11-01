@@ -25,17 +25,24 @@ namespace src.Controllers
         public async Task<ActionResult<ProductReadDto>> CreateOne([FromBody] ProductCreateDto createDto)
         {
             var productCreated = await _productService.CreateOneAsync(createDto);
-            // Created response with location header
             return Created($"api/v1/products/{productCreated.Id}", productCreated);
         }
 
         // GET: /api/v1/products
         // Get all products with pagination
         [HttpGet]
-        public async Task<ActionResult<List<ProductReadDto>>> GetAll([FromQuery] PaginationOptions paginationOptions)
+           public async Task<ActionResult<List<ProductListDto>>> GetAllAsync([FromQuery] PaginationOptions options)
         {
-            var productList = await _productService.GetAllAsync(paginationOptions);
-            return Ok(productList);
+            var productList = await _productService.GetAllAsync(options);
+            var totalCount = await _productService.CountProductsAsync();
+
+            var response = new ProductListDto
+            {
+                Products = productList,
+                TotalCount = totalCount
+            };
+
+            return Ok(response);
         }
 
         // GET: /api/v1/products/{id}

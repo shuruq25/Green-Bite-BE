@@ -8,7 +8,7 @@ using static src.DTO.SubscriptionDTO;
 
 namespace src.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class SubscriptionController : ControllerBase
     {
@@ -26,7 +26,8 @@ namespace src.Controllers
             try
             {
                 var result = await _subscriptionService.CreateSubscriptionAsync(createDto);
-                return CreatedAtAction(nameof(GetSubscriptionByIdAsync), new { id = result.ID }, result);
+                return Created($"/api/v1//{result.ID}", result);
+
             }
             catch (Exception ex)
             {

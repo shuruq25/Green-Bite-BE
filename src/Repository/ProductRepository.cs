@@ -12,6 +12,7 @@ namespace src.Repository
         Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions);
         Task<Product?> GetByIdAsync(Guid id);
         Task<bool> UpdateOneAsync(Product updateProduct);
+        Task<int> CountAsync();
         Task<List<Product>> SearchProductsAsync(
             PaginationOptions searchOptions,
             PaginationOptions paginationOptions
@@ -37,15 +38,57 @@ namespace src.Repository
             return newProduct;
         }
 
-        public async Task<List<Product>> GetAllAsync(PaginationOptions paginationOptions)
+        public async Task<List<Product>> GetAllAsync(PaginationOptions options)
         {
-            return await _product.Include(p => p.Category).ToListAsync();
+            var productsQuery = _databaseContext.Product
+                .Include(p => p.Category) 
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(options.Search))
+            {
+                string searchTerm = options.Search.Trim();
+                productsQuery = productsQuery.Where(p =>
+                    p.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                    p.Description.ToLower().Contains(searchTerm.ToLower()));
+            }
+            if (options.Filter.MinPrice.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.Price >= options.Filter.MinPrice.Value);
+            }
+
+            if (options.Filter.MaxPrice.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.Price <= options.Filter.MaxPrice.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(options.Filter.Category?.Name))
+            {
+                var searchTerm = options.Filter.Category.Name.ToLower(); 
+                productsQuery = productsQuery.Where(p => p.Category != null &&
+                                                         p.Category.Name.ToLower().Contains(searchTerm));
+            }
+
+            productsQuery = productsQuery.Skip(options.Offset).Take(options.Limit);
+
+
+            return await productsQuery.ToListAsync();
         }
+
+
+
+
+
+        public async Task<int> CountAsync()
+        {
+            return await _databaseContext.Set<Product>().CountAsync();
+        }
+
 
         public async Task<Product?> GetByIdAsync(Guid id)
         {
             return await _product
-                .Include(p => p.Category.Name)
+                .Include(p => p.Category)
+                .Include(p => p.Reviews)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -107,9 +150,9 @@ namespace src.Repository
                 query = query.Where(p => p.Price <= paginationOptions.Filter.MaxPrice.Value);
             }
 
-            if (!string.IsNullOrWhiteSpace(paginationOptions.Filter.Category))
+            if (!string.IsNullOrWhiteSpace(paginationOptions.Filter.Category.Name))
             {
-                var categoryFilter = paginationOptions.Filter.Category.ToLower(); 
+                var categoryFilter = paginationOptions.Filter.Category.Name.ToLower();
                 query = query.Where(p => p.Category.Name.ToLower().Contains(categoryFilter));
             }
 
@@ -123,7 +166,7 @@ namespace src.Repository
                     ? query.OrderByDescending(p => p.Name)
                     : query.OrderBy(p => p.Name),
 
-                _ => query.OrderBy(p => p.Name), 
+                _ => query.OrderBy(p => p.Name),
             };
 
             var totalItems = await query.CountAsync();
@@ -132,7 +175,7 @@ namespace src.Repository
                 .Include(p => p.Category)
                 .Skip(paginationOptions.Offset)
                 .Take(paginationOptions.Limit)
-                .AsNoTracking() 
+                .AsNoTracking()
                 .ToListAsync();
 
             return products;

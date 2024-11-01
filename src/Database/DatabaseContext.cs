@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using src.Entity;
-using static src.Entity.Payment;
-using static src.Entity.User;
+
 
 namespace src.Database
 {
@@ -37,9 +36,7 @@ namespace src.Database
             modelBuilder.Entity<Order>()
         .Property(o => o.Status)
         .HasConversion<string>();
-            modelBuilder.Entity<MealPlan>()
-                 .Property(m => m.Type)
-                 .HasConversion<string>();
+        
             modelBuilder.Entity<Subscription>()
          .Property(s => s.Status)
          .HasConversion<string>();
@@ -71,11 +68,7 @@ namespace src.Database
             modelBuilder.Entity<User>().HasIndex(u => u.EmailAddress).IsUnique();
             modelBuilder.Entity<Cart>().HasIndex(u => u.UserId).IsUnique();
 
-            modelBuilder.Entity<Review>()
-            .HasOne(r => r.Order) // Each Review has one Order
-            .WithMany(o => o.Reviews) // Each Order can have many Reviews
-            .HasForeignKey(r => r.OrderId); // The foreign key in Review is OrderId
-
+           
         }
     }
 }

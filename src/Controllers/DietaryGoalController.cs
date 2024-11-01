@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization; // Add this using directive
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
@@ -8,8 +9,9 @@ using static src.DTO.DietaryGoalDTO;
 
 namespace src.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize] // Apply authorization at the class level
     public class DietaryGoalController : ControllerBase
     {
         private readonly IDietaryGoalService _dietaryGoalService;
@@ -19,14 +21,14 @@ namespace src.Controllers
             _dietaryGoalService = dietaryGoalService;
         }
 
-        // POST: api/dietarygoal
+        // POST: api/v1/dietarygoal
         [HttpPost]
         public async Task<ActionResult<DietaryGoalReadDto>> CreateDietaryGoalAsync([FromBody] DietaryGoalCreateDto createDto)
         {
             try
             {
                 var result = await _dietaryGoalService.CreateDietaryGoalAsync(createDto);
-                return CreatedAtAction(nameof(GetDietaryGoalByIdAsync), new { id = result.DietaryGoalID }, result);
+                  return Created($"/api/v1//{result.DietaryGoalID}", result);
             }
             catch (Exception ex)
             {
@@ -34,7 +36,7 @@ namespace src.Controllers
             }
         }
 
-        // GET: api/dietarygoal
+        // GET: api/v1/dietarygoal
         [HttpGet]
         public async Task<ActionResult<List<DietaryGoalReadDto>>> GetAllDietaryGoalsAsync()
         {
@@ -49,7 +51,7 @@ namespace src.Controllers
             }
         }
 
-        // GET: api/dietarygoal/{id}
+        // GET: api/v1/dietarygoal/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<DietaryGoalReadDto>> GetDietaryGoalByIdAsync(Guid id)
         {
@@ -68,7 +70,7 @@ namespace src.Controllers
             }
         }
 
-        // PUT: api/dietarygoal/{id}
+        // PUT: api/v1/dietarygoal/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateDietaryGoalAsync(Guid id, [FromBody] DietaryGoalUpdateDto updateDto)
         {
@@ -79,7 +81,7 @@ namespace src.Controllers
                 {
                     return NotFound(new { message = "Dietary goal not found." });
                 }
-                return NoContent(); 
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -87,7 +89,7 @@ namespace src.Controllers
             }
         }
 
-        // DELETE: api/dietarygoal/{id}
+        // DELETE: api/v1/dietarygoal/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDietaryGoalAsync(Guid id)
         {
@@ -98,7 +100,7 @@ namespace src.Controllers
                 {
                     return NotFound(new { message = "Dietary goal not found." });
                 }
-                return NoContent(); 
+                return NoContent();
             }
             catch (Exception ex)
             {

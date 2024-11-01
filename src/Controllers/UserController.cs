@@ -23,6 +23,13 @@ namespace src.Controllers
             var userCreated = await _userService.CreateOneAsync(createDto);
             return Created($"api/v1/user/{userCreated.UserID}", userCreated);
         }
+        
+        [HttpPost("signin")]
+        public async Task<ActionResult<string>> SignInUser([FromBody] UserSignInDto signInDtoDto)
+        {
+            var token = await _userService.SignInAsync(signInDtoDto);
+            return Ok(token);
+        }
 
         [HttpGet]
         [Authorize(Policy = "Admin")]
@@ -74,11 +81,5 @@ namespace src.Controllers
             return Ok(updatedUser);
         }
 
-        [HttpPost("signin")]
-        public async Task<ActionResult<string>> SignInUser([FromBody] UserSignInDto signInDtoDto)
-        {
-            var token = await _userService.SignInAsync(signInDtoDto);
-            return Ok(token);
-        }
     }
 }

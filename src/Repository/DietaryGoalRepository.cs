@@ -30,19 +30,9 @@ namespace src.Repository
             _dietaryGoals = databaseContext.Set<DietaryGoal>();
         }
 
-        public async Task<DietaryGoal> CreateOneAsync(DietaryGoal dietaryGoal)
-        {
-            await _dietaryGoals.AddAsync(dietaryGoal);
-            await _databaseContext.SaveChangesAsync();
-            return dietaryGoal;
-        }
 
-        public async Task<bool> DeleteOneAsync(DietaryGoal dietaryGoal)
-        {
-            _dietaryGoals.Remove(dietaryGoal);
-            await _databaseContext.SaveChangesAsync();
-            return true;
-        }
+
+
 
         public async Task<List<DietaryGoal>> GetAllAsync()
         {
@@ -54,11 +44,65 @@ namespace src.Repository
             return await _dietaryGoals.FirstOrDefaultAsync(goal => goal.DietaryGoalID == id);
         }
 
+        public async Task<DietaryGoal> CreateOneAsync(DietaryGoal dietaryGoal)
+        {
+            try
+            {
+                await _dietaryGoals.AddAsync(dietaryGoal);
+                await _databaseContext.SaveChangesAsync();
+                return dietaryGoal;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework)
+                Console.WriteLine($"Error creating dietary goal: {ex.Message}");
+                throw; // Rethrow the exception if needed
+            }
+        }
+
+        public async Task<bool> DeleteOneAsync(DietaryGoal dietaryGoal)
+        {
+            try
+            {
+                var existingGoal = await GetByIdAsync(dietaryGoal.DietaryGoalID);
+                if (existingGoal == null)
+                {
+                    return false; // Not found
+                }
+
+                _dietaryGoals.Remove(existingGoal);
+                await _databaseContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error deleting dietary goal: {ex.Message}");
+                throw; // Rethrow the exception if needed
+            }
+        }
+
         public async Task<bool> UpdateOneAsync(DietaryGoal dietaryGoal)
         {
-            _dietaryGoals.Update(dietaryGoal);
-            await _databaseContext.SaveChangesAsync();
-            return true;
+            try
+            {
+                var existingGoal = await GetByIdAsync(dietaryGoal.DietaryGoalID);
+                if (existingGoal == null)
+                {
+                    return false; // Not found
+                }
+
+                _databaseContext.Entry(existingGoal).CurrentValues.SetValues(dietaryGoal);
+                await _databaseContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error updating dietary goal: {ex.Message}");
+                throw; // Rethrow the exception if needed
+            }
         }
+
     }
 }

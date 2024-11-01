@@ -7,7 +7,7 @@ using static src.DTO.MealPlanDTO;
 
 namespace src.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class MealPlanController : ControllerBase
     {
@@ -25,7 +25,7 @@ namespace src.Controllers
             try
             {
                 var result = await _mealPlanService.CreateMealPlanAsync(createDto);
-                return CreatedAtAction(nameof(GetMealPlanByIdAsync), new { id = result.Id }, result);
+                  return Created($"/api/v1//{result.Id}", result);
             }
             catch (Exception ex)
             {
