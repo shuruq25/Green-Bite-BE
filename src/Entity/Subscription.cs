@@ -11,6 +11,7 @@ namespace src.Entity
         public Guid ID { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
+        public string SubscriptionType { get; set; }
 
         public int Duration { get; set; }
         public SubscriptionStatus Status { get; set; }

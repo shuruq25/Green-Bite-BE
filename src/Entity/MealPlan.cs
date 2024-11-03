@@ -16,7 +16,6 @@ namespace src.Entity
         public decimal TotalCalories { get; set; }
         public int NumberOfDays { get; set; }
 
-        public string NutritionalInfo { get; set; }
         public List<MealPlanMeal> MealPlanMeals { get; set; }
         public Guid DietaryGoalId { get; set; }
 
