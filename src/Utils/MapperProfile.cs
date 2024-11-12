@@ -161,6 +161,11 @@ namespace src.Utils
             CreateMap<MealPlanMealUpdateDto, MealPlanMeal>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null));
 
+            CreateMap<Product, ProductReadDto>()
+     .ForMember(dest => dest.DietaryGoalId, opt => opt.MapFrom(src => src.DietaryGoal));
+
+            CreateMap<DietaryGoal, DietaryGoalReadDto>();
+
 
 
         }

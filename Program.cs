@@ -15,6 +15,7 @@ using src.Services.review;
 using src.Services.UserService;
 using src.Utils;
 using static src.Entity.Payment;
+using static src.Entity.Subscription;
 using static src.Entity.User;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,8 @@ dataSourceBuilder.MapEnum<Role>();
 dataSourceBuilder.MapEnum<PaymentStatus>();
 dataSourceBuilder.MapEnum<PaymentMethod>();
 dataSourceBuilder.MapEnum<OrderStatuses>();
+dataSourceBuilder.MapEnum<SubscriptionStatus>();
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.ConnectionString);
@@ -63,6 +66,7 @@ builder
     .AddScoped<ISubscriptionRepository, SubscriptionRepository>()
     .AddScoped<IDietaryGoalRepository, DietaryGoalRepository>()
         .AddScoped<IDietaryGoalService, DietaryGoalService>();
+
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -103,6 +107,8 @@ builder
             ),
         };
     });
+
+    
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));

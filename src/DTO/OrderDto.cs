@@ -9,7 +9,9 @@ namespace src.DTO
     {
         public class Update
         {
-         public ICollection<OrderDetailCreateDto> OrderDetails { get; set; }
+            public ICollection<OrderDetailCreateDto>? OrderDetails { get; set; }
+            public OrderStatuses Status { get; set; }
+
 
         }
 
@@ -25,12 +27,14 @@ namespace src.DTO
         {
             public Guid ID { get; set; }
             public Guid UserID { get; set; }
+
             public decimal OriginalPrice { get; set; }
+
             public DateTime CreatedAt { get; set; }
             public DateTime EstimatedArrival { get; set; }
             public OrderStatuses Status { get; set; }
             public PaymentDTO.PaymentReadDto? Payment { get; set; }
-            public ICollection<OrderDetailCreateDto> OrderDetails { get; set; }
+            public ICollection<OrderDetailReadDto> OrderDetails { get; set; }
             public ICollection<ReviewDTO.ReviewReadDto>? reviews { get; set; }
         }
     }

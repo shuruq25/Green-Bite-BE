@@ -19,19 +19,27 @@ namespace src.Controllers
 
         // GET: /api/v1/category
         // Retrieve all categories with pagination
-        [HttpGet]
-        public async Task<ActionResult<List<CategoryReadDto>>> GetCategories([FromQuery] PaginationOptions paginationOptions)
+        // [HttpGet]
+        // public async Task<ActionResult<List<CategoryReadDto>>> GetCategories([FromQuery] PaginationOptions paginationOptions)
+        // {
+        //     try
+        //     {
+        //         var categories = await _categoryService.GetCategoriesAsync(paginationOptions);
+        //         return Ok(categories);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         throw CustomException.InternalError(ex.Message);
+        //     }
+        // }
+
+            [HttpGet]
+        public async Task<ActionResult<List<CategoryReadDto>>> GetAllAsync()
         {
-            try
-            {
-                var categories = await _categoryService.GetCategoriesAsync(paginationOptions);
-                return Ok(categories);
-            }
-            catch (Exception ex)
-            {
-                throw CustomException.InternalError(ex.Message);
-            }
+            var categoryList = await _categoryService.GetAllAsync();
+            return Ok(categoryList);
         }
+
 
         // GET: /api/v1/category/{id}
         // Retrieve a single category by ID

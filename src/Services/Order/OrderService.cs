@@ -2,6 +2,7 @@ using AutoMapper;
 using src.DTO;
 using src.Entity;
 using src.Repository;
+using static src.DTO.OrderDTO;
 
 namespace src.Services
 {
@@ -32,14 +33,12 @@ namespace src.Services
         // }
         public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO)
         {
-            // Map DTO to Entity
             Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
             order.UserID = userID;
 
-            // Add the order to the repository (this will calculate OriginalPrice dynamically)
             Order createdOrder = await _ordersRepo.AddOrderAsync(order);
+            createdOrder.OriginalPrice = createdOrder.OrderDetails.Sum(od => od.Quantity * od.Product.Price);
 
-            // Map the created order back to the DTO for response
             return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
         }
 
@@ -63,6 +62,15 @@ namespace src.Services
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
             return await _ordersRepo.DeleteOrderAsync(id);
+        }
+        public async Task<IEnumerable<Get>> GetOrdersByUserIdAsync(Guid userId)
+        {
+            var orders = await _ordersRepo.GetOrdersByUserIdAsync(userId);
+
+            var orderList = _mapper.Map<IEnumerable<Order>, IEnumerable<Get>>(orders);
+
+            return orderList;
+
         }
     }
 }

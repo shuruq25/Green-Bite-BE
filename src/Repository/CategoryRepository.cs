@@ -12,6 +12,7 @@ namespace src.Repository
         Task<List<Category>> GetCategoriesAsync();
         Task<Category?> GetCategoryAsync(Guid id);
         Task<bool> UpdateOneAsync(Category updatedCategory);
+        Task<List<Category>> GetAllWithPaginationAsync();
     }
 
     public class CategoryRepository : ICategoryRepository
@@ -38,6 +39,10 @@ namespace src.Repository
             {
                 throw CustomException.InternalError("Failed to create category: " + ex.Message);
             }
+        }
+        public async Task<List<Category>> GetAllWithPaginationAsync()
+        {
+            return await _category.ToListAsync();
         }
 
         // Get a category by ID

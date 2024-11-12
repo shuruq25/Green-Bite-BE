@@ -13,5 +13,6 @@ namespace src.Services.product
         Task<List<ProductReadDto>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions);
         Task<List<ProductReadDto>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions);
         Task<int> CountProductsAsync();
+        
     }
 }

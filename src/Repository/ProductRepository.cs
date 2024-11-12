@@ -42,6 +42,7 @@ namespace src.Repository
         {
             var productsQuery = _databaseContext.Product
                 .Include(p => p.Category) 
+                .Include(p=>p.DietaryGoal)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(options.Search))
@@ -67,6 +68,12 @@ namespace src.Repository
                 productsQuery = productsQuery.Where(p => p.Category != null &&
                                                          p.Category.Name.ToLower().Contains(searchTerm));
             }
+              if (!string.IsNullOrWhiteSpace(options.Filter.DietaryGoal?.Name))
+            {
+                var searchTerm = options.Filter.DietaryGoal.Name.ToLower(); 
+                productsQuery = productsQuery.Where(p => p.DietaryGoal != null &&
+                                                         p.DietaryGoal.Name.ToLower().Contains(searchTerm));
+            }
 
             productsQuery = productsQuery.Skip(options.Offset).Take(options.Limit);
 
@@ -89,6 +96,7 @@ namespace src.Repository
             return await _product
                 .Include(p => p.Category)
                 .Include(p => p.Reviews)
+                .Include(p=>p.DietaryGoal)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 

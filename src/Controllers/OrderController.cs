@@ -5,6 +5,7 @@ using src.DTO;
 using src.Entity;
 using src.Services;
 using src.Utils;
+using static src.DTO.OrderDTO;
 
 namespace src.Controllers
 {
@@ -90,6 +91,14 @@ namespace src.Controllers
                 throw CustomException.NotFound($"Order with ID {id} not found.");
             }
             return NoContent();
+        }
+             [HttpGet("users/{userId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Get>>> GetOrdersByUserIdAsync([FromRoute] Guid userId)
+        {
+            var orders = await _orderService.GetOrdersByUserIdAsync(userId);
+
+            return Ok(orders);
         }
     }
 }

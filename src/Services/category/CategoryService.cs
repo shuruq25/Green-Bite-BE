@@ -32,6 +32,13 @@ namespace src.Services.category
             }
         }
 
+              public async Task<List<CategoryReadDto>> GetAllAsync()
+        {
+            var categoryList = await _categoryRepo.GetAllWithPaginationAsync();
+            return _mapper.Map<List<Category>, List<CategoryReadDto>>(categoryList);
+        }
+
+
         // Get all categories
         public async Task<List<CategoryReadDto>> GetCategoriesAsync(
             PaginationOptions paginationOptions

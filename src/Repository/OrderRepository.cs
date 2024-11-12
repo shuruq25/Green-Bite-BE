@@ -11,6 +11,7 @@ namespace src.Repository
         Task<bool> UpdateOrderAsync(Order order);
         Task<bool> DeleteOrderAsync(Guid id);
         Task<Order?> GetOrderByIdAsync(Guid id);
+        Task<List<Order>> GetOrdersByUserIdAsync(Guid userId);
     }
 
     public class OrderRepository : IOrderRepository
@@ -44,21 +45,22 @@ namespace src.Repository
         // }
            public async Task<Order> AddOrderAsync(Order newOrder)
         {
-            // Add the new order to the repository
             await _orders.AddAsync(newOrder);
             await _db.SaveChangesAsync();
 
-            // Load related entities in one go for better performance.
             await _db.Entry(newOrder)
                      .Collection(o => o.OrderDetails)
                      .Query()
-                     .Include(od => od.Product)  // Eager load the related Product entity for each OrderDetail
+                     .Include(od => od.Product)  
                      .LoadAsync();
+                newOrder.OriginalPrice = newOrder.OrderDetails.Sum(od => od.Quantity * od.Product.Price);
+        _db.Update(newOrder);
+        await _db.SaveChangesAsync();
 
             return newOrder;
         }
 
-        
+
 
         public async Task<bool> UpdateOrderAsync(Order order)
         {
@@ -77,6 +79,15 @@ namespace src.Repository
             _orders.Remove(existingOrder);
             await _db.SaveChangesAsync();
             return true;
+        }
+        
+        public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
+        {
+            return await _db.Order
+            .Include(o => o.OrderDetails)
+            .ThenInclude(od => od.Product)
+            .Where(o => o.UserID == userId)
+            .ToListAsync();
         }
     }
 }

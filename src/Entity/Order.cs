@@ -15,9 +15,9 @@ namespace src.Entity
         public Guid ID { get; set; }
         public Guid UserID { get; set; }
         public User User { get; set; }
-        public decimal OriginalPrice => OrderDetails?.Sum(od => od.Quantity * od.Product.Price) ?? 0;
+        public decimal OriginalPrice { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime EstimatedArrival { get; set; }= DateTime.UtcNow.AddDays(10);
+        public DateTime EstimatedArrival { get; set; } = DateTime.UtcNow.AddDays(10);
         public OrderStatuses Status { get; set; } = OrderStatuses.Pending;
         public Guid? PaymentID { get; set; }
         public Payment? Payment { get; set; }

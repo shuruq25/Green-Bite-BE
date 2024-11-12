@@ -7,5 +7,6 @@ namespace src.Utils
         public decimal? MinPrice { get; set; }=0;
         public decimal? MaxPrice { get; set; }=10000;
         public Category? Category { get; set; }
+        public DietaryGoal? DietaryGoal{ get; set; }
     }
 }

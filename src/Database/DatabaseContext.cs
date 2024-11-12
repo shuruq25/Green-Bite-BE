@@ -36,7 +36,7 @@ namespace src.Database
             modelBuilder.Entity<Order>()
         .Property(o => o.Status)
         .HasConversion<string>();
-        
+
             modelBuilder.Entity<Subscription>()
          .Property(s => s.Status)
          .HasConversion<string>();
@@ -67,8 +67,18 @@ namespace src.Database
 
             modelBuilder.Entity<User>().HasIndex(u => u.EmailAddress).IsUnique();
             modelBuilder.Entity<Cart>().HasIndex(u => u.UserId).IsUnique();
+            modelBuilder.Entity<Subscription>()
+       .Property(s => s.Start)
+       .HasConversion(
+           v => v.ToUniversalTime(),
+           v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+            modelBuilder.Entity<Subscription>()
+                .Property(s => s.End)
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
-           
+
         }
     }
 }

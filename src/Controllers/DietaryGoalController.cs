@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization; // Add this using directive
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
@@ -11,7 +10,6 @@ namespace src.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize] // Apply authorization at the class level
     public class DietaryGoalController : ControllerBase
     {
         private readonly IDietaryGoalService _dietaryGoalService;

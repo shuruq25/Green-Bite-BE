@@ -83,7 +83,14 @@ namespace src.Services.UserService
             {
                 throw CustomException.BadRequest($"User with ID '{id}' not found.");
             }
-            _mapper.Map(updateDto, foundUser);
+              PasswordUtils.HashPassword(
+                updateDto.Password,
+                out string hashedPassword,
+                out byte[] salt
+            );
+            var user=_mapper.Map(updateDto, foundUser);
+            user.Password = hashedPassword;
+            user.Salt = salt;
             return await _userRepo.UpdateOneAsync(foundUser);
         }
 

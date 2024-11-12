@@ -17,7 +17,9 @@ namespace src.Repository
         Task<MealPlan?> GetByIdAsync(Guid id);
         Task<bool> UpdateOneAsync(MealPlan updateMealPlan);
     }
-
+}
+namespace src.Repository
+{
     public class MealPlanRepository : IMealPlanRepository
     {
         protected DbSet<MealPlan> _mealPlan;

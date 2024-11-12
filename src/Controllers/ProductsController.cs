@@ -21,9 +21,14 @@ namespace src.Controllers
         // POST: /api/v1/products
         // Create a new product (Admin only)
         [HttpPost]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProductReadDto>> CreateOne([FromBody] ProductCreateDto createDto)
         {
+            if (createDto == null)
+            {
+                return BadRequest("Product data is invalid.");
+            }
+
             var productCreated = await _productService.CreateOneAsync(createDto);
             return Created($"api/v1/products/{productCreated.Id}", productCreated);
         }
@@ -31,7 +36,7 @@ namespace src.Controllers
         // GET: /api/v1/products
         // Get all products with pagination
         [HttpGet]
-           public async Task<ActionResult<List<ProductListDto>>> GetAllAsync([FromQuery] PaginationOptions options)
+        public async Task<ActionResult<List<ProductListDto>>> GetAllAsync([FromQuery] PaginationOptions options)
         {
             var productList = await _productService.GetAllAsync(options);
             var totalCount = await _productService.CountProductsAsync();
@@ -61,7 +66,7 @@ namespace src.Controllers
         // PUT: /api/v1/products/{id}
         // Update an existing product (Admin only)
         [HttpPut("{id}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] ProductUpdateDto updateDto)
         {
             var result = await _productService.UpdateOneAsync(id, updateDto);
@@ -121,6 +126,15 @@ namespace src.Controllers
 
             return Ok(products);
         }
+        
+        [HttpPatch("{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<ProductReadDto>> UpdateOneAsync([FromRoute] Guid id, ProductUpdateDto updateDto)
+        {
+            var userUpdated = await _productService.UpdateOneAsync(id, updateDto);
+            return Ok(userUpdated);
+        }
+
     }
 }
 
