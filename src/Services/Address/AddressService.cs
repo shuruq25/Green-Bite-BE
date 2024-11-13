@@ -40,18 +40,20 @@ namespace src.Services
       
 
         //get by id
-        public async Task<AddressReadDto> GetByIdAsync(Guid id)
+        public async Task<List<AddressReadDto>> GetByIdAsync(Guid id)
         {
             var foundAddress = await _addressRepo.GetAddressByIdAsync(id);
             // To Do :hande; error
             //throw
-            return _mapper.Map<Address, AddressReadDto>(foundAddress);
+            
+            return _mapper.Map<List<Address>, List<AddressReadDto>>(foundAddress);
         }
+        
 
         // //delete
         public async Task<bool> DeleteOneAsync(Guid id)
         {
-            var foundAddress = await _addressRepo.GetAddressByIdAsync(id);
+            var foundAddress = await _addressRepo.GetAddresstowByIdAsync(id);
             bool isDeleted = await _addressRepo.DeleteOneAsync(foundAddress);
             if (isDeleted)
             {
@@ -63,7 +65,7 @@ namespace src.Services
         //update
         public async Task<bool> UpdateOneAsync(Guid id, AddressUpdateDto updateDto)
         {
-            var foundAddress = await _addressRepo.GetAddressByIdAsync(id);
+            var foundAddress = await _addressRepo.GetAddresstowByIdAsync(id);
 
             if (foundAddress == null)
             {
@@ -73,5 +75,12 @@ namespace src.Services
             _mapper.Map(updateDto, foundAddress);
             return await _addressRepo.UpdateOneAsync(foundAddress);
         }
+            public async Task<AddressReadDto> GetByTowIdAsync(Guid id){
+            var foundAddress = await _addressRepo.GetAddresstowByIdAsync(id);
+            // To Do :hande; error
+            //throw
+            return _mapper.Map<Address, AddressReadDto>(foundAddress);  
+            }
+
     }
 }

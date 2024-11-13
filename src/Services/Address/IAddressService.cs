@@ -15,7 +15,9 @@ namespace src.Services
         // Task<List<AddressReadDto>> GetAllAsync(PaginationOptions paginationOptions);
 
         //get by id
-        Task<AddressReadDto> GetByIdAsync(Guid id);
+        Task<List<AddressReadDto>> GetByIdAsync(Guid id);
+    Task<AddressReadDto> GetByTowIdAsync(Guid id);
+
 
         //delete
         Task<bool> DeleteOneAsync(Guid id);

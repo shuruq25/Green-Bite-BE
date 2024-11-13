@@ -14,7 +14,6 @@ namespace src.DTO
         public class UserCreateDto
         {
 
-            //public string? Name { get; set; }
             [Required]
             [PasswordComplexity]
             public string Password { get; set; }
@@ -23,10 +22,7 @@ namespace src.DTO
             public string EmailAddress { get; set; }
             public string Name { get; set; }
 
-            // public string? Phone { get; set; }
-            // public string? Gender { get; set; }
-            // public decimal? Weight { get; set; }
-            // public int? Age { get; set; }
+        
         }
 
         public class UserSignInDto
@@ -59,7 +55,7 @@ namespace src.DTO
             public string? Phone { get; set; }
             public string? Gender { get; set; }
             public decimal? Weight { get; set; }
-            public int Age { get; set; }
+            public int? Age { get; set; }
         }
     }
 }

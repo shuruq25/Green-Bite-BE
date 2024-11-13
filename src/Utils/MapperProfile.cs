@@ -33,6 +33,7 @@ namespace src.Utils
             CreateMap<Address, AddressReadDto>();
             CreateMap<AddressCreateDto, Address>();
             CreateMap<AddressUpdateDto, Address>()
+            
                 .ForAllMembers(opts =>
                     opts.Condition((src, dest, srcProperty) => srcProperty != null)
                 );
