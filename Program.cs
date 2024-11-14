@@ -119,6 +119,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseRouting();
+app.MapGet("/",()=>"server is running");
 
 using (var scope = app.Services.CreateScope())
 {
