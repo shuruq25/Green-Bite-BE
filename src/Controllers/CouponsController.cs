@@ -10,36 +10,37 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class CouponsController : ControllerBase
     {
-        protected readonly ICouponService _couponService;
+        private readonly ICouponService _couponService;
 
         public CouponsController(ICouponService service)
         {
             _couponService = service;
         }
 
-        //create
-
+        // POST: /api/v1/coupons
+        // Create a new coupon (Admin only)
         [HttpPost]
         [Authorize(Policy = "Admin")]
         public async Task<ActionResult<CouponReadDto>> CreateOne(
             [FromBody] CouponCreateDto createDto
         )
         {
-            var CouponCreated = await _couponService.CreateOneAsync(createDto);
-            return Created($"/api/v1/Coupons/{CouponCreated.CouponId}", CouponCreated);
+            var couponCreated = await _couponService.CreateOneAsync(createDto);
+            return CreatedAtAction(nameof(GetById), new { id = couponCreated.CouponId }, couponCreated);
         }
 
-        // Get all
+        // GET: /api/v1/coupons
+        // Retrieve all coupons (Authenticated users)
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> GetAllCoupons()
+        public async Task<ActionResult<List<CouponReadDto>>> GetAllCoupons()
         {
-            return Ok(await _couponService.GetAllAsync());
+            var coupons = await _couponService.GetAllAsync();
+            return Ok(coupons);
         }
 
-
-        // Delete
-
+        // DELETE: /api/v1/coupons/{id}
+        // Delete a coupon by ID (Admin only)
         [HttpDelete("{id}")]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> DeleteCoupon([FromRoute] Guid id)
@@ -52,13 +53,14 @@ namespace src.Controllers
             return NoContent();
         }
 
-        // get by id
+        // GET: /api/v1/coupons/{id}
+        // Retrieve a coupon by ID (Authenticated users)
         [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<CouponReadDto>> GetById([FromRoute] Guid id)
         {
-            CouponReadDto? coupon = await _couponService.GetByIdAsync(id);
-            if (coupon is null)
+            var coupon = await _couponService.GetByIdAsync(id);
+            if (coupon == null)
             {
                 throw CustomException.NotFound();
             }
@@ -66,3 +68,4 @@ namespace src.Controllers
         }
     }
 }
+

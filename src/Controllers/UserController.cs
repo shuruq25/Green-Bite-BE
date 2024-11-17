@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.Services.UserService;
@@ -23,14 +24,20 @@ namespace src.Controllers
             var userCreated = await _userService.CreateOneAsync(createDto);
             return Created($"api/v1/user/{userCreated.UserID}", userCreated);
         }
+        
+        [HttpPost("signin")]
+        public async Task<ActionResult<string>> SignInUser([FromBody] UserSignInDto signInDtoDto)
+        {
+            var token = await _userService.SignInAsync(signInDtoDto);
+            return Ok(token);
+        }
 
         [HttpGet]
         [Authorize(Policy = "Admin")]
         public async Task<ActionResult<List<UserReadDto>>> GetAll(
-            [FromQuery] PaginationOptions paginationOptions
         )
         {
-            var userList = await _userService.GetAllAsync(paginationOptions);
+            var userList = await _userService.GetAllAsync();
             return Ok(userList);
         }
 
@@ -73,12 +80,28 @@ namespace src.Controllers
             var updatedUser = await _userService.GetByIdAsync(id);
             return Ok(updatedUser);
         }
-
-        [HttpPost("signin")]
-        public async Task<ActionResult<string>> SignInUser([FromBody] UserSignInDto signInDtoDto)
+        [HttpGet("auth")]
+        [Authorize]
+        public async Task<ActionResult<UserReadDto>> CheckAuthAsync()
         {
-            var token = await _userService.SignInAsync(signInDtoDto);
-            return Ok(token);
+            var authenticatedClaims = HttpContext.User;
+            var userId = authenticatedClaims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+            var userGuid = new Guid(userId);
+            var user = await _userService.GetByIdAsync(userGuid);
+            return Ok(user);
         }
+
+        [HttpPatch("{id:guid}")]
+        [Authorize]
+        public async Task<ActionResult<UserReadDto>> UpdateOneAsync([FromRoute] Guid id, UserUpdateDto updateDto)
+        {
+            var userUpdated = await _userService.UpdateOneAsync(id, updateDto);
+            return Ok(userUpdated);
+        }
+
+
+
+
+
     }
 }

@@ -9,7 +9,6 @@ namespace src.Services.review
         Task<List<ReviewReadDto>> GetAllAsync(PaginationOptions paginationOptions);
         Task<ReviewReadDto> GetByIdAsync(Guid id);
         Task<bool> DeleteOneAsync(Guid id);
-        Task<bool> UpdateOneAsync(Guid id, ReviewUpdateDto updateDto);
-        Task<List<ReviewReadDto>> GetReviewsByOrderIdAsync(Guid orderId);
-    }
+ Task<bool> UpdateOneAsync(Guid productId, Guid reviewId, ReviewUpdateDto updateDto) ;
+}
 }

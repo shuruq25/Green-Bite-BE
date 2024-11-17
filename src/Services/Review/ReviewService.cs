@@ -6,7 +6,7 @@ using static src.DTO.ReviewDTO;
 
 namespace src.Services.review
 {
-    public class ReviewService : IReviewService
+    public class ReviewService :IReviewService
     {
         protected readonly ReviewRepository _reviewRepo;
         protected readonly IMapper _mapper;
@@ -30,14 +30,15 @@ namespace src.Services.review
 
             var review = new Review
             {
-                OrderId = createDto.OrderId,
+                ProductId = createDto.ProductId,
                 Comment = createDto.Comment,
                 Rating = createDto.Rating,
                 ReviewDate = DateTime.UtcNow,
                 UserID = userId,
             };
+
             var reviewCreated = await _reviewRepo.CreateOneAsync(review);
-            return _mapper.Map<Review, ReviewReadDto>(reviewCreated);
+            return _mapper.Map<ReviewReadDto>(reviewCreated);
         }
 
         // Get all reviews
@@ -58,43 +59,40 @@ namespace src.Services.review
         public async Task<ReviewReadDto> GetByIdAsync(Guid id)
         {
             var foundReview = await _reviewRepo.GetReviewAsync(id);
-            return _mapper.Map<Review?, ReviewReadDto>(foundReview);
+            if (foundReview == null)
+            {
+                throw new KeyNotFoundException($"Review with ID {id} not found.");
+            }
+            return _mapper.Map<ReviewReadDto>(foundReview);
         }
 
         // Delete a review
         public async Task<bool> DeleteOneAsync(Guid id)
         {
             var foundReview = await _reviewRepo.GetReviewAsync(id);
-            if (foundReview != null)
+            if (foundReview == null)
             {
-                bool isDeleted = await _reviewRepo.DeleteOneAsync(foundReview);
-
-                if (isDeleted)
-                {
-                    return true;
-                }
+                throw new KeyNotFoundException($"Review with ID {id} not found.");
             }
-            return false;
-        }
 
-        // Get reviews by order ID
-        public async Task<List<ReviewReadDto>> GetReviewsByOrderIdAsync(Guid orderId)
-        {
-            var reviews = await _reviewRepo.GetReviewByOrderIdAsync(orderId);
-            return _mapper.Map<List<Review>, List<ReviewReadDto>>(reviews);
+            return await _reviewRepo.DeleteOneAsync(foundReview);
         }
 
         // Update a review
-        public async Task<bool> UpdateOneAsync(Guid id, ReviewUpdateDto updateDto)
+         // Update a review
+        public async Task<bool> UpdateOneAsync(Guid productId, Guid reviewId, ReviewUpdateDto updateDto)
         {
-            var foundReview = await _reviewRepo.GetReviewAsync(id);
-
+            var foundReview = await _reviewRepo.GetReviewAsync(reviewId);
             if (foundReview == null)
             {
-                return false;
+                return false; // Review not found
             }
+
+            // Map the updated values from updateDto to the existing review
             _mapper.Map(updateDto, foundReview);
-            return await _reviewRepo.UpdateOneAsync(foundReview);
+
+            // Ensure that the product ID is passed to the repository
+            return await _reviewRepo.UpdateOneAsync(productId, foundReview);
         }
     }
 }

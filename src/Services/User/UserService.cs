@@ -75,17 +75,35 @@ namespace src.Services.UserService
             return false;
         }
 
-        public async Task<bool> UpdateOneAsync(Guid id, UserUpdateDto updateDto)
-        {
-            var foundUser = await _userRepo.GetByIdAsync(id);
+public async Task<bool> UpdateOneAsync(Guid id, UserUpdateDto updateDto)
+{
+    // Retrieve the user from the repository by ID
+    var foundUser = await _userRepo.GetByIdAsync(id);
+    if (foundUser == null)
+    {
+        throw CustomException.BadRequest($"User with ID '{id}' not found.");
+    }
 
-            if (foundUser == null)
-            {
-                throw CustomException.BadRequest($"User with ID '{id}' not found.");
-            }
-            _mapper.Map(updateDto, foundUser);
-            return await _userRepo.UpdateOneAsync(foundUser);
-        }
+    // If the password is provided, hash it and update the Password and Salt
+    if (!string.IsNullOrEmpty(updateDto.Password))
+    {
+        PasswordUtils.HashPassword(
+            updateDto.Password,  // The new password to be hashed
+            out string hashedPassword,  // The hashed password
+            out byte[] salt  // The salt associated with the password
+        );
+
+        foundUser.Password = hashedPassword;
+        foundUser.Salt = salt;
+    }
+
+    // Map the updateDto fields to the foundUser object (other properties)
+    _mapper.Map(updateDto, foundUser);
+
+    return await _userRepo.UpdateOneAsync(foundUser);
+}
+
+
 
         public async Task<string> SignInAsync(UserSignInDto signInDto)
         {

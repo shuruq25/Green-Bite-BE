@@ -24,12 +24,16 @@ namespace src.Services.product
             return _mapper.Map<Product, ProductReadDto>(productCreated);
         }
 
-        public async Task<List<ProductReadDto>> GetAllAsync(PaginationOptions paginationOptions)
+        public async Task<List<ProductReadDto>> GetAllAsync(PaginationOptions options)
         {
-            var productList = await _productRepository.GetAllAsync(paginationOptions);
+            var productList = await _productRepository.GetAllAsync(options);
+
             return _mapper.Map<List<Product>, List<ProductReadDto>>(productList);
         }
-
+        public async Task<int> CountProductsAsync()
+        {
+            return await _productRepository.CountAsync();
+        }
         public async Task<ProductReadDto> GetByIdAsync(Guid id)
         {
             var foundProduct = await _productRepository.GetByIdAsync(id);

@@ -10,7 +10,13 @@ namespace src.DTO
         {
             public string Country { get; set; }
             public string Street { get; set; }
-            public Guid UserId { get; set; }
+            public string State { get; set; }
+            public string PostalCode { get; set; }
+            public string City { get; set; }
+            public Guid UserId { get; set; } // (FK) from User table
+
+
+
         }
 
         // Class to : get/read data
@@ -20,13 +26,21 @@ namespace src.DTO
             public Guid AddressId { get; set; }
             public string Country { get; set; }
             public string Street { get; set; }
-            public User User { get; set; } // to return the whole information of User
+            public string City { get; set; }
+            public string State { get; set; }
+            public string PostalCode { get; set; }
+         public Guid UserId { get; set; } // (FK) from User table
+
+
         }
 
         // Class to : Update Address
 
         public class AddressUpdateDto
         {
+            public string State { get; set; }
+            public string PostalCode { get; set; }
+            public string City { get; set; }
             public string Country { get; set; }
             public string Street { get; set; }
         }

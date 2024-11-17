@@ -10,33 +10,41 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class CategoryController : ControllerBase
     {
-        protected readonly ICategoryService _categoryService;
+        private readonly ICategoryService _categoryService;
 
         public CategoryController(ICategoryService service)
         {
             _categoryService = service;
         }
 
-        // Get all categories with pagination
-        [HttpGet]
-        public async Task<ActionResult<List<CategoryReadDto>>> GetCategories(
-            [FromQuery] PaginationOptions paginationOptions
-        )
+        // GET: /api/v1/category
+        // Retrieve all categories with pagination
+        // [HttpGet]
+        // public async Task<ActionResult<List<CategoryReadDto>>> GetCategories([FromQuery] PaginationOptions paginationOptions)
+        // {
+        //     try
+        //     {
+        //         var categories = await _categoryService.GetCategoriesAsync(paginationOptions);
+        //         return Ok(categories);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         throw CustomException.InternalError(ex.Message);
+        //     }
+        // }
+
+            [HttpGet]
+        public async Task<ActionResult<List<CategoryReadDto>>> GetAllAsync()
         {
-            try
-            {
-                var categories = await _categoryService.GetCategoriesAsync(paginationOptions);
-                return Ok(categories);
-            }
-            catch (Exception ex)
-            {
-                throw CustomException.InternalError(ex.Message);
-            }
+            var categoryList = await _categoryService.GetAllAsync();
+            return Ok(categoryList);
         }
 
-        // Get a category by ID
+
+        // GET: /api/v1/category/{id}
+        // Retrieve a single category by ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<CategoryReadDto>>> GetCategory([FromRoute] Guid id)
+        public async Task<ActionResult<CategoryReadDto>> GetCategory([FromRoute] Guid id)
         {
             try
             {
@@ -49,17 +57,16 @@ namespace src.Controllers
             }
         }
 
-        // Create a new category
+        // POST: /api/v1/category
+        // Create a new category (Admin only)
         [HttpPost]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<CategoryReadDto>> CreateOne(
-            [FromBody] CategoryCreateDto createDto
-        )
+        public async Task<ActionResult<CategoryReadDto>> CreateOne([FromBody] CategoryCreateDto createDto)
         {
             try
             {
                 var createdCategory = await _categoryService.CreateOneAsync(createDto);
-                return Created($"/api/v1/Category/{createdCategory.Id}", createdCategory);
+                return CreatedAtAction(nameof(GetCategory), new { id = createdCategory.Id }, createdCategory);
             }
             catch (Exception ex)
             {
@@ -67,10 +74,11 @@ namespace src.Controllers
             }
         }
 
-        // Delete a category
+        // DELETE: /api/v1/category/{id}
+        // Delete a category by ID (Admin only)
         [HttpDelete("{id}")]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult> DeleteCategory([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
         {
             try
             {
@@ -79,7 +87,7 @@ namespace src.Controllers
                 {
                     throw CustomException.NotFound();
                 }
-                return NoContent();
+                return NoContent(); // 204 No Content
             }
             catch (Exception ex)
             {
@@ -87,23 +95,23 @@ namespace src.Controllers
             }
         }
 
-        // Update a category
+        // PUT: /api/v1/category/{id}
+        // Update a category by ID (Admin only)
         [HttpPut("{id}")]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult> UpdateCategory(
+        public async Task<ActionResult<CategoryReadDto>> UpdateCategory(
             [FromRoute] Guid id,
             [FromBody] CategoryUpdateDto updateDto
         )
         {
             try
             {
-                var updateCategory = await _categoryService.UpdateOneAsync(id, updateDto);
-                if (!updateCategory)
+                var updatedCategory = await _categoryService.UpdateOneAsync(id, updateDto);
+                if (!updatedCategory)
                 {
                     throw CustomException.NotFound();
                 }
-                var updatedCategory = await _categoryService.GetCategoryAsync(id);
-                return Ok(updatedCategory);
+                return Ok(await _categoryService.GetCategoryAsync(id));
             }
             catch (Exception ex)
             {

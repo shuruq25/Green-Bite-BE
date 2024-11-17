@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.Services;
+using src.Services.UserService;
 using src.Utils;
 using static src.DTO.AddressDTO;
 
@@ -11,36 +12,39 @@ namespace src.Controllers
     public class AddressesController : ControllerBase
     {
         protected readonly IAddressService _addressService;
+        protected  readonly IUserService _userService;
 
-        //DI logic of  the Services.Address in AdressesController
         public AddressesController(IAddressService service)
         {
             _addressService = service;
         }
 
-        //create
-
+        // POST: /api/v1/Addresses
+        // Create a new address
         [HttpPost]
-        [Authorize]
+        [Authorize] 
         public async Task<ActionResult<AddressReadDto>> CreateOne(
-            [FromBody] AddressCreateDto createDto
+            [FromBody] AddressCreateDto createDto, [FromRoute] Guid userId
         )
         {
             var addressCreated = await _addressService.CreatOneAsync(createDto);
+            userId=addressCreated.UserId;
             return Created($"/api/v1/Addresses/{addressCreated.AddressId}", addressCreated);
         }
 
-        // Get all
+        // GET: /api/v1/Addresses
+        // Get all addresses
         [HttpGet]
-        [Authorize]
+        [Authorize]  
         public async Task<ActionResult> GetAllAddresses()
         {
             return Ok(await _addressService.GetAllAsync());
         }
 
-        // Update
+        // PUT: /api/v1/Addresses/{id}
+        // Update an existing address
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize]  
         public async Task<ActionResult> UpdateAddress(
             Guid id,
             [FromBody] AddressUpdateDto updatedAddress
@@ -48,33 +52,34 @@ namespace src.Controllers
         {
             if (await _addressService.UpdateOneAsync(id, updatedAddress))
             {
-                return NoContent();
+                return NoContent(); 
             }
-            return NotFound();
+            return NotFound();  
         }
 
-        // Delete
-
+        // DELETE: /api/v1/Addresses/{id}
+        // Delete an address by its ID
         [HttpDelete("{id}")]
-        [Authorize]
-        public async Task<IActionResult> DeleteAddress([FromRoute] Guid id)
+        [Authorize]  
+        
+         public async Task<IActionResult> DeleteAddress([FromRoute] Guid id)
         {
             var deleted = await _addressService.DeleteOneAsync(id);
             if (!deleted)
             {
-                throw CustomException.NotFound();
+                throw CustomException.NotFound(); 
             }
-            return NoContent();
+            return NoContent();  
         }
 
-        // get by id
+        // GET: /api/v1/Addresses/{id}
+        // Get a specific address by its ID
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize]  
         public async Task<ActionResult<AddressReadDto>> GetById([FromRoute] Guid id)
         {
-            var Address = await _addressService.GetByIdAsync(id);
-
-            return Ok(Address);
+            var address = await _addressService.GetByIdAsync(id);
+            return Ok(address);  
         }
     }
 }

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using src.Entity;
-using static src.Entity.Payment;
-using static src.Entity.User;
+
 
 namespace src.Database
 {
@@ -19,6 +18,15 @@ namespace src.Database
         public DbSet<Review> Review { get; set; }
         public DbSet<Cart> Cart { get; set; }
         public DbSet<CartDetails> CartDetails { get; set; }
+        public DbSet<MealPlan> MealPlan { get; set; }
+        public DbSet<MealPlanMeal> MealPlanMeal { get; set; }
+        public DbSet<Subscription> Subscription { get; set; }
+        public DbSet<DietaryGoal> DietaryGoal { get; set; }
+
+
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+
+
 
         public DatabaseContext(DbContextOptions options)
             : base(options) { }
@@ -28,6 +36,10 @@ namespace src.Database
             modelBuilder.Entity<Order>()
         .Property(o => o.Status)
         .HasConversion<string>();
+
+            modelBuilder.Entity<Subscription>()
+         .Property(s => s.Status)
+         .HasConversion<string>();
 
             modelBuilder.Entity<Payment>()
                    .Property(o => o.Method)
@@ -55,16 +67,18 @@ namespace src.Database
 
             modelBuilder.Entity<User>().HasIndex(u => u.EmailAddress).IsUnique();
             modelBuilder.Entity<Cart>().HasIndex(u => u.UserId).IsUnique();
+            modelBuilder.Entity<Subscription>()
+       .Property(s => s.Start)
+       .HasConversion(
+           v => v.ToUniversalTime(),
+           v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+            modelBuilder.Entity<Subscription>()
+                .Property(s => s.End)
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
-            modelBuilder.Entity<Review>()
-            .HasOne(r => r.Order) // Each Review has one Order
-            .WithMany(o => o.Reviews) // Each Order can have many Reviews
-            .HasForeignKey(r => r.OrderId); // The foreign key in Review is OrderId
 
-            modelBuilder.Entity<Payment>()
-            .HasOne(p => p.Coupon) // A payment has one coupon
-            .WithMany(c => c.Payments) // A coupon can have many payments
-            .HasForeignKey(p => p.CouponId); // The foreign key in Payment is CouponId
         }
     }
 }

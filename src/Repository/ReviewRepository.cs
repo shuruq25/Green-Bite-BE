@@ -8,17 +8,25 @@ namespace src.Repository
     public class ReviewRepository
     {
         protected DbSet<Review> _review;
+        protected DbSet<Product> _products;
         protected DatabaseContext _databaseContext;
 
         public ReviewRepository(DatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
             _review = databaseContext.Set<Review>();
+            _products = databaseContext.Set<Product>();
         }
 
         // Create a new review
-        public async Task<Review> CreateOneAsync(Review newReview)
+           public async Task<Review> CreateOneAsync(Review newReview)
         {
+            var productExists = await _products.AnyAsync(p => p.Id == newReview.ProductId);
+            if (!productExists)
+            {
+                throw new KeyNotFoundException($"Product with ID {newReview.ProductId} not found.");
+            }
+
             try
             {
                 await _review.AddAsync(newReview);
@@ -31,14 +39,15 @@ namespace src.Repository
             }
         }
 
+        
+
         // Get a review by ID
         public async Task<Review?> GetReviewAsync(Guid id)
         {
             try
             {
                 return await _review
-                    .Include(i => i.Order)
-                    .FirstOrDefaultAsync(i => i.ReviewId == id);
+                    .FindAsync(id);
             }
             catch (Exception ex)
             {
@@ -51,9 +60,7 @@ namespace src.Repository
         {
             try
             {
-                var result = _review
-                    .Include(r => r.Order)
-                    .Where(r => r.Comment.ToLower().Contains(paginationOptions.Name));
+                var result = _review.Where(r => r.Comment.ToLower().Contains(paginationOptions.Name));
                 return await result
                     .Skip(paginationOptions.Offset)
                     .Take(paginationOptions.Limit)
@@ -62,24 +69,6 @@ namespace src.Repository
             catch (Exception ex)
             {
                 throw CustomException.InternalError("Error fetching reviews: " + ex.Message);
-            }
-        }
-
-        // Get reviews by order ID
-        public async Task<List<Review>> GetReviewByOrderIdAsync(Guid orderId)
-        {
-            try
-            {
-                return await _review
-                    .Where(r => r.OrderId == orderId)
-                    .Include(r => r.Order)
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw CustomException.InternalError(
-                    "Error fetching reviews by order ID: " + ex.Message
-                );
             }
         }
 
@@ -99,18 +88,37 @@ namespace src.Repository
         }
 
         // Update a review
-        public async Task<bool> UpdateOneAsync(Review updatedReview)
-        {
-            try
-            {
-                _review.Update(updatedReview);
-                await _databaseContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw CustomException.InternalError("Error updating review: " + ex.Message);
-            }
-        }
+// Update a review in the ReviewRepository
+public async Task<bool> UpdateOneAsync(Guid productId, Review updatedReview)
+{
+    var product = await _products.FirstOrDefaultAsync(p => p.Id == productId);
+
+    if (product == null)
+    {
+        throw new KeyNotFoundException($"Product with ID {productId} not found.");
+    }
+
+    var existingReview = await _review.FirstOrDefaultAsync(r => r.ReviewId == updatedReview.ReviewId);
+
+    if (existingReview == null)
+    {
+        throw new KeyNotFoundException($"Review with ID {updatedReview.ReviewId} not found.");
+    }
+
+    // Update review fields
+    existingReview.Rating = updatedReview.Rating;
+    existingReview.Comment = updatedReview.Comment;
+    existingReview.ReviewDate = updatedReview.ReviewDate;
+
+    // Calculate the average rating for the product
+    var productReviews = await _review.Where(r => r.ProductId == productId).ToListAsync();
+    product.AveReviews = productReviews.Any() ? productReviews.Average(r => r.Rating) : 0;
+
+    await _databaseContext.SaveChangesAsync();
+
+    return true;
+}
+
+
     }
 }

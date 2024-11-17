@@ -55,25 +55,25 @@ namespace src.Controllers
         }
 
         // Get reviews by order ID
-        [HttpGet("/order/{orderId}")]
-        public async Task<ActionResult<List<ReviewReadDto>>> GetReviewsByOrderId(
-            [FromRoute] Guid orderId
-        )
-        {
-            try
-            {
-                var reviews = await _reviewService.GetReviewsByOrderIdAsync(orderId);
-                if (reviews == null || !reviews.Any())
-                {
-                    CustomException.NotFound();
-                }
-                return Ok(reviews);
-            }
-            catch (Exception ex)
-            {
-                throw CustomException.InternalError(ex.Message);
-            }
-        }
+        // [HttpGet("/order/{orderId}")]
+        // public async Task<ActionResult<List<ReviewReadDto>>> GetReviewsByOrderId(
+        //     [FromRoute] Guid orderId
+        // )
+        // {
+        //     try
+        //     {
+        //         var reviews = await _reviewService.GetReviewsByOrderIdAsync(orderId);
+        //         if (reviews == null || reviews.Count ==0 )
+        //         {
+        //             CustomException.NotFound();
+        //         }
+        //         return Ok(reviews);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         throw CustomException.InternalError(ex.Message);
+        //     }
+        // }
 
         // Create a new review
         [HttpPost]
@@ -122,26 +122,31 @@ namespace src.Controllers
         }
 
         // Update a review
-        [HttpPut("{id}")]
-        [Authorize]
-        public async Task<ActionResult<ReviewReadDto>> UpdateReview(
-            Guid id,
-            [FromBody] ReviewUpdateDto updateDto
-        )
+        [HttpPut("{productId}/{reviewId}")]
+        public async Task<IActionResult> UpdateReviewAsync(Guid productId, Guid reviewId, [FromBody] ReviewUpdateDto updateDto)
         {
+            if (updateDto == null)
+            {
+                return BadRequest("Invalid review data.");
+            }
+
             try
             {
-                var isUpdated = await _reviewService.UpdateOneAsync(id, updateDto);
-                if (!isUpdated)
+                // Pass both product ID and review ID to the service
+                var result = await _reviewService.UpdateOneAsync(productId, reviewId, updateDto);
+                if (result)
                 {
-                    throw CustomException.NotFound();
+                    return NoContent(); // 204 No Content
                 }
-                var updatedReview = await _reviewService.UpdateOneAsync(id, updateDto);
-                return Ok(updatedReview);
+                return NotFound("Review not found.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                throw CustomException.InternalError(ex.Message);
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
     }

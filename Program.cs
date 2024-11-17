@@ -15,9 +15,12 @@ using src.Services.review;
 using src.Services.UserService;
 using src.Utils;
 using static src.Entity.Payment;
+using static src.Entity.Subscription;
 using static src.Entity.User;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllersWithViews();
+
 
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("Local")
@@ -26,6 +29,8 @@ dataSourceBuilder.MapEnum<Role>();
 dataSourceBuilder.MapEnum<PaymentStatus>();
 dataSourceBuilder.MapEnum<PaymentMethod>();
 dataSourceBuilder.MapEnum<OrderStatuses>();
+dataSourceBuilder.MapEnum<SubscriptionStatus>();
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.ConnectionString);
@@ -54,7 +59,31 @@ builder
     .AddScoped<IWishlistService, WishlistService>()
     .AddScoped<IWishlistRepository, WishlistRepository>()
     .AddScoped<ICartService, CartService>()
-    .AddScoped<ICartRepository, CartRepository>();
+    .AddScoped<ICartRepository, CartRepository>()
+    .AddScoped<IMealPlanService, MealPlanService>()
+    .AddScoped<IMealPlanRepository, MealPlanRepository>()
+    .AddScoped<ISubscriptionService, SubscriptionService>()
+    .AddScoped<ISubscriptionRepository, SubscriptionRepository>()
+    .AddScoped<IDietaryGoalRepository, DietaryGoalRepository>()
+        .AddScoped<IDietaryGoalService, DietaryGoalService>();
+
+
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000","https://sda-3-online-fe-repo-5wol.onrender.com")
+                          .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .SetIsOriginAllowed((host) => true)
+                            .AllowCredentials();
+                      });
+});
+
+
 
 //auth
 builder
@@ -78,6 +107,8 @@ builder
             ),
         };
     });
+
+    
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
@@ -88,6 +119,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseRouting();
+
 
 app.UseRouting();
 
@@ -114,16 +147,26 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Database connection failed: {ex.Message}");
     }
 }
+
 app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
+
+app.UseCors(MyAllowSpecificOrigins);
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+
+
+
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/", () => "Shuruq Server");
 
 app.Run();

@@ -60,13 +60,23 @@ namespace src.Repository
 
         // get by Address by ID
 
-        public async Task<Address?> GetAddressByIdAsync(Guid id)
+        public async Task<Address?> GetAddresstowByIdAsync(Guid id)
         {
-            return await _address.Include(a => a.User)
+            return await _address
+            .Include(a => a.User)
             .FirstOrDefaultAsync(a => a.AddressId == id);
-
         
         }
+
+        
+        public async Task<List<Address?>> GetAddressByIdAsync(Guid id)
+        {
+            return await _address
+            .Include(a => a.User)
+            .Where(a => a.UserId == id).ToListAsync();
+        
+        }
+
 
         //delete Address:
 

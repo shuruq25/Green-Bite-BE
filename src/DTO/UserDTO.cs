@@ -14,14 +14,15 @@ namespace src.DTO
         public class UserCreateDto
         {
 
-            public string Name { get; set; }
-
+            [Required]
             [PasswordComplexity]
             public string Password { get; set; }
-
+            [Required]
             [EmailAddress(ErrorMessage = "Please provide email with right format")]
             public string EmailAddress { get; set; }
-            public string? Phone { get; set; }
+            public string Name { get; set; }
+
+        
         }
 
         public class UserSignInDto
@@ -40,13 +41,21 @@ namespace src.DTO
             public string? EmailAddress { get; set; }
             public string? Phone { get; set; }
             public Role UserRole { get; set; }
+            public string Gender { get; set; }
+            public decimal Weight { get; set; }
+            public int Age { get; set; }
         }
 
         public class UserUpdateDto
         {
             public string? Name { get; set; }
             public string? EmailAddress { get; set; }
+            public string? Password { get; set; }
+
             public string? Phone { get; set; }
+            public string? Gender { get; set; }
+            public decimal? Weight { get; set; }
+            public int? Age { get; set; }
         }
     }
 }

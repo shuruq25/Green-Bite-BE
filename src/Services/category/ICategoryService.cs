@@ -10,5 +10,6 @@ namespace src.Services.category
         Task<CategoryReadDto> GetCategoryAsync(Guid id);
         Task<bool> UpdateOneAsync(Guid id, CategoryUpdateDto updateDto);
         Task<bool> DeleteOneAsync(Guid id);
+        Task<List<CategoryReadDto>> GetAllAsync();
     }
 }
