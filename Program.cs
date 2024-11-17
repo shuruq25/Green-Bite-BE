@@ -75,7 +75,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:3000","https://sda-3-online-fe-repo-5wol.onrender.com")
+                          policy.WithOrigins("http://localhost:3000")
                           .AllowAnyHeader()
                             .AllowAnyMethod()
                             .SetIsOriginAllowed((host) => true)
