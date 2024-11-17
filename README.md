@@ -2,7 +2,7 @@
 
 ## Project Overview ✨
 
-**CareQuest** is a backend solution for an e-commerce platform specializing in health and wellness products, pharmacy items, and related services. Built using .NET 8, this project includes core functionalities like user authentication, product management, cart management, orders, payments, and more.
+**Green Bite** is a backend solution for an e-commerce platform specializing in selling organic meals. Built using .NET 8, this project includes core functionalities like user authentication, product management, cart management, orders, payments, and more.
 
 ## Features
 
@@ -219,13 +219,6 @@ The API will be available at: 'https://carequest.onrender.com'
 - **DELETE** `/api/v1/payments/{id}` - Delete a payment by ID (Authorized users only).
 
 
-## Team Members💻✨
-
-- **Leader** : Shuruq Almuhalbidi (@shuruq25)👩‍💻
-- Abdullah Alkhwahir(@Abdullah-Khawahir) 👨‍💻
-- Hadeel Alghashmari (@hdoll0)👩‍💻
-- Raghad Alharbi(@Rad109)👩‍💻
-- Reema Algureshie(ReemaAlqu)👩‍💻
 
 ## License
 
