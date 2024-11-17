@@ -122,6 +122,11 @@ var app = builder.Build();
 app.UseRouting();
 
 
+app.UseRouting();
+
+app.MapGet("/",()=>"Server is running");
+
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
