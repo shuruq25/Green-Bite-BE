@@ -135,7 +135,7 @@ dotnet ef database update
 dotnet watch
 ```
 
-The API will be available at: 'https://carequest.onrender.com'
+The API will be available at: `https://green-bite-be.onrender.com` 
 
 ### Swagger
 
