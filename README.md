@@ -36,6 +36,20 @@
 - Update order
 - Get order
 - Role-based access control (Admin, Customer)
+
+**Subscription Management**:
+- Create new subscription
+- Delete subscription
+- Update subscription
+- Get subscription
+
+  
+**Dietary Goal Management**:
+- Create new Dietary Goal
+- Delete Dietary Goal
+- Update Dietary Goal
+- Get Dietary Goal
+
   
 **Cart Management**:
 
@@ -89,8 +103,8 @@
 ### 1. Clone the repository:
 
 ```bash
-git clone `https://github.com/shuruq25/sda-3-online-Backend_Teamwork.git`
-
+git clone `https://github.com/shuruq25/Green-Bite-BE
+`
 
 ```
 
@@ -217,6 +231,23 @@ The API will be available at: 'https://carequest.onrender.com'
 - **POST** `/api/v1/payments` - Create a new payment (Authorized users only).
 - **PUT** `/api/v1/payments/{id}` - Update a payment by ID (Authorized users only).
 - **DELETE** `/api/v1/payments/{id}` - Delete a payment by ID (Authorized users only).
+
+### Subscription
+
+- **GET** `/api/v1/subscription` -Retrieve all subscriptions. (Admin only)
+- **GET** `/api/v1/subscription/{id}` - Retrieve a subscription by its ID (Authorized users only).
+- **POST** `/api/v1/subscription` -Create a new subscription for a user.(Authorized users only).
+- **PUT** `/api/v1/subscription/{id}` - Update a subscription by ID (Authorized users only).
+- **DELETE** `/api/v1/subscription/{id}` - Delete a subscription by ID (Authorized users only).
+
+### Dietary Goal
+
+- **GET** `/api/v1/dietaryGoal` -Retrieve all dietary goal.
+- **GET** `/api/v1/dietaryGoal/{id}` - Retrieve a dietary goal by its ID.
+- **POST** `/api/v1/dietaryGoal` -Create a new dietary goal for a user.(Admin only)
+- **PUT** `/api/v1/dietaryGoal/{id}` - Update a dietary goal by ID (Admin only).
+- **DELETE** `/api/v1/dietaryGoal/{id}` - Delete a  dietary goal  by ID (Admin only).
+
 
 
 

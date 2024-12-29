@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
@@ -21,12 +22,14 @@ namespace src.Controllers
 
         // POST: api/v1/dietarygoal
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<DietaryGoalReadDto>> CreateDietaryGoalAsync([FromBody] DietaryGoalCreateDto createDto)
         {
             try
             {
                 var result = await _dietaryGoalService.CreateDietaryGoalAsync(createDto);
-                  return Created($"/api/v1//{result.DietaryGoalID}", result);
+                return Created($"/api/v1//{result.DietaryGoalID}", result);
             }
             catch (Exception ex)
             {
@@ -70,6 +73,8 @@ namespace src.Controllers
 
         // PUT: api/v1/dietarygoal/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult> UpdateDietaryGoalAsync(Guid id, [FromBody] DietaryGoalUpdateDto updateDto)
         {
             try
@@ -89,6 +94,8 @@ namespace src.Controllers
 
         // DELETE: api/v1/dietarygoal/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult> DeleteDietaryGoalAsync(Guid id)
         {
             try

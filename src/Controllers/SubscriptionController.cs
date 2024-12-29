@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using src.DTO;
 using src.Services;
@@ -21,6 +22,8 @@ namespace src.Controllers
 
         // POST: api/subscription
         [HttpPost]
+        [Authorize]
+
         public async Task<ActionResult<SubscriptionReadDto>> CreateSubscriptionAsync([FromBody] SubscriptionCreateDto createDto)
         {
             try
@@ -37,6 +40,8 @@ namespace src.Controllers
 
         // GET: api/subscription
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<List<SubscriptionReadDto>>> GetAllSubscriptionsAsync()
         {
             try
@@ -52,6 +57,8 @@ namespace src.Controllers
 
         // GET: api/subscription/{id}
         [HttpGet("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<SubscriptionReadDto>> GetSubscriptionByIdAsync(Guid id)
         {
             try
@@ -71,6 +78,8 @@ namespace src.Controllers
 
         // PUT: api/subscription/{id}
         [HttpPut("{id}")]
+        [Authorize]
+
         public async Task<ActionResult> UpdateSubscriptionAsync(Guid id, [FromBody] SubscriptionUpdateDto updateDto)
         {
             try
@@ -80,7 +89,7 @@ namespace src.Controllers
                 {
                     return NotFound(new { message = "Subscription not found." });
                 }
-                return NoContent(); 
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -90,6 +99,8 @@ namespace src.Controllers
 
         // DELETE: api/subscription/{id}
         [HttpDelete("{id}")]
+        [Authorize]
+
         public async Task<ActionResult> DeleteSubscriptionAsync(Guid id)
         {
             try
@@ -99,7 +110,7 @@ namespace src.Controllers
                 {
                     return NotFound(new { message = "Subscription not found." });
                 }
-                return NoContent(); 
+                return NoContent();
             }
             catch (Exception ex)
             {
